@@ -1,0 +1,41 @@
+# ---- Core document loading / text pipeline (Pipeline A) ----
+pypdf
+langchain
+langchain-community
+langchain-google-genai
+
+# ---- LlamaParse extraction pipeline (Pipeline B) ----
+llama-index
+llama-index-core
+llama-parse
+
+# ---- Vector store ----
+# faiss-gpu 1.15.0 ships a manylinux cp310-abi3 wheel that imports on py3.12.
+# If GPU resources are unavailable, swap this line for `faiss-cpu` -- the corpus
+# is 50-100 pages, so CPU indexing is more than sufficient.
+faiss-gpu
+
+# ---- Gemini (embeddings + generation, all three pipelines) ----
+google-genai
+
+# ---- PixelRAG visual pipeline (Pipeline C) ----
+# The `playwright` extra installs the Playwright rendering backend for the
+# `pixelshot` CLI. pixelrag's own default backend is CDP over bundled CEF
+# (cef-capi-py, ~124MB), which is installed as a hard dependency regardless.
+playwright
+pixelrag[playwright]
+# pixelshot renders PDFs through pdf2image, NOT pymupdf -- without this the
+# PDF path fails with "No outputs produced". Also needs the poppler binaries:
+#   sudo apt-get install -y poppler-utils
+pdf2image
+
+# ---- Dataset acquisition (src/dataset.py) ----
+# FinanceBench + DocLayNet are both pulled from the Hugging Face Hub.
+datasets
+huggingface-hub
+requests
+tqdm
+
+# ---- Harness / reporting ----
+pandas
+python-dotenv

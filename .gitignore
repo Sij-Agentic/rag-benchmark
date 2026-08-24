@@ -1,0 +1,20 @@
+# Secrets
+.env
+
+# Data + generated artifacts (re-creatable via src/dataset.py)
+data/raw_pdfs/
+data/pages/
+data/tiles/
+data/cache/
+
+# Indexes / results
+*.faiss
+*.index
+results/*.csv
+results/*.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.ipynb_checkpoints/
