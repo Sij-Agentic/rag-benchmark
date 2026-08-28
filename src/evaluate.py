@@ -106,7 +106,7 @@ def load_pipeline(name: str):
 # ---------------------------------------------------------------------------
 
 
-def evaluate_item(pipeline_module, item: dict, k: int = 5) -> EvalResult:
+def evaluate_item(pipeline_module, item: dict, k: int = 5, config: dict | None = None) -> EvalResult:
     """Run one (pipeline, question) evaluation."""
     pdf_path = PROJECT_ROOT / item["pdf_path"]
     if not pdf_path.exists():
@@ -118,7 +118,7 @@ def evaluate_item(pipeline_module, item: dict, k: int = 5) -> EvalResult:
 
     # Ingest
     t0 = time.time()
-    index = pipeline_module.ingest([pdf_path])
+    index = pipeline_module.ingest([pdf_path], config=config)
     ingest_time = time.time() - t0
 
     # Query
@@ -198,6 +198,17 @@ def run_evaluation(
     print(f"[Pipeline {pipeline_name.upper()}]")
     pipeline = load_pipeline(pipeline_name)
 
+    # Pipeline-specific config
+    config = {}
+    if pipeline_name.upper() == "B":
+        # Pipeline B: Use GPU for embeddings (fast) but CPU for FAISS (avoid OOM)
+        config["use_gpu_embeddings"] = True
+        config["use_gpu_faiss"] = False
+        print("  [Config] Pipeline B: GPU embeddings, CPU FAISS (avoiding FAISS OOM)")
+    elif pipeline_name.upper() == "C":
+        # Pipeline C: Vision-based, may need different config
+        pass
+
     # Run evaluation
     results: list[EvalResult] = []
     for i, item in enumerate(items, 1):
@@ -205,7 +216,7 @@ def run_evaluation(
         print(f"  doc: {item['doc_id']}")
         print(f"  question: {item['question'][:80]}...")
         try:
-            result = evaluate_item(pipeline, item, k=k)
+            result = evaluate_item(pipeline, item, k=k, config=config)
             print(f"  retrieval: {'HIT' if result.retrieval_hit_at_k else 'MISS'} "
                   f"(retrieved pages: {result.retrieved_pages})")
             print(f"  answer: {result.predicted_answer[:120]}...")
