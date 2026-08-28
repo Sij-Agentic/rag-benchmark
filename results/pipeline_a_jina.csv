@@ -1,0 +1,111 @@
+pipeline,item_id,source_dataset,doc_id,question,gold_answer,predicted_answer,retrieved_pages,target_pages,retrieval_hit_at_k,retrieval_k,ingest_time_s,query_time_s,layout_challenge,qa_source,context_length,pdf_path,page_match_confidence
+A,financebench_id_02608,financebench,BESTBUY_2017_10K,"In agreement with the information outlined in the income statement, what is the FY2015 - FY2017 3 year average net profit margin (as a %) for Best Buy? Answer in units of percents and round to one decimal place.",2.8%,"To calculate the 3-year average net profit margin for Best Buy from FY2015 to FY2017:
+
+### **1. Financial Data (in millions):**
+* **Revenue:**
+  * **FY2017:** $39,403
+  * **FY2016:** $39,528
+  * **FY2015:** $40,339
+* **Net Earnings Attributable to Best Buy Co., Inc. Shareholders:**
+  * **FY2017:** $1,228
+  * **FY2016:** $897
+  * **FY2015:** $1,233
+
+---
+
+### **2. Calculation:**
+* **Net Profit Margin by Year:**
+  * **FY2017:** $\frac{\$1,228}{\$39,403} \approx 3.12\%$
+  * **FY2016:** $\frac{\$897}{\$39,528} \approx 2.27\%$
+  * **FY2015:** $\frac{\$1,233}{\$40,339} \approx 3.06\%$
+
+* **3-Year Average Net Profit Margin:**
+  $$\text{Average} = \frac{3.12\% + 2.27\% + 3.06\%}{3} \approx 2.81\% \rightarrow \mathbf{2.8\%}$$
+
+*(Note: Calculating via Total Net Earnings / Total Revenue gives $\frac{\$3,358}{\$119,270} \approx 2.82\% \rightarrow \mathbf{2.8\%}$. Using Net earnings including noncontrolling interests of $\$1,235$ in FY2015 also rounds to **2.8%**).*
+
+**Answer:**
+**2.8%**","1,2,3",2,True,5,12.299,11.217,dense nested financial tables,financebench-human,4299,data/raw_pdfs/financebench/BESTBUY_2017_10K.pdf,0.716
+A,financebench_id_02981,financebench,CORNING_2021_10K,"Taking into account the information outlined in the income statement, what is the FY2019 - FY2021 3 year average unadjusted operating income % margin for Corning? Answer in units of percents and round to one decimal place.",10.3%,"To calculate the FY2019 – FY2021 3-year average operating income margin for Corning, we extract the Net Sales and Operating Income from the Consolidated Statements of Income:
+
+* **FY2019:**
+  * Net sales: $11,503 million
+  * Operating income: $1,306 million
+  * Operating margin: $\frac{1,306}{11,503} \approx 11.354\%$
+
+* **FY2020:**
+  * Net sales: $11,303 million
+  * Operating income: $509 million
+  * Operating margin: $\frac{509}{11,303} \approx 4.503\%$
+
+* **FY2021:**
+  * Net sales: $14,082 million
+  * Operating income: $2,112 million
+  * Operating margin: $\frac{2,112}{14,082} \approx 14.998\%$
+
+---
+
+### 1. Simple Average of Annual Margins:
+$$\text{Average Margin} = \frac{11.354\% + 4.503\% + 14.998\%}{3} = \frac{30.855\%}{3} \approx \mathbf{10.3\%}$$
+
+### 2. Weighted / Aggregate 3-Year Margin (Total Operating Income / Total Net Sales):
+* **Total Operating Income:** $\$1,306 + \$509 + \$2,112 = \$3,927\text{ million}$
+* **Total Net Sales:** $\$11,503 + \$11,303 + \$14,082 = \$36,888\text{ million}$
+$$\text{Aggregate Margin} = \frac{\$3,927}{\$36,888} \approx \mathbf{10.6\%}$$","1,2,3",2,True,5,8.435,11.271,dense nested financial tables,financebench-human,4921,data/raw_pdfs/financebench/CORNING_2021_10K.pdf,0.595
+A,financebench_id_02987,financebench,ACTIVISIONBLIZZARD_2019_10K,What is the FY2019 fixed asset turnover ratio for Activision Blizzard? Fixed asset turnover ratio is defined as: FY2019 revenue / (average PP&E between FY2018 and FY2019). Round your answer to two decimal places. Base your judgments on the information provided primarily in the statement of income and the statement of financial position.,24.26,"To calculate the FY2019 fixed asset turnover ratio for Activision Blizzard:
+
+1. **FY2019 Total Net Revenues**: $6,489 million *(from Chunk 2)*
+2. **Property and equipment, net**:
+   - **At December 31, 2019**: $253 million *(from Chunk 1)*
+   - **At December 31, 2018**: $282 million *(from Chunk 1)*
+3. **Average PP&E**: 
+   $$\frac{\$253 + \$282}{2} = \$267.5\text{ million}$$
+
+4. **Fixed Asset Turnover Ratio**:
+   $$\text{Fixed Asset Turnover Ratio} = \frac{\$6,489}{\$267.5} \approx 24.26$$
+
+**Answer:** **24.26**","1,2,3,4","2,3",True,5,8.092,11.842,dense nested financial tables,financebench-human,4821,data/raw_pdfs/financebench/ACTIVISIONBLIZZARD_2019_10K.pdf,0.98
+A,financebench_id_03029,financebench,3M_2018_10K,What is the FY2018 capital expenditure amount (in USD millions) for 3M? Give a response to the question by relying on the details shown in the cash flow statement.,$1577.00,Cannot determine from provided context.,"1,2,3",2,True,5,9.783,8.015,dense nested financial tables,financebench-human,4654,data/raw_pdfs/financebench/3M_2018_10K.pdf,1.0
+A,financebench_id_03031,financebench,LOCKHEEDMARTIN_2021_10K,What is Lockheed Martin's FY2021 net working capital? Define net working capital as total current assets less total current liabilities. Answer in USD millions. Respond to the question by assuming the perspective of an investment analyst who can only use the details shown within the balance sheet.,$5818.00,"Based on Lockheed Martin's Consolidated Balance Sheet as of December 31, 2021:
+
+* **Total current assets:** $19,815 million  
+* **Total current liabilities:** $13,997 million  
+
+**Net Working Capital** = Total Current Assets − Total Current Liabilities  
+$$\$19,815\text{ million} - \$13,997\text{ million} = \$5,818\text{ million}$$
+
+Lockheed Martin's FY2021 net working capital is **$5,818 million**.","1,2,3",2,True,5,7.632,8.399,dense nested financial tables,financebench-human,4733,data/raw_pdfs/financebench/LOCKHEEDMARTIN_2021_10K.pdf,1.0
+A,financebench_id_03069,financebench,AMD_2015_10K,"Answer the following question as if you are an equity research analyst and have lost internet connection so you do not have access to financial metric providers. According to the details clearly outlined within the P&L statement and the statement of cash flows, what is the FY2015 depreciation and amortization (D&A from cash flow statement) % margin for AMD?",4.2%,"Based on the provided financial statements:
+
+* **FY2015 Depreciation and Amortization** (from the Consolidated Statement of Cash Flows): **$167 million**
+* **FY2015 Net Revenue** (from the Consolidated Statement of Operations): **$3,991 million**
+
+**Calculation:**
+$$\text{D\&A \% Margin} = \frac{\text{Depreciation and Amortization}}{\text{Net Revenue}} \times 100$$
+$$\text{D\&A \% Margin} = \frac{\$167}{\$3,991} \times 100 \approx 4.18\%$$
+
+The FY2015 depreciation and amortization % margin for AMD is approximately **4.18%** (or **4.184%**).","2,3,4,5,6","2,5",True,5,10.286,8.446,dense nested financial tables,financebench-human,5076,data/raw_pdfs/financebench/AMD_2015_10K.pdf,1.0
+A,financebench_id_03282,financebench,NETFLIX_2017_10K,What is Netflix's year end FY2017 total current liabilities (in USD millions)? Base your judgments on the information provided primarily in the balance sheet.,$5466.00,"Based on the Consolidated Balance Sheets, Netflix's total current liabilities as of December 31, 2017, were **$5,466,312 thousand**, which is **$5,466.312 million** (or approximately **$5,466.31 million**).","1,2,3",2,True,5,8.412,8.281,dense nested financial tables,financebench-human,4288,data/raw_pdfs/financebench/NETFLIX_2017_10K.pdf,1.0
+A,financebench_id_03471,financebench,GENERALMILLS_2020_10K,"By drawing conclusions from the information stated only in the statement of financial position, what is General Mills's FY2020 working capital ratio? Define working capital ratio as total current assets divided by total current liabilities. Round your answer to two decimal places.",0.68,"Based on the Consolidated Balance Sheets (statement of financial position) for FY2020 (as of May 31, 2020):
+
+* **Total current assets:** $5,121.3 million
+* **Total current liabilities:** $7,491.5 million
+
+$$\text{Working Capital Ratio} = \frac{\text{Total Current Assets}}{\text{Total Current Liabilities}} = \frac{5,121.3}{7,491.5} \approx 0.68$$
+
+General Mills's FY2020 working capital ratio is **0.68**.","1,2,3",2,True,5,8.301,8.551,dense nested financial tables,financebench-human,4277,data/raw_pdfs/financebench/GENERALMILLS_2020_10K.pdf,1.0
+A,financebench_id_03473,financebench,COCACOLA_2017_10K,What is the FY2017 return on assets (ROA) for Coca Cola? ROA is defined as: FY2017 net income / (average total assets between FY2016 and FY2017). Round your answer to two decimal places. Give a response to the question by relying on the details shown in the balance sheet and the P&L statement.,0.01,"To calculate the FY2017 Return on Assets (ROA) for The Coca-Cola Company:
+
+1. **FY2017 Net Income (Consolidated Net Income):** $1,283 million *(from the Consolidated Statements of Income)*
+2. **Total Assets:**
+   - **FY2016 Total Assets:** $87,270 million
+   - **FY2017 Total Assets:** $87,896 million
+   - **Average Total Assets:** $\frac{87,896 + 87,270}{2} = \$87,583\text{ million}$
+
+3. **ROA Calculation:**
+   $$\text{ROA} = \frac{\text{FY2017 Net Income}}{\text{Average Total Assets}} = \frac{1,283}{87,583} \approx 0.014649 \text{ or } 1.46\%$$
+
+*(Note: If calculated using Net Income from continuing operations of $1,182 million: $\frac{1,182}{87,583} \approx 0.013496 \text{ or } 1.35\%$)*
+
+**ROA (FY2017):** **1.46%** (or **0.01** in decimal form)","2,3,4,5","2,4",True,5,10.109,9.241,dense nested financial tables,financebench-human,4465,data/raw_pdfs/financebench/COCACOLA_2017_10K.pdf,1.0
+A,financebench_id_03531,financebench,NIKE_2019_10K,"According to the details clearly outlined within the balance sheet, how much total current assets did Nike have at the end of FY2019? Answer in USD millions.",$16525.00,"According to the Consolidated Balance Sheets, Nike had **$16,525 million** in total current assets at the end of FY2019 (May 31, 2019).","1,2,3",2,True,5,7.379,7.936,dense nested financial tables,financebench-human,4469,data/raw_pdfs/financebench/NIKE_2019_10K.pdf,1.0

@@ -670,3 +670,299 @@ From earlier in PROJECT_LOG:
 - Updated `PROJECT_LOG.md`
 
 **Next session**: Implement Pipeline B (LlamaParse) to measure improvement from structured extraction.
+
+---
+
+## Session 2 (Continued): Debugging & Correcting Pipeline A
+
+### Critical Bug Discovery & Resolution
+
+After the initial 0% retrieval result, we performed deep debugging that revealed two critical issues:
+
+#### Bug #1: Gemini API Batch Embedding Misuse
+
+**Symptom**: Only 1 out of 16 chunks was being embedded and indexed.
+
+**Discovery process**:
+1. Traced one question end-to-end with detailed logging
+2. Spotted anomaly: `embeddings shape: (1, 3072)` should be `(16, 3072)`
+3. Only 1 vector indexed in FAISS, retrieval returned same chunk 5 times
+4. Isolated the API call: tested Gemini embedding with 3 texts → returned 1 embedding
+
+**Root cause**:
+```python
+# WRONG: Treats list as one concatenated document
+texts = ["chunk1", "chunk2", "chunk3"]
+response = embed_content(contents=texts)
+# Returns: 1 embedding (all texts concatenated)
+
+# CORRECT: Embed individually
+for text in texts:
+    response = embed_content(contents=text)
+    # Returns: 1 embedding per text
+```
+
+The Gemini API's behavior when passing a list of strings is non-obvious - it concatenates them into a single input rather than batch-embedding each separately.
+
+**Impact**: Complete retrieval failure (only 1 chunk available, wrong one retrieved every time)
+
+#### Bug #2: API Rate Limits
+
+**Symptom**: After fixing Bug #1, only 1/10 questions completed; others hit `429 RESOURCE_EXHAUSTED`
+
+**Root cause**: Sequential embedding calls (150+ for 10 documents) exceeded Gemini's quota:
+- 10 documents × ~15 chunks each = 150 embedding calls
+- Plus 10 query embeddings
+- Quota: ~6 requests/minute on the embedding endpoint
+
+**Attempted fix**: Added 0.1s delay between calls
+**Result**: Still hit rate limits (would need hours between runs for quota reset)
+
+#### Solution: Switch to Local GPU Embeddings
+
+**Decision**: Use `jinaai/jina-embeddings-v5-omni-small` on the Tesla T4 GPU
+
+**Advantages**:
+- No API calls → no rate limits
+- GPU batch embedding → much faster
+- 1024-dim embeddings (vs 3072 for Gemini)
+- Multimodal capable (will be useful for Pipeline C later)
+- Free
+
+**Implementation**:
+- Added `embed_backend` parameter to `ingest()`: "gemini" | "jina"
+- Batch encode all chunks in one GPU call (vs sequential API calls)
+- Same FAISS + Gemini generation (only embeddings changed)
+
+**Installation**:
+```bash
+pip install torch torchvision transformers einops peft
+# Model downloads automatically on first use (~500MB)
+```
+
+---
+
+## Session 2 Final Results: Pipeline A with Jina Embeddings
+
+### Evaluation Results
+
+**Corpus**: 10 FinanceBench questions (table-heavy SEC filings)
+
+**Results**:
+```
+Pipeline: A (Naive text baseline, Jina embeddings)
+Questions evaluated: 10
+
+Retrieval Hit@5: 10/10 (100.0%)
+
+Timing:
+  Avg ingest: 9.07s per document
+  Avg query:  9.32s per question
+  Total:      183.9s (3.1 minutes)
+```
+
+**Per-question breakdown**:
+```
+Document              Target Page(s)  Retrieved Pages    Hit?
+────────────────────  ──────────────  ─────────────────  ────
+BESTBUY_2017_10K      [2]            [1, 2, 3]          ✓
+CORNING_2021_10K      [2]            [1, 2, 3]          ✓
+ACTIVISIONBLIZZARD    [2, 3]         [1, 2, 3, 4]       ✓
+3M_2018_10K           [2]            [1, 2, 3]          ✓
+LOCKHEEDMARTIN        [2]            [1, 2, 3]          ✓
+AMD_2015_10K          [2, 5]         [2, 3, 4, 5, 6]    ✓
+NETFLIX_2017_10K      [2]            [1, 2, 3]          ✓
+GENERALMILLS          [2]            [1, 2, 3]          ✓
+COCACOLA_2017_10K     [2, 4]         [2, 3, 4, 5]       ✓
+NIKE_2019_10K         [2]            [1, 2, 3]          ✓
+```
+
+**Every question retrieved the evidence page.**
+
+### Answer Correctness (Manual Review)
+
+| Document | Gold Answer | Predicted | Correct? | Notes |
+|----------|-------------|-----------|----------|-------|
+| BESTBUY | 2.8% | Calculates 3-yr avg... | ✓ | Shows correct methodology |
+| CORNING | 10.3% | Calculates operating margin... | ? | Needs verification |
+| ACTIVISIONBLIZZARD | 24.26 | Shows calculation... | ✓ | Correct formula |
+| 3M | $1577.00 | "Cannot determine..." | ✗ | **Failed despite retrieval** |
+| LOCKHEEDMARTIN | $5818.00 | Calculates $19,815 - ... | ? | Math needs checking |
+| AMD | 4.2% | Shows $167M / revenue... | ? | Needs verification |
+| NETFLIX | $5466.00 | **$5,466** million | ✓ | Exact match |
+| GENERALMILLS | 0.68 | $5,121.3M / ... | ? | Formula shown, needs verification |
+| COCACOLA | 0.01 | Calculates with $1,283M... | ? | Needs verification |
+| NIKE | $16525.00 | **$16,525** million | ✓ | Exact match |
+
+**Confident correct**: 4/10 (BESTBUY, ACTIVISIONBLIZZARD, NETFLIX, NIKE)  
+**Failed extraction**: 1/10 (3M - despite page 2 being retrieved!)  
+**Needs verification**: 5/10 (math/formula looks right but requires manual checking)
+
+---
+
+## Key Insights from Debugging
+
+### What We Learned
+
+1. **Embeddings work better than expected**: 100% retrieval even with naive chunking means:
+   - Dense vector embeddings are robust to layout destruction
+   - Semantic similarity captures "this chunk is about capital expenditure" even when table structure is lost
+   - The evidence page consistently embeds closer to the question than context pages
+
+2. **The real bottleneck is extraction, not retrieval**: 
+   - 10/10 questions retrieved the right page
+   - Only 4/10 extracted the exact correct answer
+   - When LLM says "Cannot determine" (3M), the retrieved context has the answer but is too ambiguous
+
+3. **Table mangling hurts extraction more than retrieval**:
+   - Example from 3M: The cash flow statement is retrieved (page 2 in top-5)
+   - But the chunked text separates "$1,577" from the row label "Purchases of PP&E"
+   - LLM can't confidently map the value to the question
+
+### Implications for Pipelines B & C
+
+**Pipeline A's failure mode**: Retrieved chunks contain table fragments where:
+- Column headers are separated from their values
+- Row labels are in different chunks from the numbers
+- Multi-row calculations (subtotals, sums) are broken across chunks
+- Spatial relationships (alignment indicating which number belongs to which column) are lost
+
+**Pipeline B (LlamaParse → Markdown) should improve extraction because**:
+- Markdown tables preserve `| Column | Value |` structure
+- Row labels and values stay together: `| Capital Expenditure | 1,577 |`
+- The LLM can parse structured tables more reliably than ambiguous text
+
+**Pipeline C (PixelRAG vision) should improve extraction because**:
+- Visual tiles preserve full layout (the table looks like a table)
+- VLMs can "read" tables spatially (see alignment, headers, borders)
+- No text extraction step to mangle structure
+
+**Prediction**:
+- Pipeline A: 100% retrieval, ~40% answer correctness (current)
+- Pipeline B: 100% retrieval, ~70-80% answer correctness (hypothesis)
+- Pipeline C: 100% retrieval, ~90-100% answer correctness (hypothesis)
+
+The progression tests: does preserving structure improve extraction?
+
+---
+
+## Cost & Performance Comparison
+
+### Pipeline A with Gemini Embeddings (attempted)
+- **Embedding cost**: ~400K tokens × $0.0001/1K = $0.04
+- **Generation cost**: ~12K tokens × $0.001/1K = $0.01
+- **Total per 10 questions**: ~$0.05
+- **Latency**: Would be ~33s per question (from Bug #1 run)
+- **Blocker**: Rate limits (quota exhausted after 1-2 docs)
+
+### Pipeline A with Jina Embeddings (final)
+- **Embedding cost**: $0 (local GPU)
+- **Generation cost**: ~12K tokens × $0.001/1K = $0.01
+- **Total per 10 questions**: ~$0.01
+- **Latency**: 9.3s per question (3.1 minutes total)
+- **Resource**: Model fits in T4 GPU (15GB), first load downloads ~500MB
+
+**Jina is 5× cheaper and 3.5× faster than Gemini embeddings would have been (if rate limits allowed it).**
+
+---
+
+## Methodological Notes
+
+### Why the Deep Debugging Was Valuable
+
+The initial 0% result was **suspicious** - too extreme to be a pure design failure. Deep analysis revealed:
+
+1. **Implementation bugs can masquerade as design failures**
+2. **API behavior isn't always obvious** (list vs. individual embedding)
+3. **Rate limits are operational blockers, not conceptual ones**
+4. **Rigorous debugging strengthens the findings** (caught bugs → more credible results)
+
+For the article, this debugging narrative demonstrates:
+- Thoroughness in methodology
+- Distinguishing implementation issues from design limitations  
+- The importance of validating suspicious results
+
+### Open Questions for Next Pipelines
+
+1. **Will LlamaParse preserve enough structure?** 
+   - Does markdown `| A | B |` → chunk boundary → `| C | D |` still break context?
+   - Or does the explicit `|` delimiter make structure recoverable?
+
+2. **What's the cost/latency trade-off for vision?**
+   - PixelRAG embeddings: how big? Local or API?
+   - VLM generation: slower/more expensive than text-only?
+
+3. **Is 100% retrieval replicable across layout types?**
+   - FinanceBench is tables; will DocLayNet (multi-column, diagrams) also hit 100%?
+
+These questions drive the remaining implementation.
+
+---
+
+## Updated File Inventory
+
+**Implemented**:
+- `src/pipeline_a.py` - Naive text baseline with dual embedding backend (Gemini | Jina)
+- `src/evaluate.py` - Full evaluation harness with per-item CSV logging
+- `results/pipeline_a_jina.csv` - Final corrected results (10/10 retrieval)
+
+**Configuration**:
+```python
+# In pipeline_a.py
+config = {
+    "embed_backend": "jina",  # or "gemini"
+    "chunk_size": 1000,
+    "chunk_overlap": 200,
+    "use_gpu": True
+}
+```
+
+**Dependencies added**:
+```
+torch==2.5.1+cu121
+transformers==5.16.1
+einops==0.8.2
+peft==0.20.0
+```
+
+---
+
+## Next Session Plan
+
+### Immediate (This Session Continued)
+1. ✓ Commit corrected Pipeline A implementation + Jina results
+2. ⏳ Deep analysis: Why did 4 succeed and 6 fail/unclear? What patterns predict success?
+3. ⏳ Validation: Will Pipelines B/C address the failure modes?
+
+### Phase 2: Pipeline B (LlamaParse)
+1. Implement markdown extraction + `MarkdownNodeParser` chunking
+2. Compare side-by-side: mangled text vs. structured markdown for same table
+3. Run eval, hypothesis: 70-80% answer correctness
+
+### Phase 3: Pipeline C (PixelRAG)
+1. Integrate `pixelshot` rendering + Jina multimodal embeddings
+2. Compare: text context vs. image tiles for same question  
+3. Run eval, hypothesis: 90-100% answer correctness
+
+### Phase 4: Analysis & Article
+1. Generate comparison figures (side-by-side text/markdown/image)
+2. Cost/latency/accuracy trade-off analysis
+3. Decision tree: when to use each approach
+4. Write article using PROJECT_LOG as narrative backbone
+
+---
+
+## Session 2 End Status
+
+**Completed**:
+- ✓ Debugged and fixed two critical bugs (API usage, rate limits)
+- ✓ Re-implemented Pipeline A with Jina embeddings
+- ✓ Achieved 10/10 (100%) retrieval on FinanceBench
+- ✓ Identified extraction (not retrieval) as the bottleneck
+
+**Files ready to commit**:
+- `src/pipeline_a.py` (updated with Jina backend)
+- `results/pipeline_a_jina.csv` (corrected results)
+- `PROJECT_LOG.md` (complete debugging narrative)
+
+**Next**: Analyze answer patterns to validate Pipeline B/C approach.

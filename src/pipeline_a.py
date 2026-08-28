@@ -14,20 +14,23 @@ Interface (shared by all three pipelines):
 from __future__ import annotations
 
 import os
+import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import faiss
 import numpy as np
 from dotenv import load_dotenv
-from google import genai
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
 # Load environment
 load_dotenv()
+
+# Embedding backends
+EmbedBackend = Literal["gemini", "jina"]
 
 
 @dataclass
@@ -46,6 +49,7 @@ class Index:
 
     faiss_index: faiss.Index
     chunks: list[Chunk]
+    embed_backend: EmbedBackend
     embed_model: str
     embed_dim: int
 
@@ -73,7 +77,8 @@ def ingest(pdf_paths: list[Path], config: dict | None = None) -> Index:
         config: Optional configuration dict:
             chunk_size: int (default 1000)
             chunk_overlap: int (default 200)
-            embed_model: str (default from GEMINI_EMBED_MODEL env)
+            embed_backend: "gemini" | "jina" (default "jina")
+            embed_model: str (backend-specific model name)
             use_gpu: bool (default True if available)
 
     Returns:
@@ -82,10 +87,16 @@ def ingest(pdf_paths: list[Path], config: dict | None = None) -> Index:
     cfg = config or {}
     chunk_size = cfg.get("chunk_size", 1000)
     chunk_overlap = cfg.get("chunk_overlap", 200)
-    embed_model = cfg.get("embed_model") or os.getenv(
-        "GEMINI_EMBED_MODEL", "gemini-embedding-2-preview"
-    )
+    embed_backend: EmbedBackend = cfg.get("embed_backend", "jina")
+    embed_model = cfg.get("embed_model")
     use_gpu = cfg.get("use_gpu", True)
+
+    # Set default model per backend
+    if not embed_model:
+        if embed_backend == "gemini":
+            embed_model = os.getenv("GEMINI_EMBED_MODEL", "gemini-embedding-2-preview")
+        else:  # jina
+            embed_model = "jinaai/jina-embeddings-v5-omni-small"
 
     print(f"[Pipeline A] Ingesting {len(pdf_paths)} PDFs")
     print(f"  chunk_size={chunk_size}, overlap={chunk_overlap}")
@@ -121,23 +132,44 @@ def ingest(pdf_paths: list[Path], config: dict | None = None) -> Index:
             )
         )
 
-    # 4. Batch embed all chunks
-    print(f"  embedding {len(chunks)} chunks with {embed_model}...")
-    client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+    # 4. Embed all chunks
+    print(f"  embedding {len(chunks)} chunks with {embed_backend}/{embed_model}...")
 
-    # Batch embed in groups of 100 (API limit)
-    batch_size = 100
-    all_embeddings = []
-    for start in range(0, len(chunks), batch_size):
-        batch = chunks[start : start + batch_size]
-        texts = [c.text for c in batch]
-        response = client.models.embed_content(model=embed_model, contents=texts)
-        batch_embeddings = [emb.values for emb in response.embeddings]
-        all_embeddings.extend(batch_embeddings)
-        if (start // batch_size + 1) % 5 == 0:
-            print(f"    embedded {start + len(batch)}/{len(chunks)} chunks")
+    if embed_backend == "gemini":
+        from google import genai
+        client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+        all_embeddings = []
+        for i, chunk in enumerate(chunks):
+            if i > 0:
+                time.sleep(0.1)  # Rate limit protection
+            response = client.models.embed_content(model=embed_model, contents=chunk.text)
+            all_embeddings.append(response.embeddings[0].values)
+            if (i + 1) % 10 == 0 or i == len(chunks) - 1:
+                print(f"    embedded {i + 1}/{len(chunks)} chunks")
+        embeddings = np.array(all_embeddings, dtype="float32")
 
-    embeddings = np.array(all_embeddings, dtype="float32")
+    elif embed_backend == "jina":
+        import torch
+        from transformers import AutoModel
+
+        # Load model on GPU
+        jina_model = AutoModel.from_pretrained(
+            embed_model, trust_remote_code=True
+        ).cuda() if torch.cuda.is_available() and use_gpu else AutoModel.from_pretrained(
+            embed_model, trust_remote_code=True
+        )
+
+        # Batch encode (much faster than one-by-one)
+        texts = [c.text for c in chunks]
+        with torch.no_grad():
+            embeddings_tensor = jina_model.encode(texts, task='retrieval')
+        # Convert to float32 before numpy (handles bfloat16)
+        embeddings = embeddings_tensor.float().cpu().numpy()
+        print(f"    embedded {len(chunks)}/{len(chunks)} chunks (GPU batch)")
+
+    else:
+        raise ValueError(f"Unknown embed_backend: {embed_backend}")
+
     embed_dim = embeddings.shape[1]
     print(f"  embeddings shape: {embeddings.shape} (dim={embed_dim})")
 
@@ -159,6 +191,7 @@ def ingest(pdf_paths: list[Path], config: dict | None = None) -> Index:
     return Index(
         faiss_index=index,
         chunks=chunks,
+        embed_backend=embed_backend,
         embed_model=embed_model,
         embed_dim=embed_dim,
     )
@@ -180,14 +213,32 @@ def query(index: Index, question: str, k: int = 5) -> Answer:
     Returns:
         Answer with generated text and retrieval provenance
     """
-    client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
     llm_model = os.getenv("GEMINI_LLM_MODEL", "gemini-2.5-flash")
 
-    # 1. Embed query
-    q_response = client.models.embed_content(
-        model=index.embed_model, contents=[question]
-    )
-    q_embedding = np.array([q_response.embeddings[0].values], dtype="float32")
+    # 1. Embed query using same backend as index
+    if index.embed_backend == "gemini":
+        from google import genai
+        client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+        q_response = client.models.embed_content(
+            model=index.embed_model, contents=[question]
+        )
+        q_embedding = np.array([q_response.embeddings[0].values], dtype="float32")
+
+    elif index.embed_backend == "jina":
+        import torch
+        from transformers import AutoModel
+        jina_model = AutoModel.from_pretrained(
+            index.embed_model, trust_remote_code=True
+        ).cuda() if torch.cuda.is_available() else AutoModel.from_pretrained(
+            index.embed_model, trust_remote_code=True
+        )
+        with torch.no_grad():
+            q_tensor = jina_model.encode([question], task='retrieval')
+        q_embedding = q_tensor.float().cpu().numpy()
+
+    else:
+        raise ValueError(f"Unknown embed_backend: {index.embed_backend}")
+
     faiss.normalize_L2(q_embedding)
 
     # 2. Search FAISS
@@ -202,7 +253,10 @@ def query(index: Index, question: str, k: int = 5) -> Answer:
         )
     context = "\n\n".join(context_parts)
 
-    # 4. Generate answer with Gemini
+    # 4. Generate answer with Gemini (always use Gemini for generation)
+    from google import genai
+    client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+
     prompt = f"""Answer the following question based strictly on the provided context.
 If the answer cannot be determined from the context, say "Cannot determine from provided context."
 
