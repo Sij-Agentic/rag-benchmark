@@ -160,6 +160,7 @@ def run_evaluation(
     output_path: Path,
     financebench_only: bool = False,
     k: int = 5,
+    ground_truth_path: Path = GROUND_TRUTH,
 ) -> pd.DataFrame:
     """Run full evaluation and save results.
 
@@ -168,17 +169,18 @@ def run_evaluation(
         output_path: Where to save CSV results
         financebench_only: If True, skip DocLayNet items
         k: Number of chunks to retrieve per query
+        ground_truth_path: Path to ground truth JSON file
 
     Returns:
         DataFrame with results
     """
     # Load ground truth
-    if not GROUND_TRUTH.exists():
+    if not ground_truth_path.exists():
         raise FileNotFoundError(
-            f"{GROUND_TRUTH} not found. Run `python src/dataset.py` first."
+            f"{ground_truth_path} not found. Run `python src/dataset.py` first."
         )
 
-    with open(GROUND_TRUTH) as f:
+    with open(ground_truth_path) as f:
         gt = json.load(f)
 
     items = gt["items"]
@@ -313,6 +315,12 @@ def main(argv: list[str] | None = None) -> int:
         default=5,
         help="Number of chunks to retrieve (default: 5)",
     )
+    ap.add_argument(
+        "--ground-truth",
+        type=Path,
+        default=GROUND_TRUTH,
+        help=f"Ground truth JSON file (default: {GROUND_TRUTH})",
+    )
     args = ap.parse_args(argv)
 
     # Default output path
@@ -327,6 +335,7 @@ def main(argv: list[str] | None = None) -> int:
             output_path=args.output,
             financebench_only=args.financebench_only,
             k=args.k,
+            ground_truth_path=args.ground_truth,
         )
         return 0
     except Exception as exc:

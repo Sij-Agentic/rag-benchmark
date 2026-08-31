@@ -171,12 +171,23 @@ def ingest(pdf_paths: list[Path], config: dict | None = None) -> Index:
             docs = parser.load_data(str(pdf_path))
             _save_to_cache(pdf_path, cache_dir, docs)
 
+        # Skip empty documents
+        if not docs or all(len(doc.text.strip()) == 0 for doc in docs):
+            print(f"  ⚠ {pdf_path.stem}: no text content (image-only PDF?)")
+            continue
+
         # Assign metadata: LlamaParse returns docs in page order, assign 1, 2, 3...
         for i, doc in enumerate(docs, start=1):
             doc.metadata["source_file"] = pdf_path.stem
             doc.metadata["page_num"] = i  # Sequential page number
 
         all_docs.extend(docs)
+
+    if not all_docs:
+        raise ValueError(
+            f"No text content found in any of the {len(pdf_paths)} PDFs. "
+            "All PDFs appear to be image-only."
+        )
 
     print(f"  parsed {len(all_docs)} document(s) to markdown")
 

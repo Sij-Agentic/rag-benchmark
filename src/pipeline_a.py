@@ -104,14 +104,32 @@ def ingest(pdf_paths: list[Path], config: dict | None = None) -> Index:
 
     # 1. Load PDFs with PyPDF
     all_docs = []
+    skipped_pdfs = []
     for pdf_path in pdf_paths:
         loader = PyPDFLoader(str(pdf_path))
         docs = loader.load()
+
+        # Skip image-only PDFs (no text layer)
+        if not docs or all(len(doc.page_content.strip()) == 0 for doc in docs):
+            skipped_pdfs.append(pdf_path.stem)
+            continue
+
         # Attach source filename for later attribution
         for doc in docs:
             doc.metadata["source_file"] = pdf_path.stem
         all_docs.extend(docs)
-    print(f"  loaded {len(all_docs)} pages from {len(pdf_paths)} PDFs")
+
+    if skipped_pdfs:
+        print(f"  ⚠ Skipped {len(skipped_pdfs)} image-only PDFs: {', '.join(skipped_pdfs[:3])}{'...' if len(skipped_pdfs) > 3 else ''}")
+    print(f"  loaded {len(all_docs)} pages from {len(pdf_paths) - len(skipped_pdfs)} PDFs")
+
+    # Early exit if no text content found
+    if not all_docs:
+        raise ValueError(
+            f"No text content found in any of the {len(pdf_paths)} PDFs. "
+            "All PDFs appear to be image-only (no text layer). "
+            "Pipeline A requires text-extractable PDFs."
+        )
 
     # 2. Split into chunks
     splitter = RecursiveCharacterTextSplitter(
