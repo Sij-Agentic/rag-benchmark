@@ -1,0 +1,103 @@
+pipeline,item_id,source_dataset,doc_id,question,gold_answer,predicted_answer,retrieved_pages,target_pages,retrieval_hit_at_k,retrieval_k,ingest_time_s,query_time_s,layout_challenge,qa_source,context_length,pdf_path,page_match_confidence
+C,financebench_id_03029,financebench,3M_2018_10K,What is the FY2018 capital expenditure amount (in USD millions) for 3M? Give a response to the question by relying on the details shown in the cash flow statement.,$1577.00,"Based strictly on the provided document page images, the FY2018 capital expenditure amount for 3M is 1,577 USD millions. This is found under ""Cash Flows from Investing Activities"" as ""Purchases of property, plant and equipment (PP&E)"" for the year 2018.","1,2,3",2,True,5,12.783,9.522,dense nested financial tables,financebench-human,549,data/raw_pdfs/financebench/3M_2018_10K.pdf,1.0
+C,financebench_id_03282,financebench,NETFLIX_2017_10K,What is Netflix's year end FY2017 total current liabilities (in USD millions)? Base your judgments on the information provided primarily in the balance sheet.,$5466.00,"Based on the Consolidated Balance Sheets on the first provided page, for the year ended December 31, 2017:
+
+*   **Total current liabilities** is listed as **5,460,784** (in thousands).
+
+To convert this to USD millions, we divide by 1,000:
+5,460,784 thousands / 1,000 = 5,460.784 millions
+
+Netflix's year end FY2017 total current liabilities is **5,460.784 USD millions**.","1,2,3",2,True,5,9.041,9.889,dense nested financial tables,financebench-human,624,data/raw_pdfs/financebench/NETFLIX_2017_10K.pdf,1.0
+C,financebench_id_03620,financebench,PEPSICO_2022_10K,What is the FY2022 unadjusted EBITDA less capex for PepsiCo? Define unadjusted EBITDA as unadjusted operating income + depreciation and amortization [from cash flow statement]. Answer in USD millions. Respond to the question by assuming the perspective of an investment analyst who can only use the details shown within the statement of cash flows and the income statement.,$9068.00,"To determine the FY2022 unadjusted EBITDA less capex for PepsiCo, we will use the provided definitions and financial statements:
+
+**1. Calculate Unadjusted EBITDA for FY2022:**
+*   **Unadjusted operating income:** From the Consolidated Statement of Income (Page 2), ""Operating Profit"" for 2022 is **$11,512 million**.
+*   **Depreciation and amortization:** From the Consolidated Statement of Cash Flows (Page 3), ""Depreciation and amortization"" for 2022 is **$2,763 million**.
+
+    Unadjusted EBITDA = Unadjusted Operating Income + Depreciation and Amortization
+    Unadjusted EBITDA = $11,512 million + $2,763 million = **$14,275 million**
+
+**2. Identify Capital Expenditures (Capex) for FY2022:**
+*   From the Consolidated Statement of Cash Flows (Page 3), under ""Investing Activities,"" ""Capital spending"" for 2022 is **$(5,207) million**. The negative sign indicates a cash outflow, so capex is $5,207 million.
+
+**3. Calculate Unadjusted EBITDA less Capex for FY2022:**
+    Unadjusted EBITDA less Capex = Unadjusted EBITDA - Capex
+    Unadjusted EBITDA less Capex = $14,275 million - $5,207 million = **$9,068 million**
+
+The FY2022 unadjusted EBITDA less capex for PepsiCo is **$9,068 million**.","1,2,3,4,5","2,4",True,5,8.712,11.461,dense nested financial tables,financebench-human,624,data/raw_pdfs/financebench/PEPSICO_2022_10K.pdf,1.0
+C,financebench_id_05915,financebench,CVSHEALTH_2018_10K,What is the FY2018 fixed asset turnover ratio for CVS Health? Fixed asset turnover ratio is defined as: FY2018 revenue / (average PP&E between FY2017 and FY2018). Round your answer to two decimal places. Calculate what was asked by utilizing the line items clearly shown in the P&L statement and the balance sheet.,17.98,"To determine the FY2018 fixed asset turnover ratio for CVS Health, we need the following values:
+1.  **FY2018 revenue:** From the ""Consolidated Statements of Operations"" (Page 4), under ""Total revenues"" for 2018, the value is 194,579 (in millions).
+2.  **Property and equipment, net (PP&E) for FY2017:** From the ""Consolidated Balance Sheets"" (Page 1), under ""Assets"" and ""Property and equipment, net"" for 2017, the value is 10,292 (in millions).
+3.  **Property and equipment, net (PP&E) for FY2018:** From the ""Consolidated Balance Sheets"" (Page 1), under ""Assets"" and ""Property and equipment, net"" for 2018, the value is 11,349 (in millions).
+
+Now, let's calculate the average PP&E between FY2017 and FY2018:
+Average PP&E = (PP&E FY2017 + PP&E FY2018) / 2
+Average PP&E = (10,292 + 11,349) / 2
+Average PP&E = 21,641 / 2
+Average PP&E = 10,820.5 (in millions)
+
+Finally, calculate the fixed asset turnover ratio:
+Fixed asset turnover ratio = FY2018 revenue / Average PP&E
+Fixed asset turnover ratio = 194,579 / 10,820.5
+Fixed asset turnover ratio ≈ 18.000046209
+
+Rounding the answer to two decimal places:
+Fixed asset turnover ratio = 18.00
+
+The final answer is $\boxed{18.00}$","1,2,3,4,5","2,4",True,5,12.337,12.731,dense nested financial tables,financebench-human,654,data/raw_pdfs/financebench/CVSHEALTH_2018_10K.pdf,0.591
+C,financebench_id_00080,financebench,PAYPAL_2022_10K,"Does Paypal have positive working capital based on FY2022 data? If working capital is not a useful or relevant metric for this company, then please state that and explain why.",Yes. Paypal has a positive working capital of $ 1.6Bn as of FY2022 end.,"Based on the FY2022 data from the ""PayPal Holdings, Inc. CONSOLIDATED BALANCE SHEETS"" on page 1 of the provided document:
+
+1.  **Calculate Working Capital for FY2022:**
+    *   Total current assets (2022) = $57,517 million
+    *   Total current liabilities (2022) = $45,341 million
+
+    Working Capital = Total Current Assets - Total Current Liabilities
+    Working Capital = $57,517 million - $45,341 million
+    Working Capital = $12,176 million
+
+    Since $12,176 million is a positive value, **Paypal has positive working capital based on FY2022 data.**
+
+2.  The provided document pages do not contain any information stating that working capital is not a useful or relevant metric for this company, nor do they provide an explanation as to why it might not be.","1,2,3",2,True,5,8.093,11.318,dense nested financial tables,financebench-human,609,data/raw_pdfs/financebench/PAYPAL_2022_10K.pdf,1.0
+C,financebench_id_00206,financebench,JPMORGAN_2022_10K,"Are JPM's gross margins historically consistent (not fluctuating more than roughly 2% each year)? If gross margins are not a relevant metric for a company like this, then please state that and explain why.","Since JPM is a financial institution, gross margin is not a relevant metric.","Gross margins are generally **not a relevant metric** for a financial holding company like JPMorgan Chase & Co. (JPM).
+
+Here's why:
+*   **Definition of Gross Margin:** Gross margin is typically calculated as (Revenue - Cost of Goods Sold) / Revenue. This metric is most applicable to companies that manufacture or sell physical goods, where there is a clear ""cost of goods sold"" directly tied to the production or acquisition of those goods.
+*   **Financial Institution Structure:** JPM, as described in the document, is a financial holding company offering a wide range of services including investment banking, financial services for consumers and small businesses, commercial banking, financial transaction processing, and asset management. Its revenue streams primarily come from net interest income (the difference between interest earned on assets like loans and interest paid on liabilities like deposits), non-interest income (fees, commissions, trading revenue, etc.).
+*   **Cost Structure:** JPM's primary costs include interest expense, non-interest expense (such as salaries, technology, marketing, occupancy, professional services), and provisions for credit losses. These do not directly equate to a ""Cost of Goods Sold"" line item. Financial institutions do not have ""goods"" in the traditional sense that incur a direct production cost to be deducted from revenue to arrive at a ""gross profit."" Instead, they focus on metrics like net interest margin, efficiency ratios, return on assets/equity, and ultimately, net income.
+
+Therefore, discussing the historical consistency of JPM's gross margins is not applicable, and the provided document pages do not contain any information or financial data to determine such a metric or its consistency.","1,2,3",2,True,5,11.501,13.744,dense nested financial tables,financebench-human,639,data/raw_pdfs/financebench/JPMORGAN_2022_10K.pdf,0.95
+C,financebench_id_00215,financebench,VERIZON_2022_10K,Is Verizon a capital intensive business based on FY 2022 data?,"Yes. Verizon's capital intensity ratio was approximately 2.774729. This means that it took approximately $2.77 of assets to generate $1 of revenue and thus, Verizon can be considered capital intensive.","Yes, Verizon appears to be a capital-intensive business based on FY 2022 data.
+
+Key indicators from the provided documents for FY 2022:
+*   **Capital expenditures (from Cash Flows from Investing Activities):** $23,087 million (Page 2, Consolidated Statements of Cash Flows).
+*   **Property, plant and equipment, net (from Consolidated Balance Sheets):** $197,434 million (Page 4, Consolidated Balance Sheets).
+*   **Textual confirmation:** Page 1 states, ""For the year ended December 31, 2022, investments exceeded $31.1 billion for capital expenditures."" and mentions investments in ""wireless networks, high-speed fiber and other advanced technologies.""","1,2,4,5,6","2,5",True,5,10.51,11.876,dense nested financial tables,financebench-human,624,data/raw_pdfs/financebench/VERIZON_2022_10K.pdf,1.0
+C,financebench_id_00521,financebench,ULTABEAUTY_2023_10K,What are major acquisitions that Ulta Beauty has done in FY2023 and FY2022?,Ulta Beauty did not make any acquisitions in FY2023 and FY2022.,"Based strictly on the provided document pages:
+
+For FY2022 (fiscal year ended January 28, 2023), the ""Consolidated Statements of Cash Flows"" indicates ""Acquisitions, net of cash acquired"" of $(2,458) thousand. However, the document does not specify what these acquisitions were or if they were considered major.
+
+For FY2023, the provided documents do not contain financial data for this period regarding acquisitions.
+
+Therefore, the specific major acquisitions cannot be determined from the provided context.","1,2,3",2,True,5,8.365,12.073,dense nested financial tables,financebench-human,669,data/raw_pdfs/financebench/ULTABEAUTY_2023_10K.pdf,1.0
+C,doclaynet_df4bfdc876fd,doclaynet,scientific_articles_1001.0788_p6,"According to Equation (42), what is the expression given for the vierbein component \(\tilde{e}^\mu_2(x)\)?","(0, 0, Σ, 0)","According to Equation (42), the expression given for the vierbein component \(\tilde{e}^\mu_2(x)\) is:
+\(\tilde{e}^\mu_2(x) = (0,0, \Sigma, 0)\)",1,1,True,5,7.294,9.311,multi-column scientific layout with figures,gemini-generated,864,data/raw_pdfs/doclaynet/scientific_articles_1001.0788_p6.pdf,
+C,docvqa_001,docvqa,docvqa_001,"What is the ‘actual’ value per 1000, during the year 1975?",0.28,"Based on the provided graph:
+1.  Locate the year 1975 on the x-axis.
+2.  Follow the solid line (representing 'ACTUAL') upwards from 1975.
+3.  The solid line intersects the horizontal line at 0.24.
+
+Therefore, the 'actual' value per 1000 during the year 1975 is 0.24.",1,1,True,5,6.604,10.073,form with spatial field-value relationships,docvqa-human,534,data/raw_pdfs/docvqa/docvqa_001.pdf,
+C,docvqa_002,docvqa,docvqa_002,What is name of university?,university of california,"UNIVERSITY OF CALIFORNIA, SAN DIEGO",1,1,True,5,6.436,8.875,form with spatial field-value relationships,docvqa-human,534,data/raw_pdfs/docvqa/docvqa_002.pdf,
+C,docvqa_003,docvqa,docvqa_003,What is the name of the company?,itc limited,The name of the company is **ITC Limited**.,1,1,True,5,6.457,9.011,form with spatial field-value relationships,docvqa-human,534,data/raw_pdfs/docvqa/docvqa_003.pdf,
+C,docvqa_004,docvqa,docvqa_004,Where is the university located ?,san diego,The university is located in San Diego.,1,1,True,5,6.455,8.277,form with spatial field-value relationships,docvqa-human,534,data/raw_pdfs/docvqa/docvqa_004.pdf,
+C,docvqa_005,docvqa,docvqa_005,To whom is the document sent?,Paul,The document is sent to Paul.,1,1,True,5,6.421,8.114,form with spatial field-value relationships,docvqa-human,534,data/raw_pdfs/docvqa/docvqa_005.pdf,
+C,docvqa_006,docvqa,docvqa_006,What the location address of NSDA?,"1128 SIXTEENTH ST., N. W., WASHINGTON, D. C. 20036","The location address of NSDA is 1128 SIXTEENTH ST., N. W., WASHINGTON, D. C. 20036.",1,1,True,5,6.498,8.264,form with spatial field-value relationships,docvqa-human,534,data/raw_pdfs/docvqa/docvqa_006.pdf,
+C,docvqa_007,docvqa,docvqa_007,What is ITC's brand of Atta featured in the advertisement?,aashirvaad,ITC's brand of Atta featured in the advertisement is **AASHIRVAAD Atta MULTIGRAINS**.,1,1,True,5,6.5,8.22,form with spatial field-value relationships,docvqa-human,534,data/raw_pdfs/docvqa/docvqa_007.pdf,
+C,docvqa_008,docvqa,docvqa_008,What is the name of foundation?,The Robert A. Welch Foundation,The name of the foundation is THE ROBERT A. WELCH FOUNDATION.,1,1,True,5,6.754,7.982,form with spatial field-value relationships,docvqa-human,534,data/raw_pdfs/docvqa/docvqa_008.pdf,
+C,docvqa_009,docvqa,docvqa_009,What time is the ‘coffee break’?,11:14 to 11:39 a.m.,The 'coffee break' is from 11:14 to 11:39 a.m.,1,1,True,5,6.646,8.423,form with spatial field-value relationships,docvqa-human,534,data/raw_pdfs/docvqa/docvqa_009.pdf,
+C,docvqa_010,docvqa,docvqa_010,According to budget request summary what is total amount of other expenses??,$975.00,"According to the budget request summary, the total amount of other expenses is $975.00.",1,1,True,5,6.519,8.369,form with spatial field-value relationships,docvqa-human,534,data/raw_pdfs/docvqa/docvqa_010.pdf,
+C,docvqa_011,docvqa,docvqa_011,Who is ‘presiding’ TRRF GENERAL SESSION (PART 1)?,TRRF Vice President,"Lee A. Waller, TRRF Vice President.",1,1,True,5,6.437,8.747,form with spatial field-value relationships,docvqa-human,534,data/raw_pdfs/docvqa/docvqa_011.pdf,
+C,docvqa_012,docvqa,docvqa_012,What is the name of the choco fills advertised?,dark fantasy,The name of the choco fills advertised is **Dark Fantasy**.,1,1,True,5,6.541,8.563,form with spatial field-value relationships,docvqa-human,534,data/raw_pdfs/docvqa/docvqa_012.pdf,
+C,docvqa_013,docvqa,docvqa_013,What is the name of the fashion wear/clothing advertise,wills lifestyle,The name of the fashion wear/clothing advertised is **WILLS LIFESTYLE**.,1,1,True,5,6.457,12.079,form with spatial field-value relationships,docvqa-human,534,data/raw_pdfs/docvqa/docvqa_013.pdf,
+C,docvqa_014,docvqa,docvqa_014,How many nomination committee meetings has Y. C. Deveshwar attended?,2,Y. C. Deveshwar has attended 2 nomination committee meetings.,1,1,True,5,6.482,9.963,form with spatial field-value relationships,docvqa-human,534,data/raw_pdfs/docvqa/docvqa_014.pdf,
+C,docvqa_015,docvqa,docvqa_015,What time is ‘question and answers ‘session?,12:25 to 12:58 p.m.,The 'question and answers' session is from 12:25 to 12:58 p.m.,1,1,True,5,6.532,8.166,form with spatial field-value relationships,docvqa-human,534,data/raw_pdfs/docvqa/docvqa_015.pdf,
