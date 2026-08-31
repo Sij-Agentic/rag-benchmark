@@ -1,0 +1,253 @@
+{
+  "metadata": {
+    "seed": 20240831,
+    "num_questions": 9,
+    "num_documents": 9,
+    "description": "Hard layout-aware corpus: FinanceBench (9) + DocVQA (15) + ChartQA (15)",
+    "sources": {
+      "financebench_hard": 8,
+      "doclaynet_hard": 1,
+      "docvqa": 0,
+      "chartqa": 0
+    },
+    "notes": [
+      "Only includes documents where naive text extraction fails",
+      "FinanceBench: Multi-column complex tables",
+      "DocVQA: Forms with spatial field-value relationships",
+      "ChartQA: Charts requiring visual value reading"
+    ]
+  },
+  "items": [
+    {
+      "id": "financebench_id_03029",
+      "source_dataset": "financebench",
+      "doc_id": "3M_2018_10K",
+      "pdf_path": "data/raw_pdfs/financebench/3M_2018_10K.pdf",
+      "question": "What is the FY2018 capital expenditure amount (in USD millions) for 3M? Give a response to the question by relying on the details shown in the cash flow statement.",
+      "answer": "$1577.00",
+      "target_pages": [
+        2
+      ],
+      "layout_challenge": "dense nested financial tables",
+      "qa_source": "financebench-human",
+      "company": "3M",
+      "doc_type": "10k",
+      "doc_period": 2018,
+      "question_type": "metrics-generated",
+      "justification": "The metric capital expenditures was directly extracted from the company 10K. The line item name, as seen in the 10K, was: Purchases of property, plant and equipment (PP&E).",
+      "evidence_page_num_original": [
+        59
+      ],
+      "source_pdf_pages_original": [
+        59
+      ],
+      "page_match_confidence": 1.0
+    },
+    {
+      "id": "financebench_id_03282",
+      "source_dataset": "financebench",
+      "doc_id": "NETFLIX_2017_10K",
+      "pdf_path": "data/raw_pdfs/financebench/NETFLIX_2017_10K.pdf",
+      "question": "What is Netflix's year end FY2017 total current liabilities (in USD millions)? Base your judgments on the information provided primarily in the balance sheet.",
+      "answer": "$5466.00",
+      "target_pages": [
+        2
+      ],
+      "layout_challenge": "dense nested financial tables",
+      "qa_source": "financebench-human",
+      "company": "Netflix",
+      "doc_type": "10k",
+      "doc_period": 2017,
+      "question_type": "metrics-generated",
+      "justification": "The metric total current liabilities was directly extracted from the company 10K. The line item name, as seen in the 10K, was: Total current liabilities.",
+      "evidence_page_num_original": [
+        44
+      ],
+      "source_pdf_pages_original": [
+        44
+      ],
+      "page_match_confidence": 1.0
+    },
+    {
+      "id": "financebench_id_03620",
+      "source_dataset": "financebench",
+      "doc_id": "PEPSICO_2022_10K",
+      "pdf_path": "data/raw_pdfs/financebench/PEPSICO_2022_10K.pdf",
+      "question": "What is the FY2022 unadjusted EBITDA less capex for PepsiCo? Define unadjusted EBITDA as unadjusted operating income + depreciation and amortization [from cash flow statement]. Answer in USD millions. Respond to the question by assuming the perspective of an investment analyst who can only use the details shown within the statement of cash flows and the income statement.",
+      "answer": "$9068.00",
+      "target_pages": [
+        2,
+        4
+      ],
+      "layout_challenge": "dense nested financial tables",
+      "qa_source": "financebench-human",
+      "company": "PepsiCo",
+      "doc_type": "10k",
+      "doc_period": 2022,
+      "question_type": "metrics-generated",
+      "justification": "The metric in question was calculated using other simpler metrics. The various simpler metrics (from the current and, if relevant, previous fiscal year(s)) used were:\n\nMetric 1: Depreciation and amortization. This metric was located in the 10K as a single line item named: Depreciation and amortization.\n\nMetric 2: Unadjusted operating income. This metric was located in the 10K as a single line item named: Operating Profit.\n\nMetric 3: Capital expenditures. This metric was located in the 10K as a single line item named: Capital spending.",
+      "evidence_page_num_original": [
+        61,
+        63
+      ],
+      "source_pdf_pages_original": [
+        61,
+        63
+      ],
+      "page_match_confidence": 1.0
+    },
+    {
+      "id": "financebench_id_05915",
+      "source_dataset": "financebench",
+      "doc_id": "CVSHEALTH_2018_10K",
+      "pdf_path": "data/raw_pdfs/financebench/CVSHEALTH_2018_10K.pdf",
+      "question": "What is the FY2018 fixed asset turnover ratio for CVS Health? Fixed asset turnover ratio is defined as: FY2018 revenue / (average PP&E between FY2017 and FY2018). Round your answer to two decimal places. Calculate what was asked by utilizing the line items clearly shown in the P&L statement and the balance sheet.",
+      "answer": "17.98",
+      "target_pages": [
+        2,
+        4
+      ],
+      "layout_challenge": "dense nested financial tables",
+      "qa_source": "financebench-human",
+      "company": "CVS Health",
+      "doc_type": "10k",
+      "doc_period": 2018,
+      "question_type": "metrics-generated",
+      "justification": "The metric in question was calculated using other simpler metrics. The various simpler metrics (from the current and, if relevant, previous fiscal year(s)) used were:\n\nMetric 1: Total revenue. This metric was located in the 10K as a single line item named: Total revenues.\n\nMetric 2: Ppne, net. This metric was located in the 10K as a single line item named: Property and equipment, net.",
+      "evidence_page_num_original": [
+        301,
+        303
+      ],
+      "source_pdf_pages_original": [
+        301,
+        303
+      ],
+      "page_match_confidence": 0.591
+    },
+    {
+      "id": "financebench_id_00080",
+      "source_dataset": "financebench",
+      "doc_id": "PAYPAL_2022_10K",
+      "pdf_path": "data/raw_pdfs/financebench/PAYPAL_2022_10K.pdf",
+      "question": "Does Paypal have positive working capital based on FY2022 data? If working capital is not a useful or relevant metric for this company, then please state that and explain why.",
+      "answer": "Yes. Paypal has a positive working capital of $ 1.6Bn as of FY2022 end.",
+      "target_pages": [
+        2
+      ],
+      "layout_challenge": "dense nested financial tables",
+      "qa_source": "financebench-human",
+      "company": "Paypal",
+      "doc_type": "10k",
+      "doc_period": 2022,
+      "question_type": "domain-relevant",
+      "justification": "Accounts receivable, net+Loans and interest receivable, net of allowances +Funds receivable and customer accounts+Prepaid expenses and other current assets-Accounts payable-Funds payable and amounts due to customers-Accrued expenses and other current liabilities -Income taxes payable\n963+7431+36357+1898-126-40107-4055-813",
+      "evidence_page_num_original": [
+        60
+      ],
+      "source_pdf_pages_original": [
+        60
+      ],
+      "page_match_confidence": 1.0
+    },
+    {
+      "id": "financebench_id_00206",
+      "source_dataset": "financebench",
+      "doc_id": "JPMORGAN_2022_10K",
+      "pdf_path": "data/raw_pdfs/financebench/JPMORGAN_2022_10K.pdf",
+      "question": "Are JPM's gross margins historically consistent (not fluctuating more than roughly 2% each year)? If gross margins are not a relevant metric for a company like this, then please state that and explain why.",
+      "answer": "Since JPM is a financial institution, gross margin is not a relevant metric.",
+      "target_pages": [
+        2
+      ],
+      "layout_challenge": "dense nested financial tables",
+      "qa_source": "financebench-human",
+      "company": "JPMorgan",
+      "doc_type": "10k",
+      "doc_period": 2022,
+      "question_type": "domain-relevant",
+      "justification": null,
+      "evidence_page_num_original": [
+        2
+      ],
+      "source_pdf_pages_original": [
+        2
+      ],
+      "page_match_confidence": 0.95
+    },
+    {
+      "id": "financebench_id_00215",
+      "source_dataset": "financebench",
+      "doc_id": "VERIZON_2022_10K",
+      "pdf_path": "data/raw_pdfs/financebench/VERIZON_2022_10K.pdf",
+      "question": "Is Verizon a capital intensive business based on FY 2022 data?",
+      "answer": "Yes. Verizon's capital intensity ratio was approximately 2.774729. This means that it took approximately $2.77 of assets to generate $1 of revenue and thus, Verizon can be considered capital intensive.",
+      "target_pages": [
+        2,
+        5
+      ],
+      "layout_challenge": "dense nested financial tables",
+      "qa_source": "financebench-human",
+      "company": "Verizon",
+      "doc_type": "10k",
+      "doc_period": 2022,
+      "question_type": "domain-relevant",
+      "justification": "capital intensity ratio = total asset / revenue = 379680/ 136835 = 2.774729, which is relatively high",
+      "evidence_page_num_original": [
+        55,
+        22
+      ],
+      "source_pdf_pages_original": [
+        22,
+        55
+      ],
+      "page_match_confidence": 1.0
+    },
+    {
+      "id": "financebench_id_00521",
+      "source_dataset": "financebench",
+      "doc_id": "ULTABEAUTY_2023_10K",
+      "pdf_path": "data/raw_pdfs/financebench/ULTABEAUTY_2023_10K.pdf",
+      "question": "What are major acquisitions that Ulta Beauty has done in FY2023 and FY2022?",
+      "answer": "Ulta Beauty did not make any acquisitions in FY2023 and FY2022.",
+      "target_pages": [
+        2
+      ],
+      "layout_challenge": "dense nested financial tables",
+      "qa_source": "financebench-human",
+      "company": "Ulta Beauty",
+      "doc_type": "10k",
+      "doc_period": 2023,
+      "question_type": "domain-relevant",
+      "justification": "Consolidated statement of cash flows reflects - for Acquisitions, net of cash acquired in FY2023 and FY2022.",
+      "evidence_page_num_original": [
+        56
+      ],
+      "source_pdf_pages_original": [
+        56
+      ],
+      "page_match_confidence": 1.0
+    },
+    {
+      "id": "doclaynet_df4bfdc876fd",
+      "source_dataset": "doclaynet",
+      "doc_id": "scientific_articles_1001.0788_p6",
+      "pdf_path": "data/raw_pdfs/doclaynet/scientific_articles_1001.0788_p6.pdf",
+      "question": "According to Equation (42), what is the expression given for the vierbein component \\(\\tilde{e}^\\mu_2(x)\\)?",
+      "answer": "(0, 0, \u03a3, 0)",
+      "target_pages": [
+        1
+      ],
+      "layout_challenge": "multi-column scientific layout with figures",
+      "qa_source": "gemini-generated",
+      "doc_category": "scientific_articles",
+      "collection": "arxiv_two_columns",
+      "original_filename": "1001.0788.pdf",
+      "original_page_no": 6,
+      "page_image": "data/pages/scientific_articles_1001.0788_p6.jpg",
+      "page_text": "7\n\u2213\n\u03a6 about the 2-axis at\n\u03c6\n=\n\u00b1\n\u03a6 respectively,\nAs in [1],\nis found to describe the state, where\nSince the trivial rotation has been removed it\nis clear that a real deterioration of the perfect\ncorrelation between the spins is being observed,\nWe adopt the Doran [4] metric to remove the co-\nordinate singularities of the metric. The observer\ncan now fall through the apparent singularities\nof the Kerr-Newman spacetime observed by an\nobserver at infinity.\nFor this observer the line\nelement is given by\nhowever only local unitary operations have been\napplied and the entanglement is invariant under\nunitary operations.\nHence this must be an af-\nfect of the acceleration and gravity. If the pure\nstate can be recovered then quantum computa-\ntions may still be done while in the presence of\na gravitational field. In particular the respective\nobservers at\n\u03c6\n=\n\u00b1\n\u03a6 must take measurements at\nan angle\n\u2213\n\u0398 in their local inertial frames. Since\n\u03d1\n$^{a}$$_{b}$(\nx\n)\n=\n\u03c7\n$^{a}$$_{b}$(\nx\n) a parallel transport would not\nreproduce this angle. Hence by transforming in\nthe appropriate direction the full EPR correla-\ntion may still be recovered.\nNow it was found that \u0394 is positive for\nr\n\u2192\n\u221e\nto a radius\nr$_{0}$\nvery close to the outer horizon\nr$_{+}$\n.\nAs\nr\nbecomes smaller than\nr$_{0}$\nand furthermore\nr\n\u2193\nr$_{+}$\n, \u0394\n\u2192 \u2212\u221e\nand thus to extract the perfect\nEPR correlation each observer would require in-\nfinite accuracy in the measurement that even a\nsmall error would lead to a mixed state element.\nIn the (\nt, r, \u03b8, \u03c6\n) coordinates the vierbein inher-\nited the\nr$_{+}$\nand\nr$_{\u2212}$\ncoordinate singularities, the\nabove (\nT, R, \u03b8, \u03c6\n) also act as the metric does at\nthose radii, and since the metric is singularity\nfree there so is the vierbein.\nNow similarly to\nEq.(5) we take a four velocity of the form,\nand\nthe\ntime\ncoordinate\ncoincides\nwith\nthe\nproper time for the free fall observer. The vier-\nbein is now chosen to be,\nwhere\n|\np\na\n$_{\u00b1}$,\n\u2191\n;\n\u00b1\n\u03a6\n\u232a\n\u2032\n= cos(\n\u03a6\n2\n)\n|\np\na\n$_{\u00b1}$,\n\u2191\n;\n\u00b1\n\u03a6\n\u232a\n\u00b1\nsin(\n\u03a6\n2\n)\n|\np\na\n$_{\u00b1}$,\n\u2193\n;\n\u00b1\n\u03a6\n\u232a\n,\n(35)\n(36)\n|\np\na\n$_{\u00b1}$,\n\u2193\n;\n\u00b1\n\u03a6\n\u232a\n\u2032\n=\n\u2213\nsin(\n\u03a6\n2\n)\n|\np\na\n$_{\u00b1}$,\n\u2191\n;\n\u00b1\n\u03a6\n\u232a\n+ cos(\n\u03a6\n2\n)\n|\np\na\n$_{\u00b1}$,\n\u2193\n;\n\u00b1\n\u03a6\n\u232a\n,\n(37)\n1\n\u221a\n2$^{[}$\ncos(\u0394)\n$^{(}$|\np\na\n$_{+}$,\n\u2191\n; \u03a6\n\u232a\n\u2032\n|\np\na\n$_{\u2212}$,\n\u2193\n;\n\u2212\n\u03a6\n\u232a\n\u2032\n\u2212 |\np\na\n$_{+}$,\n\u2193\n; \u03a6\n\u232a\n\u2032\n|\np\na\n$_{\u2212}$,\n\u2191\n;\n\u2212\n\u03a6\n\u232a\n\u2032\n)\n+ sin(\u0394)\n$^{(}$|\np\na\n$_{+}$,\n\u2191\n; \u03a6\n\u232a\n\u2032\n|\np\na\n$_{\u2212}$,\n\u2191\n;\n\u2212\n\u03a6\n\u232a\n\u2032\n+\n|\np\na\n$_{+}$,\n\u2193\n; \u03a6\n\u232a\n\u2032\n|\np\na\n$_{\u2212}$,\n\u2193\n;\n\u2212\n\u03a6\n\u232a\n\u2032\n)\n]\n(38)\n\u0394 = \u0398\n\u2212\n\u03a6 = \u03a6$^{[}$\nr\nsinh(\n\u03b6\n)\n\u03d1\n1\n3\n\u2212\n1$^{]}$\n(39)\n\u2126 =\n$^{(}$R\n2\n+\na\n2\n)\n1\n2\nb\n=\n(\n2\nMR\n\u2212\nQ\n$^{2}$)\n1\n2\n\u2126\n\u03a3 =\n$^{(}$R\n2\n+\na\n$^{2}$cos$^{2}$(\n\u03b8\n)\n)\n1\n/\n2\n(41)\n\u02dc\ne\n\u00b5\n0\n(\nx\n) = (1\n,\n0\n,\n0\n,\n0)\n\u02dc\ne\n\u00b5\n1\n(\nx\n) =\n(\nb\n\u2126\n\u03a3\n,\n\u03a3\n\u2126\n,\n0\n,\n\u2212\na b\nsin\n$^{2}$(\n\u03b8\n)\n\u2126\n\u03a3$^{)}$\n\u02dc\ne\n\u00b5\n2\n(\nx\n) = (0\n,\n0\n,\n\u03a3\n,\n0)\n\u02dc\ne\n\u00b5\n3\n(\nx\n) = (0\n,\n0\n,\n0\n,\n\u2126 sin (\n\u03b8\n))\n(42)\nds\n2\n=\n\u2212\ndT\n2\n+$^{[}$\n\u03a3\n\u2126\ndR\n+\nb\n\u2126\n\u03a3\n$^{(}$dT\n\u2212\na\nsin\n$^{2}$(\n\u03b8\n)\nd\u03c6\n)\n]\n2\n+ \u03a3\n$^{2}$d\u03b82\n+ \u2126\n$^{2}$sin$^{2}$(\n\u03b8\n)\nd\u03c6\n2\n(40)\nIV. THE INFALLING OBSERVER",
+      "needs_human_review": true,
+      "qa_rationale": "Equation (42) explicitly lists the vierbein components, defining \\(\\tilde{e}^\\mu_2(x) = (0, 0, \\Sigma, 0)\\).",
+      "qa_model": "gemini-3.7-flash"
+    }
+  ]
+}
