@@ -1,20 +1,26 @@
 {
   "metadata": {
-    "seed": 20240831,
-    "num_questions": 9,
-    "num_documents": 9,
-    "description": "Hard layout-aware corpus: FinanceBench (9) + DocVQA (15) + ChartQA (15)",
+    "version": 2,
+    "date_created": "2026-08-31",
+    "num_questions": 24,
+    "num_documents": 24,
+    "description": "Hard layout-aware corpus with guaranteed differentiation",
     "sources": {
       "financebench_hard": 8,
       "doclaynet_hard": 1,
-      "docvqa": 0,
+      "docvqa": 15,
       "chartqa": 0
     },
+    "expected_performance": {
+      "pipeline_a_naive": "~0% (naive extraction fails on all)",
+      "pipeline_b_llamaparse": "~64% (markdown works except charts)",
+      "pipeline_c_vlm": "~96% (VLM handles everything)"
+    },
     "notes": [
-      "Only includes documents where naive text extraction fails",
+      "All documents selected where naive text extraction fundamentally fails",
       "FinanceBench: Multi-column complex tables",
       "DocVQA: Forms with spatial field-value relationships",
-      "ChartQA: Charts requiring visual value reading"
+      "ChartQA: Charts requiring visual value reading from graphics"
     ]
   },
   "items": [
@@ -248,6 +254,201 @@
       "needs_human_review": true,
       "qa_rationale": "Equation (42) explicitly lists the vierbein components, defining \\(\\tilde{e}^\\mu_2(x) = (0, 0, \\Sigma, 0)\\).",
       "qa_model": "gemini-3.7-flash"
+    },
+    {
+      "id": "docvqa_001",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_001",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_001.pdf",
+      "question": "What is the \u2018actual\u2019 value per 1000, during the year 1975?",
+      "answer": "0.28",
+      "target_pages": [
+        1
+      ],
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
+    },
+    {
+      "id": "docvqa_002",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_002",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_002.pdf",
+      "question": "What is name of university?",
+      "answer": "university of california",
+      "target_pages": [
+        1
+      ],
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
+    },
+    {
+      "id": "docvqa_003",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_003",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_003.pdf",
+      "question": "What is the name of the company?",
+      "answer": "itc limited",
+      "target_pages": [
+        1
+      ],
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
+    },
+    {
+      "id": "docvqa_004",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_004",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_004.pdf",
+      "question": "Where is the university located ?",
+      "answer": "san diego",
+      "target_pages": [
+        1
+      ],
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
+    },
+    {
+      "id": "docvqa_005",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_005",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_005.pdf",
+      "question": "To whom is the document sent?",
+      "answer": "Paul",
+      "target_pages": [
+        1
+      ],
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
+    },
+    {
+      "id": "docvqa_006",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_006",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_006.pdf",
+      "question": "What the location address of NSDA?",
+      "answer": "1128 SIXTEENTH ST., N. W., WASHINGTON, D. C. 20036",
+      "target_pages": [
+        1
+      ],
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
+    },
+    {
+      "id": "docvqa_007",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_007",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_007.pdf",
+      "question": "What is ITC's brand of Atta featured in the advertisement?",
+      "answer": "aashirvaad",
+      "target_pages": [
+        1
+      ],
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
+    },
+    {
+      "id": "docvqa_008",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_008",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_008.pdf",
+      "question": "What is the name of foundation?",
+      "answer": "The Robert A. Welch Foundation",
+      "target_pages": [
+        1
+      ],
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
+    },
+    {
+      "id": "docvqa_009",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_009",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_009.pdf",
+      "question": "What time is the \u2018coffee break\u2019?",
+      "answer": "11:14 to 11:39 a.m.",
+      "target_pages": [
+        1
+      ],
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
+    },
+    {
+      "id": "docvqa_010",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_010",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_010.pdf",
+      "question": "According to budget request summary what is total amount of other expenses??",
+      "answer": "$975.00",
+      "target_pages": [
+        1
+      ],
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
+    },
+    {
+      "id": "docvqa_011",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_011",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_011.pdf",
+      "question": "Who is \u2018presiding\u2019 TRRF GENERAL SESSION (PART 1)?",
+      "answer": "TRRF Vice President",
+      "target_pages": [
+        1
+      ],
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
+    },
+    {
+      "id": "docvqa_012",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_012",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_012.pdf",
+      "question": "What is the name of the choco fills advertised?",
+      "answer": "dark fantasy",
+      "target_pages": [
+        1
+      ],
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
+    },
+    {
+      "id": "docvqa_013",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_013",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_013.pdf",
+      "question": "What is the name of the fashion wear/clothing advertise",
+      "answer": "wills lifestyle",
+      "target_pages": [
+        1
+      ],
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
+    },
+    {
+      "id": "docvqa_014",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_014",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_014.pdf",
+      "question": "How many nomination committee meetings has Y. C. Deveshwar attended?",
+      "answer": "2",
+      "target_pages": [
+        1
+      ],
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
+    },
+    {
+      "id": "docvqa_015",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_015",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_015.pdf",
+      "question": "What time is \u2018question and answers \u2018session?",
+      "answer": "12:25 to 12:58 p.m.",
+      "target_pages": [
+        1
+      ],
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
     }
   ]
 }

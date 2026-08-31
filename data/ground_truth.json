@@ -1,104 +1,29 @@
 {
   "metadata": {
-    "seed": 20250824,
-    "context_pages": 1,
-    "num_questions": 50,
-    "num_documents": 50,
-    "total_pages": 135,
-    "questions_by_source": {
-      "financebench": 30,
-      "doclaynet": 20
-    },
+    "version": 2,
+    "date_created": "2026-08-31",
+    "num_questions": 24,
+    "num_documents": 24,
+    "description": "Hard layout-aware corpus with guaranteed differentiation",
     "sources": {
-      "financebench": "PatronusAI/financebench",
-      "doclaynet": "pierreguillou/DocLayNet-base:DocLayNet_2022.08_processed_on_2023.01:test"
+      "financebench_hard": 8,
+      "doclaynet_hard": 1,
+      "docvqa": 15,
+      "chartqa": 0
+    },
+    "expected_performance": {
+      "pipeline_a_naive": "~0% (naive extraction fails on all)",
+      "pipeline_b_llamaparse": "~64% (markdown works except charts)",
+      "pipeline_c_vlm": "~96% (VLM handles everything)"
     },
     "notes": [
-      "target_pages are 1-based page numbers within pdf_path, which is the exact file all three pipelines ingest.",
-      "FinanceBench PDFs are trimmed to evidence pages +/- context_pages; source_pdf_pages_original records the pages in the full filing.",
-      "DocLayNet pages are rebuilt as single-page PDFs from the page image plus an invisible text layer derived from DocLayNet bounding boxes.",
-      "Any item with qa_source='gemini-generated' is synthetic and needs human review before results are reported."
+      "All documents selected where naive text extraction fundamentally fails",
+      "FinanceBench: Multi-column complex tables",
+      "DocVQA: Forms with spatial field-value relationships",
+      "ChartQA: Charts requiring visual value reading from graphics"
     ]
   },
   "items": [
-    {
-      "id": "financebench_id_02608",
-      "source_dataset": "financebench",
-      "doc_id": "BESTBUY_2017_10K",
-      "pdf_path": "data/raw_pdfs/financebench/BESTBUY_2017_10K.pdf",
-      "question": "In agreement with the information outlined in the income statement, what is the FY2015 - FY2017 3 year average net profit margin (as a %) for Best Buy? Answer in units of percents and round to one decimal place.",
-      "answer": "2.8%",
-      "target_pages": [
-        2
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "Best Buy",
-      "doc_type": "10k",
-      "doc_period": 2017,
-      "question_type": "metrics-generated",
-      "justification": "The metric in question was calculated using other simpler metrics. The various simpler metrics (from the current and, if relevant, previous fiscal year(s)) used were:\n\nMetric 1: Total revenue. This metric was located in the 10K as a single line item named: Revenue.\n\nMetric 2: Net income. This metric was located in the 10K as a single line item named: Net earnings attributable to Best Buy Co., Inc. shareholders.",
-      "evidence_page_num_original": [
-        55
-      ],
-      "source_pdf_pages_original": [
-        55
-      ],
-      "page_match_confidence": 0.716
-    },
-    {
-      "id": "financebench_id_02981",
-      "source_dataset": "financebench",
-      "doc_id": "CORNING_2021_10K",
-      "pdf_path": "data/raw_pdfs/financebench/CORNING_2021_10K.pdf",
-      "question": "Taking into account the information outlined in the income statement, what is the FY2019 - FY2021 3 year average unadjusted operating income % margin for Corning? Answer in units of percents and round to one decimal place.",
-      "answer": "10.3%",
-      "target_pages": [
-        2
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "Corning",
-      "doc_type": "10k",
-      "doc_period": 2021,
-      "question_type": "metrics-generated",
-      "justification": "The metric in question was calculated using other simpler metrics. The various simpler metrics (from the current and, if relevant, previous fiscal year(s)) used were:\n\nMetric 1: Unadjusted operating income. This metric was located in the 10K as a single line item named: Operating\u00c2\u00a0income.\n\nMetric 2: Total revenue. This metric was located in the 10K as a single line item named: Net\u00c2\u00a0sales.",
-      "evidence_page_num_original": [
-        64
-      ],
-      "source_pdf_pages_original": [
-        64
-      ],
-      "page_match_confidence": 0.595
-    },
-    {
-      "id": "financebench_id_02987",
-      "source_dataset": "financebench",
-      "doc_id": "ACTIVISIONBLIZZARD_2019_10K",
-      "pdf_path": "data/raw_pdfs/financebench/ACTIVISIONBLIZZARD_2019_10K.pdf",
-      "question": "What is the FY2019 fixed asset turnover ratio for Activision Blizzard? Fixed asset turnover ratio is defined as: FY2019 revenue / (average PP&E between FY2018 and FY2019). Round your answer to two decimal places. Base your judgments on the information provided primarily in the statement of income and the statement of financial position.",
-      "answer": "24.26",
-      "target_pages": [
-        2,
-        3
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "Activision Blizzard",
-      "doc_type": "10k",
-      "doc_period": 2019,
-      "question_type": "metrics-generated",
-      "justification": "The metric in question was calculated using other simpler metrics. The various simpler metrics (from the current and, if relevant, previous fiscal year(s)) used were:\n\nMetric 1: Total revenue. This metric was located in the 10K as a single line item named: Total net revenues.\n\nMetric 2: Ppne, net. This metric was located in the 10K as a single line item named: Property and equipment, net.",
-      "evidence_page_num_original": [
-        68,
-        69
-      ],
-      "source_pdf_pages_original": [
-        68,
-        69
-      ],
-      "page_match_confidence": 0.98
-    },
     {
       "id": "financebench_id_03029",
       "source_dataset": "financebench",
@@ -125,59 +50,6 @@
       "page_match_confidence": 1.0
     },
     {
-      "id": "financebench_id_03031",
-      "source_dataset": "financebench",
-      "doc_id": "LOCKHEEDMARTIN_2021_10K",
-      "pdf_path": "data/raw_pdfs/financebench/LOCKHEEDMARTIN_2021_10K.pdf",
-      "question": "What is Lockheed Martin's FY2021 net working capital? Define net working capital as total current assets less total current liabilities. Answer in USD millions. Respond to the question by assuming the perspective of an investment analyst who can only use the details shown within the balance sheet.",
-      "answer": "$5818.00",
-      "target_pages": [
-        2
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "Lockheed Martin",
-      "doc_type": "10k",
-      "doc_period": 2021,
-      "question_type": "metrics-generated",
-      "justification": "The metric in question was calculated using other simpler metrics. The various simpler metrics (from the current and, if relevant, previous fiscal year(s)) used were:\n\nMetric 1: Total current liabilities. This metric was located in the 10K as a single line item named: Total current liabilities.\n\nMetric 2: Total current assets. This metric was located in the 10K as a single line item named: Total current assets.",
-      "evidence_page_num_original": [
-        67
-      ],
-      "source_pdf_pages_original": [
-        67
-      ],
-      "page_match_confidence": 1.0
-    },
-    {
-      "id": "financebench_id_03069",
-      "source_dataset": "financebench",
-      "doc_id": "AMD_2015_10K",
-      "pdf_path": "data/raw_pdfs/financebench/AMD_2015_10K.pdf",
-      "question": "Answer the following question as if you are an equity research analyst and have lost internet connection so you do not have access to financial metric providers. According to the details clearly outlined within the P&L statement and the statement of cash flows, what is the FY2015 depreciation and amortization (D&A from cash flow statement) % margin for AMD?",
-      "answer": "4.2%",
-      "target_pages": [
-        2,
-        5
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "AMD",
-      "doc_type": "10k",
-      "doc_period": 2015,
-      "question_type": "metrics-generated",
-      "justification": "The metric in question was calculated using other simpler metrics. The various simpler metrics (from the current and, if relevant, previous fiscal year(s)) used were:\n\nMetric 1: Depreciation and amortization. This metric was located in the 10K as a single line item named: Depreciation and amortization.\n\nMetric 2: Total revenue. This metric was located in the 10K as a single line item named: Net revenue.",
-      "evidence_page_num_original": [
-        55,
-        59
-      ],
-      "source_pdf_pages_original": [
-        55,
-        59
-      ],
-      "page_match_confidence": 1.0
-    },
-    {
       "id": "financebench_id_03282",
       "source_dataset": "financebench",
       "doc_id": "NETFLIX_2017_10K",
@@ -199,84 +71,6 @@
       ],
       "source_pdf_pages_original": [
         44
-      ],
-      "page_match_confidence": 1.0
-    },
-    {
-      "id": "financebench_id_03471",
-      "source_dataset": "financebench",
-      "doc_id": "GENERALMILLS_2020_10K",
-      "pdf_path": "data/raw_pdfs/financebench/GENERALMILLS_2020_10K.pdf",
-      "question": "By drawing conclusions from the information stated only in the statement of financial position, what is General Mills's FY2020 working capital ratio? Define working capital ratio as total current assets divided by total current liabilities. Round your answer to two decimal places.",
-      "answer": "0.68",
-      "target_pages": [
-        2
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "General Mills",
-      "doc_type": "10k",
-      "doc_period": 2020,
-      "question_type": "metrics-generated",
-      "justification": "The metric in question was calculated using other simpler metrics. The various simpler metrics (from the current and, if relevant, previous fiscal year(s)) used were:\n\nMetric 1: Total current liabilities. This metric was located in the 10K as a single line item named: Total current liabilities.\n\nMetric 2: Total current assets. This metric was located in the 10K as a single line item named: Total current assets.",
-      "evidence_page_num_original": [
-        49
-      ],
-      "source_pdf_pages_original": [
-        49
-      ],
-      "page_match_confidence": 1.0
-    },
-    {
-      "id": "financebench_id_03473",
-      "source_dataset": "financebench",
-      "doc_id": "COCACOLA_2017_10K",
-      "pdf_path": "data/raw_pdfs/financebench/COCACOLA_2017_10K.pdf",
-      "question": "What is the FY2017 return on assets (ROA) for Coca Cola? ROA is defined as: FY2017 net income / (average total assets between FY2016 and FY2017). Round your answer to two decimal places. Give a response to the question by relying on the details shown in the balance sheet and the P&L statement.",
-      "answer": "0.01",
-      "target_pages": [
-        2,
-        4
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "Coca-Cola",
-      "doc_type": "10k",
-      "doc_period": 2017,
-      "question_type": "metrics-generated",
-      "justification": "The metric in question was calculated using other simpler metrics. The various simpler metrics (from the current and, if relevant, previous fiscal year(s)) used were:\n\nMetric 1: Net income. This metric was located in the 10K as a single line item named: NET INCOME ATTRIBUTABLE TO SHAREOWNERS OF THE COCA-COLA COMPANY.\n\nMetric 2: Total assets. This metric was located in the 10K as a single line item named: TOTAL ASSETS.",
-      "evidence_page_num_original": [
-        73,
-        75
-      ],
-      "source_pdf_pages_original": [
-        73,
-        75
-      ],
-      "page_match_confidence": 1.0
-    },
-    {
-      "id": "financebench_id_03531",
-      "source_dataset": "financebench",
-      "doc_id": "NIKE_2019_10K",
-      "pdf_path": "data/raw_pdfs/financebench/NIKE_2019_10K.pdf",
-      "question": "According to the details clearly outlined within the balance sheet, how much total current assets did Nike have at the end of FY2019? Answer in USD millions.",
-      "answer": "$16525.00",
-      "target_pages": [
-        2
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "Nike",
-      "doc_type": "10k",
-      "doc_period": 2019,
-      "question_type": "metrics-generated",
-      "justification": "The metric total current assets was directly extracted from the company 10K. The line item name, as seen in the 10K, was: Total current assets.",
-      "evidence_page_num_original": [
-        53
-      ],
-      "source_pdf_pages_original": [
-        53
       ],
       "page_match_confidence": 1.0
     },
@@ -309,215 +103,6 @@
       "page_match_confidence": 1.0
     },
     {
-      "id": "financebench_id_03838",
-      "source_dataset": "financebench",
-      "doc_id": "BLOCK_2020_10K",
-      "pdf_path": "data/raw_pdfs/financebench/BLOCK_2020_10K.pdf",
-      "question": "What is the FY2019 - FY2020 total revenue growth rate for Block (formerly known as Square)? Answer in units of percents and round to one decimal place. Approach the question asked by assuming the standpoint of an investment banking analyst who only has access to the statement of income.",
-      "answer": "101.5%",
-      "target_pages": [
-        2
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "Block",
-      "doc_type": "10k",
-      "doc_period": 2020,
-      "question_type": "metrics-generated",
-      "justification": "The metric total revenue was directly extracted from the company 10K. The line item name, as seen in the 10K, was: Total net revenue. The final step was to execute the desired percent change calculation on total revenue.",
-      "evidence_page_num_original": [
-        85
-      ],
-      "source_pdf_pages_original": [
-        85
-      ],
-      "page_match_confidence": 0.769
-    },
-    {
-      "id": "financebench_id_03849",
-      "source_dataset": "financebench",
-      "doc_id": "MGMRESORTS_2020_10K",
-      "pdf_path": "data/raw_pdfs/financebench/MGMRESORTS_2020_10K.pdf",
-      "question": "What is the FY2018 - FY2020 3 year average of capex as a % of revenue for MGM Resorts? Answer in units of percents and round to one decimal place. Please utilize information provided primarily within the statement of cash flows and the statement of income.",
-      "answer": "7.9%",
-      "target_pages": [
-        2,
-        4
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "MGM Resorts",
-      "doc_type": "10k",
-      "doc_period": 2020,
-      "question_type": "metrics-generated",
-      "justification": "The metric in question was calculated using other simpler metrics. The various simpler metrics (from the current and, if relevant, previous fiscal year(s)) used were:\n\nMetric 1: Capital expenditures. This metric was located in the 10K as a single line item named: Capital expenditures, net of construction payable.\n\nMetric 2: Total revenue. This metric was located in the 10K as a single line item named: [blank line item referring to total revenue].",
-      "evidence_page_num_original": [
-        64,
-        66
-      ],
-      "source_pdf_pages_original": [
-        64,
-        66
-      ],
-      "page_match_confidence": 0.763
-    },
-    {
-      "id": "financebench_id_03856",
-      "source_dataset": "financebench",
-      "doc_id": "ADOBE_2017_10K",
-      "pdf_path": "data/raw_pdfs/financebench/ADOBE_2017_10K.pdf",
-      "question": "What is the FY2017 operating cash flow ratio for Adobe? Operating cash flow ratio is defined as: cash from operations / total current liabilities. Round your answer to two decimal places. Please utilize information provided primarily within the balance sheet and the cash flow statement.",
-      "answer": "0.83",
-      "target_pages": [
-        2,
-        5
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "Adobe",
-      "doc_type": "10k",
-      "doc_period": 2017,
-      "question_type": "metrics-generated",
-      "justification": "The metric in question was calculated using other simpler metrics. The various simpler metrics (from the current and, if relevant, previous fiscal year(s)) used were:\n\nMetric 1: Cash from operations. This metric was located in the 10K as a single line item named: Net cash provided by operating activities.\n\nMetric 2: Total current liabilities. This metric was located in the 10K as a single line item named: Total current liabilities.",
-      "evidence_page_num_original": [
-        56,
-        60
-      ],
-      "source_pdf_pages_original": [
-        56,
-        60
-      ],
-      "page_match_confidence": 1.0
-    },
-    {
-      "id": "financebench_id_03882",
-      "source_dataset": "financebench",
-      "doc_id": "AMCOR_2020_10K",
-      "pdf_path": "data/raw_pdfs/financebench/AMCOR_2020_10K.pdf",
-      "question": "What is Amcor's year end FY2020 net AR (in USD millions)? Address the question by adopting the perspective of a financial analyst who can only use the details shown within the balance sheet.",
-      "answer": "$1616.00",
-      "target_pages": [
-        2
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "Amcor",
-      "doc_type": "10k",
-      "doc_period": 2020,
-      "question_type": "metrics-generated",
-      "justification": "The metric accounts receivable, net was directly extracted from the company 10K. The line item name, as seen in the 10K, was: Trade receivables, net.",
-      "evidence_page_num_original": [
-        49
-      ],
-      "source_pdf_pages_original": [
-        49
-      ],
-      "page_match_confidence": 1.0
-    },
-    {
-      "id": "financebench_id_04209",
-      "source_dataset": "financebench",
-      "doc_id": "COSTCO_2021_10K",
-      "pdf_path": "data/raw_pdfs/financebench/COSTCO_2021_10K.pdf",
-      "question": "Using only the information within the balance sheet, how much total assets did Costco have at the end of FY2021? Answer in USD millions.",
-      "answer": "$59268.00",
-      "target_pages": [
-        2
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "Costco",
-      "doc_type": "10k",
-      "doc_period": 2021,
-      "question_type": "metrics-generated",
-      "justification": "The metric total assets was directly extracted from the company 10K. The line item name, as seen in the 10K, was: TOTAL ASSETS.",
-      "evidence_page_num_original": [
-        37
-      ],
-      "source_pdf_pages_original": [
-        37
-      ],
-      "page_match_confidence": 1.0
-    },
-    {
-      "id": "financebench_id_04254",
-      "source_dataset": "financebench",
-      "doc_id": "AMERICANWATERWORKS_2021_10K",
-      "pdf_path": "data/raw_pdfs/financebench/AMERICANWATERWORKS_2021_10K.pdf",
-      "question": "Basing your judgments off of the cash flow statement and the income statement, what is American Water Works's FY2021 unadjusted operating income + depreciation and amortization from the cash flow statement (unadjusted EBITDA) in USD millions?",
-      "answer": "$1832.00",
-      "target_pages": [
-        2,
-        4
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "American Water Works",
-      "doc_type": "10k",
-      "doc_period": 2021,
-      "question_type": "metrics-generated",
-      "justification": "The metric in question was calculated using other simpler metrics. The various simpler metrics (from the current and, if relevant, previous fiscal year(s)) used were:\n\nMetric 1: Depreciation and amortization. This metric was located in the 10K as a single line item named: Depreciation and amortization.\n\nMetric 2: Unadjusted operating income. This metric was located in the 10K as a single line item named: Operating income.",
-      "evidence_page_num_original": [
-        85,
-        87
-      ],
-      "source_pdf_pages_original": [
-        85,
-        87
-      ],
-      "page_match_confidence": 1.0
-    },
-    {
-      "id": "financebench_id_04700",
-      "source_dataset": "financebench",
-      "doc_id": "MICROSOFT_2016_10K",
-      "pdf_path": "data/raw_pdfs/financebench/MICROSOFT_2016_10K.pdf",
-      "question": "What is the FY2016 COGS for Microsoft? Please state answer in USD millions. Provide a response to the question by primarily using the statement of income.",
-      "answer": "$32780.00",
-      "target_pages": [
-        2
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "Microsoft",
-      "doc_type": "10k",
-      "doc_period": 2016,
-      "question_type": "metrics-generated",
-      "justification": "The metric cost of goods sold was directly extracted from the company 10K. The line item name, as seen in the 10K, was: Total cost of revenue.",
-      "evidence_page_num_original": [
-        51
-      ],
-      "source_pdf_pages_original": [
-        51
-      ],
-      "page_match_confidence": 1.0
-    },
-    {
-      "id": "financebench_id_04784",
-      "source_dataset": "financebench",
-      "doc_id": "WALMART_2019_10K",
-      "pdf_path": "data/raw_pdfs/financebench/WALMART_2019_10K.pdf",
-      "question": "Based on the information provided primarily in the statement of income, what is the FY2018 - FY2019 change in unadjusted operating income % margin for Walmart? Answer in units of percents and round to one decimal place.",
-      "answer": "0.2%",
-      "target_pages": [
-        2
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "Walmart",
-      "doc_type": "10k",
-      "doc_period": 2019,
-      "question_type": "metrics-generated",
-      "justification": "The metric in question was calculated using other simpler metrics. The various simpler metrics (from the current and, if relevant, previous fiscal year(s)) used were:\n\nMetric 1: Unadjusted operating income. This metric was located in the 10K as a single line item named: Operating income.\n\nMetric 2: Total revenue. This metric was located in the 10K as a single line item named: Total revenues.",
-      "evidence_page_num_original": [
-        47
-      ],
-      "source_pdf_pages_original": [
-        47
-      ],
-      "page_match_confidence": 0.873
-    },
-    {
       "id": "financebench_id_05915",
       "source_dataset": "financebench",
       "doc_id": "CVSHEALTH_2018_10K",
@@ -544,115 +129,6 @@
         303
       ],
       "page_match_confidence": 0.591
-    },
-    {
-      "id": "financebench_id_06655",
-      "source_dataset": "financebench",
-      "doc_id": "AMAZON_2017_10K",
-      "pdf_path": "data/raw_pdfs/financebench/AMAZON_2017_10K.pdf",
-      "question": "What is Amazon's FY2017 days payable outstanding (DPO)? DPO is defined as: 365 * (average accounts payable between FY2016 and FY2017) / (FY2017 COGS + change in inventory between FY2016 and FY2017). Round your answer to two decimal places. Address the question by using the line items and information shown within the balance sheet and the P&L statement.",
-      "answer": "93.86",
-      "target_pages": [
-        2,
-        4
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "Amazon",
-      "doc_type": "10k",
-      "doc_period": 2017,
-      "question_type": "metrics-generated",
-      "justification": "The metric in question was calculated using other simpler metrics. The various simpler metrics (from the current and, if relevant, previous fiscal year(s)) used were:\n\nMetric 1: Accounts payable. This metric was located in the 10K as a single line item named: Accounts payable.\n\nMetric 2: Inventories. This metric was located in the 10K as a single line item named: Inventories.\n\nMetric 3: Cost of goods sold. This metric was located in the 10K as a single line item named: Cost of sales.",
-      "evidence_page_num_original": [
-        37,
-        39
-      ],
-      "source_pdf_pages_original": [
-        37,
-        39
-      ],
-      "page_match_confidence": 1.0
-    },
-    {
-      "id": "financebench_id_10285",
-      "source_dataset": "financebench",
-      "doc_id": "BOEING_2018_10K",
-      "pdf_path": "data/raw_pdfs/financebench/BOEING_2018_10K.pdf",
-      "question": "We need to calculate a financial metric by using information only provided within the balance sheet. Please answer the following question: what is Boeing's year end FY2018 net property, plant, and equipment (in USD millions)?",
-      "answer": "$12645.00",
-      "target_pages": [
-        2
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "Boeing",
-      "doc_type": "10k",
-      "doc_period": 2018,
-      "question_type": "metrics-generated",
-      "justification": "The metric ppne, net was directly extracted from the company 10K. The line item name, as seen in the 10K, was: Property, plant and equipment, net.",
-      "evidence_page_num_original": [
-        51
-      ],
-      "source_pdf_pages_original": [
-        51
-      ],
-      "page_match_confidence": 0.993
-    },
-    {
-      "id": "financebench_id_10420",
-      "source_dataset": "financebench",
-      "doc_id": "AES_2022_10K",
-      "pdf_path": "data/raw_pdfs/financebench/AES_2022_10K.pdf",
-      "question": "Based on the information provided primarily in the statement of financial position and the statement of income, what is AES's FY2022 return on assets (ROA)? ROA is defined as: FY2022 net income / (average total assets between FY2021 and FY2022). Round your answer to two decimal places.",
-      "answer": "-0.02",
-      "target_pages": [
-        2,
-        4
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "AES Corporation",
-      "doc_type": "10k",
-      "doc_period": 2022,
-      "question_type": "metrics-generated",
-      "justification": "The metric in question was calculated using other simpler metrics. The various simpler metrics (from the current and, if relevant, previous fiscal year(s)) used were:\n\nMetric 1: Net income. This metric was located in the 10K as a single line item named: NET INCOME (LOSS) ATTRIBUTABLE TO THE AES CORPORATION.\n\nMetric 2: Total assets. This metric was located in the 10K as a single line item named: TOTAL ASSETS.",
-      "evidence_page_num_original": [
-        129,
-        131
-      ],
-      "source_pdf_pages_original": [
-        129,
-        131
-      ],
-      "page_match_confidence": 1.0
-    },
-    {
-      "id": "financebench_id_10499",
-      "source_dataset": "financebench",
-      "doc_id": "KRAFTHEINZ_2019_10K",
-      "pdf_path": "data/raw_pdfs/financebench/KRAFTHEINZ_2019_10K.pdf",
-      "question": "What is Kraft Heinz's FY2019 inventory turnover ratio? Inventory turnover ratio is defined as: (FY2019 COGS) / (average inventory between FY2018 and FY2019). Round your answer to two decimal places. Please base your judgments on the information provided primarily in the balance sheet and the P&L statement.",
-      "answer": "6.25",
-      "target_pages": [
-        2,
-        4
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "Kraft Heinz",
-      "doc_type": "10k",
-      "doc_period": 2019,
-      "question_type": "metrics-generated",
-      "justification": "The metric in question was calculated using other simpler metrics. The various simpler metrics (from the current and, if relevant, previous fiscal year(s)) used were:\n\nMetric 1: Cost of goods sold. This metric was located in the 10K as a single line item named: Cost of products sold.\n\nMetric 2: Inventories. This metric was located in the 10K as a single line item named: Inventories.",
-      "evidence_page_num_original": [
-        49,
-        51
-      ],
-      "source_pdf_pages_original": [
-        49,
-        51
-      ],
-      "page_match_confidence": 1.0
     },
     {
       "id": "financebench_id_00080",
@@ -733,56 +209,6 @@
       "page_match_confidence": 1.0
     },
     {
-      "id": "financebench_id_00283",
-      "source_dataset": "financebench",
-      "doc_id": "Pfizer_2023Q2_10Q",
-      "pdf_path": "data/raw_pdfs/financebench/Pfizer_2023Q2_10Q.pdf",
-      "question": "How much does Pfizer expect to pay to spin off Upjohn in the future in USD million?",
-      "answer": "77.78",
-      "target_pages": [
-        2
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "Pfizer",
-      "doc_type": "10q",
-      "doc_period": 2023,
-      "question_type": "novel-generated",
-      "justification": "10% cost is remaining amount in the future. Calculation: 700/9 is 10% of the cost remaining",
-      "evidence_page_num_original": [
-        40
-      ],
-      "source_pdf_pages_original": [
-        40
-      ],
-      "page_match_confidence": 1.0
-    },
-    {
-      "id": "financebench_id_00476",
-      "source_dataset": "financebench",
-      "doc_id": "AMERICANEXPRESS_2022_10K",
-      "pdf_path": "data/raw_pdfs/financebench/AMERICANEXPRESS_2022_10K.pdf",
-      "question": "Which debt securities are registered to trade on a national securities exchange under American Express' name as of 2022?",
-      "answer": "There are none",
-      "target_pages": [
-        1
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human",
-      "company": "American Express",
-      "doc_type": "10k",
-      "doc_period": 2022,
-      "question_type": "domain-relevant",
-      "justification": "No debt securities are listed under the securities registered pursuant to Section 12(b) of the Act, which implies there are none",
-      "evidence_page_num_original": [
-        0
-      ],
-      "source_pdf_pages_original": [
-        0
-      ],
-      "page_match_confidence": 0.967
-    },
-    {
       "id": "financebench_id_00521",
       "source_dataset": "financebench",
       "doc_id": "ULTABEAUTY_2023_10K",
@@ -808,94 +234,6 @@
       "page_match_confidence": 1.0
     },
     {
-      "id": "doclaynet_e51e669ce94a",
-      "source_dataset": "doclaynet",
-      "doc_id": "scientific_articles_1001.1785_p6",
-      "pdf_path": "data/raw_pdfs/doclaynet/scientific_articles_1001.1785_p6.pdf",
-      "question": "According to the reference list at the bottom of the page, what is the title of the book cited in reference [2]?",
-      "answer": "Quantum Computation and Quantum Information",
-      "target_pages": [
-        1
-      ],
-      "layout_challenge": "multi-column scientific layout with figures",
-      "qa_source": "gemini-generated",
-      "doc_category": "scientific_articles",
-      "collection": "arxiv_two_columns",
-      "original_filename": "1001.1785.pdf",
-      "original_page_no": 6,
-      "page_image": "data/pages/scientific_articles_1001.1785_p6.jpg",
-      "page_text": "7\nSince this state is diagonal (\u201cclassical\u201d) it is invariant under\nthe dephasing channel with Kraus operators given by Eq. (18).\nTherefore the eigenvalues of the output state (A5) are\nThe states input to the quantum dephasing channel obtained\nfrom Eq. (29) are\ntherefore, for all\n\u03c1$_{S,i}$\nThis results in the following expression for the first term in\nEq. (8):\nFinally, we calculate the third term in Eq. (8):\n\u03c5$_{1}$\n= cos\n2\n\u03b8\ncos\n2\nx$_{1}$\n+ sin\n2\n\u03b8\nsin\n2\nx$_{1}$,\n\u03c5$_{2}$\n= cos\n2\n\u03b8\nsin\n2\nx$_{1}$\n+ sin\n2\n\u03b8\ncos\n2\nx$_{1}$,\n(A7)\n\u03c1$_{S,}$$_{1}$\n=\nTr$_{R}$\n(\n|\n\u03a6$_{1}$\n\u232a\u2329\n\u03a6$_{1}$\n|\n) = cos\n2\n\u03b8\n|\n0\n\u232a\u2329\n0\n|\n+ sin\n2\n\u03b8\n|\n1\n\u232a\u2329\n1\n|\n,\n\u03c1$_{S,}$$_{2}$\n=\nTr$_{R}$\n(\n|\n\u03a6$_{2}$\n\u232a\u2329\n\u03a6$_{2}$\n|\n) = sin\n2\n\u03b8\n|\n0\n\u232a\u2329\n0\n|\n+ cos\n2\n\u03b8\n|\n1\n\u232a\u2329\n1\n|\n,\n\u03c1$_{S,}$$_{3}$\n=\nTr$_{R}$\n(\n|\n\u03a6$_{3}$\n\u232a\u2329\n\u03a6$_{3}$\n|\n) = cos\n2\n\u03b8\n|\n0\n\u232a\u2329\n0\n|\n+ sin\n2\n\u03b8\n|\n1\n\u232a\u2329\n1\n|\n,\n\u03c1$_{S,}$$_{4}$\n=\nTr$_{R}$\n(\n|\n\u03a6$_{4}$\n\u232a\u2329\n\u03a6$_{4}$\n|\n) = sin\n2\n\u03b8\n|\n0\n\u232a\u2329\n0\n|\n+ cos\n2\n\u03b8\n|\n1\n\u232a\u2329\n1\n|\n,\n(A2)\nS\n(\n\u03c1$_{S,i}$\n) =\n\u2212\n[cos\n2\n\u03b8\nlog$_{2}$ cos\n2\n\u03b8\n+ sin\n2\n\u03b8\nlog$_{2}$ sin\n2\n\u03b8\n]\n.\n(A3)\nS\n[\nE\n(\n\u2211\ni\np$_{i}$\n(\nx$_{1}$, x$_{2}$\n)\n\u03c1$_{S,i}$\n)] =\n\u2212\n2\n\u2211\ni\n=1\n\u03c5$_{i}$\nlog$_{2}$\n\u03c5$_{i}$.\n(A8)\nand\nwhich for all\n|\n\u03a6$_{i}$\n\u232a\nhas eigenvalues\n\u03c9$_{1}$\n=\n\u03c9$_{2}$\n= 0\nand\n\u03c9$_{3}$, \u03c9$_{4}$\nare given in Eq. (31). The third term in Eq. (8) is thus\n(\nE\n\u2297\nI\n)(\n|\n\u03a6$_{i}$\n\u232a\u2329\n\u03a6$_{i}$\n|\n)\n=\n\u2211\ni,j\n(\nK$_{ij}$\n\u2297\nI\n)(\n|\n\u03a6$_{i}$\n\u232a\u2329\n\u03a6$_{i}$\n|\n)(\nK\n\u2020\nij\n\u2297\nI\n)\n,\n(A9)\n\u2211\ni\np$_{i}$\n(\nx$_{1}$, x$_{2}$\n)\nS\n(\n\u03c1$_{S,i}$\n)\n=\n\u2212\n(cos\n2\nx$_{1}$\ncos\n2\nx$_{2}$\n+ sin\n2\nx$_{1}$\ncos\n2\nx$_{2}$\n+ cos\n2\nx$_{1}$\nsin\n2\nx$_{2}$\n+ sin\n2\nx$_{1}$\nsin\n2\nx$_{2}$\n)\n\u00d7\n[cos\n2\n\u03b8\nlog$_{2}$ cos\n2\n\u03b8\n+ sin\n2\n\u03b8\nlog$_{2}$ sin\n2\n\u03b8\n]\n,\n=\n\u2212\n[cos\n2\n\u03b8\nlog$_{2}$ cos\n2\n\u03b8\n+ sin\n2\n\u03b8\nlog$_{2}$ sin\n2\n\u03b8\n]\n,\n(A4)\nwhere we have used the normalization\n\u2211\n4\ni\n=1\np$_{i}$\n(\nx$_{1}$, x$_{2}$\n) =\n1\n,\n\u2200\nx$_{1}$, x$_{2}$\n. This yields the first term in Eq. (30).\nNext we calculate the second term in Eq. (8). The output\nstate is\n\u2211\ni\np$_{i}$\n(\nx$_{1}$, x$_{2}$\n)\nS\n[(\nE\n\u2297\nI\n)(\n|\n\u03a6$_{i}$\n\u232a\u2329\n\u03a6$_{i}$\n|\n)]\n=\n\u2212\n4\n\u2211\ni\n=1\n\u03c9$_{i}$\nlog$_{2}$\n\u03c9$_{i}$,\n(A10)\nE\n(\n\u2211\ni\np$_{i}$\n(\nx$_{1}$, x$_{2}$\n)\n\u03c1$_{S,i}$\n)\n=\n\u2211\ni,j\nK$_{ij}$\n(\n\u2211\ni\np$_{i}$\n(\nx$_{1}$, x$_{2}$\n)\n\u03c1$_{S,i}$\n)\nK\n\u2020\n$_{ij}$,\n(A5)\n\u2211\ni\np$_{i}$\n(\nx$_{1}$, x$_{2}$\n)\n\u03c1$_{S,i}$\n= [cos\n2\n\u03b8\n(cos\n2\nx$_{1}$\ncos\n2\nx$_{2}$\n+ cos\n2\nx$_{1}$\nsin\n2\nx$_{2}$\n)\n+ sin\n2\n\u03b8\n(sin\n2\nx$_{1}$\nsin\n2\nx$_{2}$\n+ sin\n2\nx$_{1}$\ncos\n2\nx$_{2}$\n)]\n|\n0\n\u232a\u2329\n0\n|\n+ [cos\n2\n\u03b8\n(sin\n2\nx$_{1}$\nsin\n2\nx$_{2}$\n+ sin\n2\nx$_{1}$\ncos\n2\nx$_{2}$\n)\n+ sin\n2\n\u03b8\n(cos\n2\nx$_{1}$\ncos\n2\nx$_{2}$\n+ cos\n2\nx$_{1}$\nsin\n2\nx$_{2}$\n)]\n|\n1\n\u232a\u2329\n1\n|\n= (cos\n2\n\u03b8\ncos\n2\nx$_{1}$\n+ sin\n2\n\u03b8\nsin\n2\nx$_{1}$\n)\n|\n0\n\u232a\u2329\n0\n|\n+ (cos\n2\n\u03b8\nsin\n2\nx$_{1}$\n+ sin\n2\n\u03b8\ncos\n2\nx$_{1}$\n)\n|\n1\n\u232a\u2329\n1\n|\n.\n(A6)\nwhere, as for Eq. (A4), we have used the normalization\n\u2211\n4\ni\n=1\np$_{i}$\n= 1\n. This yields the third term in Eq. (30).\nThus, indeed only the second term in Eq. (8) depends on\nx$_{1}$, x$_{2}$\n, and for a given value of\n\u03b8\n, the classical capacity as-\nsisted by limited entanglement is maximized by maximizing\nEq. (A8).\nThe maximum is attained when the output state\n(A5)\nis fully mixed, i.e., when its eigenvalues\n\u03c5$_{1}$\n=\n\u03c5$_{2}$\n= 1\n/\n2\n.\nThis occurs when\nx$_{1}$\n=\nx$_{2}$\n=\n\u03c0\n$_{4}$, i.e., when we have an\nequiprobable ensemble of the states.\nThis gives rise to the\n1\nin Eq. (30).\nwhere\n[4]\nC. Shannon, Bell Sys. Tech. J.\n27\n, 379 (1948).\n[5]\nC. H. Bennett and P. W. Shor, Science\n303\n, 1784 (2004).\n[6]\nP. Hausladen, R. Jozsa, B. Schumacher, M. Westmoreland, and\nW.\nK. Wootters, Phys. Rev. A\n54\n, 1869 (1996).\n[7]\nB. Schumacher and M. D. Westmoreland, Phys. Rev. A\n56\n, 131\n(1997).\n[8]\nS. Lloyd, Phys. Rev. A\n55\n, 1613 (1997).\n[1]\nC. Bennett and P. Shor, IEEE Trans. Inf. Theory\n44\n, 2724\n(1998).\n[2]\nM. Nielsen and I. Chuang,\nQuantum Computation and Quan-\ntum Information\n(Cambridge University Press, Cambridge,\nEngland, 2000).\n[3]\nT. M. Cover and J. A. Thomas,\nElements of Information Theory\n(Wiley, New York, 1991).",
-      "needs_human_review": true,
-      "qa_rationale": "Reference [2] in the bibliography at the bottom of the page cites M. Nielsen and I. Chuang's book titled 'Quantum Computation and Quantum Information' published by Cambridge University Press in 2000.",
-      "qa_model": "gemini-3.7-flash"
-    },
-    {
-      "id": "doclaynet_c10636db4f55",
-      "source_dataset": "doclaynet",
-      "doc_id": "scientific_articles_1001.0764_p3",
-      "pdf_path": "data/raw_pdfs/doclaynet/scientific_articles_1001.0764_p3.pdf",
-      "question": "Which equation label designates the expression for the anomalous Green's function F(\u03c9, \u20d7k) in a superconducting state (SCS)?",
-      "answer": "(9c)",
-      "target_pages": [
-        1
-      ],
-      "layout_challenge": "multi-column scientific layout with figures",
-      "qa_source": "gemini-generated",
-      "doc_category": "scientific_articles",
-      "collection": "arxiv_two_columns",
-      "original_filename": "1001.0764.pdf",
-      "original_page_no": 3,
-      "page_image": "data/pages/scientific_articles_1001.0764_p3.jpg",
-      "page_text": "4\nan energy of interband transitions, which is roughly 2\neV\n.\nThis would be consistent with Refs. 8,9.\nWe begin with formulating our calculational basis in\nthe next section.\nThen we take up the four cases and\nconsider in each case the extent to which the Kubo sum is\nsatisfied up to the order of bandwidth and the functional\nform and the sign of \u0394\nW\n(\n\u03c9$_{c}$\n). The last section presents\nour conclusions.\njust list the formulas that we used in our computations.\nThe conductivity\n\u03c3\n(\u2126) and the optical integral\nW\n(\n\u03c9$_{c}$\n)\nare given by (see for example Ref. 35).\nThe generic formalism of the computation of the op-\ntical conductivity and the optical integral has been dis-\ncussed several times in the literature\n21\u201323,26,29\nand we\nwhere \u2018\nX\n\u2032\n\u2019 and \u2018\nX\n\u2032\u2032\n\u2019 stand for real and imaginary parts\nof\nX\n.\nWe will restrict with\nT\n= 0.\nThe polarization\noperator \u03a0(\u2126) is (see Ref. 36)\nwhere\n\u222b\n\u2032\ndenotes the principal value of the integral,\n\u2211\n\u20d7\nk\nis understood to be\n1\nN\n\u2211\n\u20d7\n$_{k}$,(\nN\nis the number of lat-\ntice sites),\nn$_{F}$\n(\nx\n) is the Fermi function which is a step\nfunction at zero temperature,\nG\nand\nF\nare the normal\nand anomalous Greens functions. given by\n37\nThe 2 is due to the trace over spin indices. We show the\ndistribution functions in the NS and SCS under different\ncircumstances in Fig 2.\nThe\n\u20d7\nk\n-summation is done over first Brillouin zone for a\n2-D lattice with a 62x62 grid. The frequency integrals are\ndone analytically wherever possible, otherwise performed\nusing Simpson\u2019s rule for all regular parts. Contributions\nfrom the poles are computed separately using Cauchy\u2019s\ntheorem. For comparison, in all four cases we also calcu-\nlated FGT sum rule by replacing\n\u222b\nd\n$^{2}$k\n=\nd\n\u2126$_{k}$\nd\u03f5$_{k}$\u03bd$_{\u03f5}$$_{k}$$_{,}$$_{\u2126}$$_{k}$\nand keeping\n\u03bd\nconstant.\nWe remind that the FGT is\nthe result when one assumes that the integral in\nW\n(\n\u03c9$_{c}$\n)\npredominantly comes from a narrow region around the\nFermi surface.\nWe will first use Eq 3 and compute\nW$_{K}$\nin NS and SCS.\nThis will tell us about the magnitude of \u0394\nW\n(\n\u03c9$_{c}$\n=\n\u221e\n).\nWe next compute the conductivity\n\u03c3\n(\n\u03c9\n) using the equa-\ntions listed above, find\nW\n(\n\u03c9$_{c}$\n) and \u0394\nW\n(\n\u03c9$_{c}$\n) and compare\n\u0394\nf\n(\n\u03c9$_{c}$\n) and \u0394\nW$_{K}$\n.\nFor simplicity and also for comparisons with earlier\nstudies, for BCSI, EB, and MFLI models we assumed\nthat the gap is just a constant along the FS. For CB\nmodel, we used a\nd\n\u2212\nwave gap and included into consid-\neration the fact that, if a CB is a spin fluctuation, its\npropagator develops a resonance when the pairing gap is\nd\n\u2212\nwave.\nwhere\nZ$_{k,\u03c9}$\n= 1\n\u2212\n\u03a3(\nk,\u03c9\n)\n\u03c9\n, and \u0394$_{k,\u03c9}$, is the SC gap. Fol-\nlowing earlier works\n$^{31,33}$, we assume that the fermionic\nself-energy \u03a3(\nk, \u03c9\n) predominantly depends on frequency\nand approximate \u03a3(\nk, \u03c9\n)\n\u2248\n\u03a3(\n\u03c9\n) and also neglect the\nfrequency dependence of the gap, i.e., approximate \u0394$_{k,\u03c9}$\nby a\nd\n\u2212\nwave \u0394$_{k}$. The lattice dispersion\n\u03b5$_{\u20d7}$\nk\nis taken from\nRef. 38. To calculate\nW$_{K}$\n, one has to evaluate the Kubo\nterm in Eq.3 wherein the distribution function\nn$_{\u20d7}$\n$_{k}$, is cal-\nculated from\nFor a NS,\nG\n(\n\u03c9,\n\u20d7\nk\n) =\n1\n\u03c9\n\u2212\n\u03a3(\nk, \u03c9\n)\n\u2212\n\u03b5$_{\u20d7}$\nk\n+\ni\u03b4\n(9a)\nFor a SCS,\nG\n(\n\u03c9,\n\u20d7\nk\n) =\nZ$_{k,\u03c9}$\u03c9\n+\n\u03b5$_{\u20d7}$\nk\nZ\n2\n$_{k,\u03c9}$(\n\u03c9\n2\n\u2212\n\u0394\n2\n$_{k,\u03c9}$)\n\u2212\n\u03b5\n2\n\u20d7\nk\n+\ni\u03b4sgn\n(\n\u03c9\n)\n(9b)\nF\n(\n\u03c9,\n\u20d7\nk\n) =\nZ$_{k,\u03c9}$\n\u0394$_{k,\u03c9}$\nZ\n2\n$_{k,\u03c9}$(\n\u03c9\n2\n\u2212\n\u0394\n2\n$_{k,\u03c9}$)\n\u2212\n\u03b5\n2\n\u20d7\nk\n+\ni\u03b4sgn\n(\n\u03c9\n)\n(9c)\nn\n(\n\u03b5$_{\u20d7}$\n$_{k}$) =\n\u2212\n2\n\u222b\n0\n\u2212\u221e\nd\u03c9\n2\n\u03c0\n$_{G}$\u2032\u2032$_{(}$$_{\u03c9,}$\n\u20d7\nk\n)\n(10)\n\u03a0(\ni\n\u2126) =\nT\n\u2211\n\u03c9\n\u2211\n\u20d7\nk\n(\n\u2207$_{\u20d7}$\n$_{k}$\u03b5$_{\u20d7}$\n$_{k}$)\n2\n(\nG\n(\ni\u03c9,\n\u20d7\nk\n)\nG\n(\ni\u03c9\n+\ni\n\u2126\n,\n\u20d7\nk\n) +\nF\n(\ni\u03c9,\n\u20d7\nk\n)\nF\n(\ni\u03c9\n+\ni\n\u2126\n,\n\u20d7\nk\n)\n(8a)\n$_{\u03a0}$\u2032$_{(\u2126) =}$\n1\n\u03c0\n2\n\u2211\n\u20d7\nk\n(\n\u2207$_{\u20d7}$\n$_{k}$\u03b5$_{\u20d7}$\n$_{k}$)\n2\n\u222b\n\u2032\n\u222b\n\u2032\ndx dy\n(\n$_{G}$\u2032\u2032$_{(}$$_{x,}$\n\u20d7\nk\n)\n$_{G}$\u2032\u2032$_{(}$$_{y,}$\n\u20d7\nk\n) +\n$_{F}$\u2032\u2032$_{(}$$_{x,}$\n\u20d7\nk\n)\n$_{F}$\u2032\u2032$_{(}$$_{y,}$\n\u20d7\nk\n)\nn$_{F}$\n(\ny\n)\n\u2212\nn$_{F}$\n(\nx\n)\ny\n\u2212\nx\n(8c)\n$_{\u03a0}$\u2032\u2032$_{(\u2126) =}$\n\u2212\n1\n\u03c0\n\u2211\n\u20d7\nk\n(\n\u2207$_{\u20d7}$\n$_{k}$\u03b5$_{\u20d7}$\n$_{k}$)\n2\n\u222b\n0\n\u2212\n\u2126\nd\u03c9\n(\n$_{G}$\u2032\u2032$_{(}$$_{\u03c9,}$\n\u20d7\nk\n)\n$_{G}$\u2032\u2032$_{(}$$_{\u03c9}$\n+ \u2126\n,\n\u20d7\nk\n) +\n$_{F}$\u2032\u2032$_{(}$$_{\u03c9,}$\n\u20d7\nk\n)\n$_{F}$\u2032\u2032$_{(}$$_{\u03c9}$\n+ \u2126\n,\n\u20d7\nk\n)\n(8b)\n\u03c3\n\u2032\n(\u2126) =\nIm\n[\n\u2212\n\u03a0(\u2126)\n\u2126 +\ni\u03b4\n]\n=\n\u2212\n\u03a0\n\u2032\u2032\n(\u2126)\n\u2126\n+\n\u03c0\u03b4\n(\u2126) \u03a0\n\u2032\n(\u2126)\n(7a)\nW\n(\n\u03c9$_{c}$\n) =\n\u222b\n\u03c9$_{c}$\n0\n\u03c3\n\u2032\n(\u2126)\nd\n\u2126 =\n\u2212\n\u222b\n\u03c9$_{c}$\n0+\n\u03a0\n\u2032\u2032\n(\u2126)\n\u2126\nd\n\u2126 +\n\u03c0\n2\n\u03a0\n\u2032\n(0)\n(7b)\nII.\nOPTICAL INTEGRAL IN NORMAL AND\nSUPERCONDUCTING STATES",
-      "needs_human_review": true,
-      "qa_rationale": "In the labeled equations on the page, Equation (9a) defines G(\u03c9, \u20d7k) for a normal state (NS), Equation (9b) defines G(\u03c9, \u20d7k) for a superconducting state (SCS), and Equation (9c) defines the anomalous Green's function F(\u03c9, \u20d7k).",
-      "qa_model": "gemini-3.7-flash"
-    },
-    {
-      "id": "doclaynet_b7cedc934f66",
-      "source_dataset": "doclaynet",
-      "doc_id": "scientific_articles_1001.0266_p3",
-      "pdf_path": "data/raw_pdfs/doclaynet/scientific_articles_1001.0266_p3.pdf",
-      "question": "According to Equation (8), what numerical fraction multiplies $J_z [S_{j2} \\cdot (S_{j3} \\times S_{j4})][S_{k2} \\cdot (S_{k3} \\times S_{k4})]$ in the summation over $z$-links?",
-      "answer": "16/9",
-      "target_pages": [
-        1
-      ],
-      "layout_challenge": "multi-column scientific layout with figures",
-      "qa_source": "gemini-generated",
-      "doc_category": "scientific_articles",
-      "collection": "arxiv_two_columns",
-      "original_filename": "1001.0266.pdf",
-      "original_page_no": 3,
-      "page_image": "data/pages/scientific_articles_1001.0266_p3.jpg",
-      "page_text": "Plug in the expressions (4) and (6) into (7), the Hamil-\ntonian reads explicitly as\n4\nH\n=\n\u2211\nj\n(\nJ$_{cluster}$/\n2)(\nS$_{j}$$_{1}$\n+\nS$_{j}$$_{2}$\n+\nS$_{j}$$_{3}$\n+\nS$_{j}$$_{4}$\n)\n2\n\u2212\n\u2211\nz\n$^{\u2212}$links\n<jk>\nJ$_{z}$\n(16\n/\n9)[\nS$_{j}$$_{2}$\n\u00b7\n(\nS$_{j}$$_{3}$\n\u00d7\nS$_{j}$$_{4}$\n)][\nS$_{k}$$_{2}$\n\u00b7\n(\nS$_{k}$$_{3}$\n\u00d7\nS$_{k}$$_{4}$\n)]\n\u2212\n\u2211\nx\n$^{\u2212}$links\n<jk>\nJ$_{x}$\n(2\nS$_{j}$$_{1}$\n\u00b7\nS$_{j}$$_{2}$\n+ 1\n/\n2)(2\nS$_{k}$$_{1}$\n\u00b7\nS$_{k}$$_{2}$\n+ 1\n/\n2)\n\u2212\n\u2211\ny\n$^{\u2212}$links\n<jk>\nJ$_{y}$\n(4\n/\n3)[\nS$_{j}$$_{1}$\n\u00b7\n(\nS$_{j}$$_{3}$\n\u2212\nS$_{j}$$_{4}$\n)][\nS$_{k}$$_{1}$\n\u00b7\n(\nS$_{k}$$_{3}$\n\u2212\nS$_{k}$$_{4}$\n)]\n(8)\nWhile by the represenation (4) and (5), the Hamilto-\nnian becomes\nH\n=\n\u2211\nj\n(\nJ$_{cluster}$/\n2)(\nS$_{j}$$_{1}$\n+\nS$_{j}$$_{2}$\n+\nS$_{j}$$_{3}$\n+\nS$_{j}$$_{4}$\n)\n2\n\u2212\n\u2211\nx\n$^{\u2212}$links\n<jk>\nJ$_{x}$\n(2\nS$_{j}$$_{1}$\n\u00b7\nS$_{j}$$_{2}$\n+ 1\n/\n2)(2\nS$_{k}$$_{1}$\n\u00b7\nS$_{k}$$_{2}$\n+ 1\n/\n2)\n\u2212\n\u2211\ny\n$^{\u2212}$links\n<jk>\nJ$_{y}$\n(4\n/\n3)[\nS$_{j}$$_{1}$\n\u00b7\n(\nS$_{j}$$_{3}$\n\u2212\nS$_{j}$$_{4}$\n)][\nS$_{k}$$_{1}$\n\u00b7\n(\nS$_{k}$$_{3}$\n\u2212\nS$_{k}$$_{4}$\n)]\n\u2212\n\u2211\nz\n$^{\u2212}$links\n<jk>\nJ$_{z}$\n(\n\u2212\n4\n/\n3)(2\nS$_{j}$$_{3}$\n\u00b7\nS$_{j}$$_{4}$\n+ 1\n/\n2)[\nS$_{j}$$_{1}$\n\u00b7\n(\nS$_{j}$$_{3}$\n\u2212\nS$_{j}$$_{4}$\n)](2\nS$_{k}$$_{3}$\n\u00b7\nS$_{k}$$_{4}$\n+ 1\n/\n2)[\nS$_{k}$$_{1}$\n\u00b7\n(\nS$_{k}$$_{3}$\n\u2212\nS$_{k}$$_{4}$\n)]\n(9)\n\u03c4\n\u2032\nx\n=\n\u221a\n1\n/\n3\n\u03c4\nz\n+\n\u221a\n2\n/\n3\n\u03c4\n$^{x}$,\n\u03c4\n\u2032\ny\n=\n1\n/\n3\n\u03c4\nz\n\u2212\n1\n/\n6\n\u03c4\nx\n+\n\u221a\n1\n/\n2\n\u03c4\n$^{y}$,\n\u03c4\n\u2032\nz\n=\n\u221a\n1\n/\n3\n\u03c4\nz\n\u2212\n\u221a\n1\n/\n6\n\u03c4\nx\n\u2212\n1\n/\n2\n\u03c4\ny\n\u03c4\n\u2032\nx\n=\n\u2212\n(4\n/\n3)\nS$_{2}$\n\u00b7\n(\nS$_{3}$\n\u00d7\nS$_{4}$\n) +\n\u221a\n2\n/\n3(2\nS$_{1}$\n\u00b7\nS$_{2}$\n+ 1\n/\n2)\n\u03c4\n\u2032\ny\n=\n\u2212\n(4\n/\n3)\nS$_{3}$\n\u00b7\n(\nS$_{4}$\n\u00d7\nS$_{2}$\n) +\n2\n/\n3(2\nS$_{1}$\n\u00b7\nS$_{3}$\n+ 1\n/\n2)\n\u03c4\n\u2032\nz\n=\n\u2212\n(4\n/\n3)\nS$_{4}$\n\u00b7\n(\nS$_{2}$\n\u00d7\nS$_{3}$\n) +\n\u221a\n2\n/\n3(2\nS$_{1}$\n\u00b7\nS$_{4}$\n+ 1\n/\n2)\n(10)\nThis model, in terms of physical spins\nS\n, has full\nspin rotation symmetry and time-reversal symmetry. A\npseudo-magnetic field term\n\u2211\n$_{j}$\u20d7\nh\n\u00b7\n\u20d7\n\u03c4$_{j}$\nterm can also be\nincluded under this mapping, however the resulting Ki-\ntaev model with magnetic field is not exactly solvable.\nIt is quite curious that such a formidably looking Hamil-\ntonian (8), with biquadratic and six-spin(or eight-spin)\nterms, has an exactly solvable low energy sector.\nNote that the original Kitaev model (1) has three-\nfold rotation symmetry around a honeycomb lattice site,\ncombined with a three-fold rotation in pseudo-spin space\n(cyclic permutation of\n\u03c4\n$^{x}$,\n\u03c4\n$^{y}$,\n\u03c4\n$^{z}$). This is not apparent\nin our model (8) in terms of physical spins, under the\ncurrent representation of\n\u03c4\n$^{x,y,z}$. We can remedy this by\nusing a different set of pseudo-spin Pauli matrices\n\u03c4\n\u2032\nx,y,z\nin (7),\nWith proper representation choice, they have a symmet-\nric form in terms of physical spins,\nWe emphasize that because the first intra-cluster term\n\u2211\ncluster\nH$_{cluster}$\ncommutes with the latter Kitaev terms\nindependent of the representation used, the Kitaev model\nis realized as the\nexact\nlow energy Hamiltonian of this\nmodel without truncation errors of perturbation theories,\nnamely no (\n|\nJ$_{x,y,z}$\n|\n/J$_{cluster}$\n)\n2\nor higher order terms will\nbe generated under the projection to low energy clus-\nter singlet space.\nThis is unlike, for example, the\nt/U\nexpansion of the half-filled Hubbard model\n$^{22,23}$, where\nat lowest\nt\n$^{2}$/U\norder the effective Hamiltonian is the\nHeisenberg model, but higher order terms (\nt\n$^{4}$/U 3\netc.)\nshould in principle still be included in the low energy ef-\nfective Hamiltonian for any finite\nt/U\n. Similar compari-\nson can be made to the perturbative expansion studies of\nthe Kitaev-type models by Vidal\net al.\n$^{9}$, where the low\nenergy effective Hamiltonians were obtained in certian\nanisotropic (strong bond/triangle) limits. Although the\nspirit of this work, namely projection to low energy sec-\ntor, is the same as all previous perturbative approaches\nto effective Hamiltonians.\nSo the symmetry mentioned above can be realized by a\nthree-fold rotation of the honeycomb lattice, with a cyclic\npermutation of\nS$_{2}$\n,\nS$_{3}$\nand\nS$_{4}$\nin each cluster. This is in\nfact the three-fold rotation symmetry of the physical spin\nlattice illustrated in FIG. 2. However this more symmet-\nric representation will not be used in later part of this\npaper.",
-      "needs_human_review": true,
-      "qa_rationale": "In the multi-line display of Hamiltonian Equation (8), the term under the summation over z-links contains the prefactor J_z (16/9) multiplying the product of triple scalar products.",
-      "qa_model": "gemini-3.7-flash"
-    },
-    {
-      "id": "doclaynet_f04336baecfe",
-      "source_dataset": "doclaynet",
-      "doc_id": "scientific_articles_1410.5885_p58",
-      "pdf_path": "data/raw_pdfs/doclaynet/scientific_articles_1410.5885_p58.pdf",
-      "question": "Which figure is cited on this page in connection with the condition under which $y_{1} \\in A_{\\rho,D}^{+}(\\phi, s)$ for some $\\rho \\ge 0$?",
-      "answer": "Figure A.1",
-      "target_pages": [
-        1
-      ],
-      "layout_challenge": "multi-column scientific layout with figures",
-      "qa_source": "gemini-generated",
-      "doc_category": "scientific_articles",
-      "collection": "arxiv_doublespaced",
-      "original_filename": "1410.5885.pdf",
-      "original_page_no": 58,
-      "page_image": "data/pages/scientific_articles_1410.5885_p58.jpg",
-      "page_text": "Thus, the value of\nsup\n(\n\u03d5,\u03c8\n)\n\u2208\n\u03a6$_{c}$\nJ\n(\n\u03d5, \u03c8\n) is unchanged even if one restricts the supremum to pairs of the form\nwhich implies that for each\ny$_{1}$\n\u2208$_{R}$\n,\nDefine\n$^{{}$A\n+\nk,D\n(\n\u03d5, s\n)\n}\n\u221e\nk\n=0\n,\n$^{{}$A\n\u2212\nk,D\n(\n\u03d5, s\n)\n}\n\u221e\nk\n=0\nas follows:\nAlso, according to the definitions above and Figure A.1, if\ny$_{1}$\n\u2208\nA\n+\n\u03c1,D\n(\n\u03d5, s\n) for some\n\u03c1\n\u2265\n0\n,\nthen\nA\n+\nk,D\n(\n\u03d5, s\n) =\n$^{{}$y$_{1}$\n\u2208$_{R}$|\u2203\ny$_{0}$\n\u2208\nA\n+\nk\n(\n\u03d5, s\n) s.t.\ny$_{1}$\n\u2212\ny$_{0}$\n\u2265\n\u03b4\nand (\ny$_{0}$, y$_{1}$\n)\n\u2208\nC\n}\n\u222a\n$^{{}$y$_{1}$\n\u2208$_{R}$|\u2203\ny$_{0}$\n\u2208\nA\n+\nk\n$_{+1}$(\n\u03d5, s\n) s.t.\ny$_{1}$\n\u2212\ny$_{0}$ < \u03b4\nand (\ny$_{0}$, y$_{1}$\n)\n\u2208\nC\n}\nfor any integer\nk\n\u2265\n0\n,\n(A.6)\nA\n\u2212\n0\n,D\n(\n\u03d5, s\n) =\n$^{{}$y$_{1}$\n\u2208$_{R}$|\u2200\ny$_{0}$\n\u2264\ny$_{1}$\n\u2212\n\u03b4\ns.t. (\ny$_{0}$, y$_{1}$\n)\n\u2208\nC, y$_{0}$\n\u2208\nA\n\u2212\n0\n(\n\u03d5, s\n)\n}\n\u2229\n$^{{}$y$_{1}$\n\u2208$_{R}$|\u2200\ny$_{0}$ > y$_{1}$\n\u2212\n\u03b4\ns.t. (\ny$_{0}$, y$_{1}$\n)\n\u2208\nC, y$_{0}$\n\u2208\n$^{(}$A\n+\n0\n(\n\u03d5, s\n)\nc\n$^{}}$,\nA\n\u2212\nk,D\n(\n\u03d5, s\n) =\n$^{{}$y$_{1}$\n\u2208$_{R}$|\u2200\ny$_{0}$\n\u2264\ny$_{1}$\n\u2212\n\u03b4\ns.t. (\ny$_{0}$, y$_{1}$\n)\n\u2208\nC, y$_{0}$\n\u2208\nA\n\u2212\nk\n(\n\u03d5, s\n)\n}\n\u2229\n$^{{}$y$_{1}$\n\u2208$_{R}$|\u2200\ny$_{0}$ > y$_{1}$\n\u2212\n\u03b4\ns.t. (\ny$_{0}$, y$_{1}$\n)\n\u2208\nC, y$_{0}$\n\u2208\nA\n\u2212\nk\n\u2212\n$_{1}$(\n\u03d5, s\n)\n}\nfor any integer\nk >\n0\n.\nsup\ny$_{0}$\n\u2208$_{R}$\n[\n\u221e\n\u2211\nk\n=0\n$^{(}$1$_{A}$\n+\n$_{k}$(\n\u03d5,s\n$_{)}$(\ny$_{0}$\n)\n\u2212\n1$_{A}$\n\u2212\nk\n(\n\u03d5,s\n$_{)}$(\ny$_{0}$\n)\n$^{)}$\u2212\n1\n{\ny$_{1}$\n\u2212\ny$_{0}$ < \u03b4\n} \u2212\n\u03bb\n(1\n\u2212\n1$_{C}$\n(\ny$_{0}$, y$_{1}$\n))$^{]}$\n\u2265\n\u03c1\n+ 1\n,\n\u2212\u221e\n<\nsup\ny$_{0}$\n\u2208$_{R}$\n[\n\u221e\n\u2211\nk\n=0\n$^{(}$1$_{A}$\n+\n$_{k}$(\n\u03d5,s\n$_{)}$(\ny$_{0}$\n)\n\u2212\n1$_{A}$\n\u2212\nk\n(\n\u03d5,s\n$_{)}$(\ny$_{0}$\n)\n$^{)}$\u2212\n1\n(\ny$_{1}$\n\u2212\ny$_{0}$ < \u03b4\n)\n\u2212\n\u03bb\n(1\n\u2212\n1$_{C}$\n(\ny$_{0}$, y$_{1}$\n))$^{]}$\n\u2264 \u2212\n\u221e\n\u2211\nk\n=0\n$^{(}$1$_{A}$\n+\n$_{k}$(\n\u03c8,s\n$_{)}$(\ny$_{1}$\n)\n\u2212\n1$_{A}$\n\u2212\nk\n(\n\u03c8,s\n$_{)}$(\ny$_{1}$\n)\n$^{)}$.\n(\n\u221e\n\u2211\nk\n=0\n$^{(}$1$_{A}$\n+\n$_{k}$(\n\u03d5,s\n)\n\u2212\n1$_{A}$\n\u2212\nk\n(\n\u03d5,s\n)\n$^{)}$,\n\u221e\n\u2211\nk\n=0\n$^{(}$1$_{A}$\n+\n$_{k}$(\n\u03c8,s\n)\n\u2212\n1$_{A}$\n\u2212\nk\n(\n\u03c8,s\n)\n)\n)\n.\nHence for all (\ny$_{0}$, y$_{1}$\n)\n\u2208$_{R}$\n$^{2}$,\n\u221e\n\u2211\nk\n=0\n$^{(}$1$_{A}$\n+\n$_{k}$(\n\u03d5,s\n$_{)}$(\ny$_{0}$\n)\n\u2212\n1$_{A}$\n\u2212\nk\n(\n\u03d5,s\n$_{)}$(\ny$_{0}$\n)\n$^{)}$+\n\u221e\n\u2211\nk\n=0\n$^{(}$1$_{A}$\n+\n$_{k}$(\n\u03c8,s\n$_{)}$(\ny$_{1}$\n)\n\u2212\n1$_{A}$\n\u2212\nk\n(\n\u03c8,s\n$_{)}$(\ny$_{1}$\n)\n\u2264\n1\n{\ny$_{1}$\n\u2212\ny$_{0}$ < \u03b4\n}\n+\n\u03bb\n(1\n\u2212\n1$_{C}$\n(\ny$_{0}$, y$_{1}$\n))\n,\n59",
-      "needs_human_review": true,
-      "qa_rationale": "The text states: 'Also, according to the definitions above and Figure A.1, if $y_{1} \\in A_{\\rho,D}^{+}(\\phi, s)$ for some $\\rho \\ge 0$, then...'.",
-      "qa_model": "gemini-3.7-flash"
-    },
-    {
       "id": "doclaynet_df4bfdc876fd",
       "source_dataset": "doclaynet",
       "doc_id": "scientific_articles_1001.0788_p6",
@@ -918,334 +256,199 @@
       "qa_model": "gemini-3.7-flash"
     },
     {
-      "id": "doclaynet_9223416e99d7",
-      "source_dataset": "doclaynet",
-      "doc_id": "scientific_articles_1001.2120_p3",
-      "pdf_path": "data/raw_pdfs/doclaynet/scientific_articles_1001.2120_p3.pdf",
-      "question": "According to the bulleted list of initial preparations, which preparation is the $n=0$ Fock preparation where the Wigner function is concentrated along the equator $\\theta = \\pi/2$?",
-      "answer": "TwinFock preparation",
+      "id": "docvqa_001",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_001",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_001.pdf",
+      "question": "What is the \u2018actual\u2019 value per 1000, during the year 1975?",
+      "answer": "0.28",
       "target_pages": [
         1
       ],
-      "layout_challenge": "multi-column scientific layout with figures",
-      "qa_source": "gemini-generated",
-      "doc_category": "scientific_articles",
-      "collection": "arxiv_two_columns",
-      "original_filename": "1001.2120.pdf",
-      "original_page_no": 3,
-      "page_image": "data/pages/scientific_articles_1001.2120_p3.jpg",
-      "page_text": "4\n[(\nj\n+1)\nj\n]\n1\n/\n$^{2}$sin(\n\u03b8\n) cos(\n\u03d5\n) [44].\nWe adopt the convention\nthat\n\u03c1$_{W}$\nis normalized with respect to the measure\nd\n\u2126\n/h\n,\nallowing to handle on equal footing a cylindrical phase\nspace upon the re-identification\nd\n\u2126 =\nd\u03d5dn\nand\nh\n= 2\n\u03c0\n.\nWithin\nthis\nphase-space\nrepresentation,\nthe\nFock\nstates\n|\nn\n\u232a\nare represented by stripes along constant\n\u03b8\ncon-\ntours (see e.g. left panel of Fig. 2). The\n|\nn\n=\nN\n\u232a\nstate (all\nparticles in one site) is a Gaussian-like wave packet con-\ncentrated around the NorthPole. From this state, we can\nobtain a family of spin coherent states (SCS)\n|\n\u03b8, \u03d5\n\u232a\nvia\nrotation.\nis\n\u03c9\n(\nE\n) given by Eq. (18). In particular, the low energy\nlevels have spacing\n\u03c9$_{J}$\n, while the high energy levels are\ndoubly-degenerate with spacing\n\u03c9$_{+}$\n.\nIn the vicinity of\nthe separatrix we get\nUsing the WKB quantization condition, we find that the\nlevel spacing at the vicinity of the separatrix (\nE\n\u223c\nE$_{x}$\n)\nis\nfinite\nand given by the expression\nIn what follows, we explore the dynamics of the follow-\ning experimentally-accessible preparations (see Fig. 2),\nthe first being a Fock state, whereas the last three are\nspin coherent states:\n\u2022\nTwinFock preparation:\nThe\nn\n=0 Fock preparation.\nExactly half of the particles are in each side of the\ndouble well. The Wigner function is concentrated\nalong the equator\n\u03b8\n=\n\u03c0/\n2.\n\u2022\nZero preparation:\nCoherent (\n\u03b8\n=\n\u03c0/\n2\n, \u03d5\n=0) prepa-\nration, located entirely in the (linear) sea region.\nBoth sites are equally populated with definite 0 rel-\native phase. The minimal wave-packet is centered\nat (\nn\n= 0\n, \u03d5\n= 0).\n\u2022\nPi\npreparation:\nCoherent\n(\n\u03b8\n=\n\u03c0/\n2\n, \u03d5\n=\n\u03c0\n)\non-\nseparatrix preparation. The sites are equally pop-\nulated with\n\u03c0\nrelative phase. The minimal wave-\npacket is centered at (\nn\n= 0\n, \u03d5\n=\n\u03c0\n).\n\u2022\nEdge preparation:\nCoherent\n\u03d5\n=\n\u03c0\non-separatrix\npreparation. The minimal wave-packet is centered\non the separatrix but away from the saddle point\non the\n\u03d5\n=0 side.\nThe Wigner function of an SCS resembles a\nminimal\nGaussian wave-packet, and it should satisfy\nOur approach for investigating the dynamics of various\ninitial preparations relies on the Wigner-function formal-\nism for spin variables, developed in Refs. [43, 44]. Each\ninitial preparation is described as a Wigner distribution\nfunction over the spherical phase space.\nThe dynam-\nics is deduced from expanding the initial state in terms\nof the semiclassical eigenstates described in Sec III. In\nthis section we specify the Wigner distribution for the\npreparations under study whereas the following section\npresents the eigenstate expansion of each of these four\ninitial wavepackets, evaluated semiclassically.\nThis requirement helps to determine the phase space\nspread without the need to use the lengthy algebra of\nRefs. [43, 44]. For the Fock coherent state\n|\nn\n=\nN\n\u232a\n, that\nis centered at the NorthPole (\n\u03b8\n= 0), one obtains:\nTo recap the phase-space approach to spin [43, 44], the\nHilbert space of the BHH has the dimension\nN\n= 2\nj\n+1,\nand the associated space of operators has the dimension-\nality\nN\n$^{2}$.\nAccording to the Stratonovich-Wigner-Weyl\ncorrespondence (SWWC) [50], any observable\nA\nin this\nspace, as well as the probability matrix of a spin\n(\nj\n)\nentity,\ncan be represented by a real sphere\n(2\nj\n)\nfunction\nA$_{W}$\n(\u2126).\nThe sphere\n(2\nj\n)\nis spanned by the\nY\n$^{\u2113m}$(\u2126) functions with\n\u2113\n\u2264\n2\nj\n, and the practical details regarding this formal-\nism can be found in Refs. [43, 44]. The SWWC allows\nto do exact quantum calculation in a classical-like man-\nner. A few examples for Wigner functions pertinent to\nthis work, are displayed in Fig. 2. Expectation values are\ncalculated as in classical statistical mechanics:\nFor the coherent states centered around the Equator, it is\nmore convenient to use (\n\u03d5, n\n) coordinates, e.g. the\n\u03d5\n= 0\ncoherent state is well approximated as,\nIn particular the Wigner-Weyl representation of the\nidentity operator is 1, and that of\nJ$_{x}$\nis as expected\nwith\na\n= 1\n$_{/}$\u221a$_{2}$\nN\nand\nb\n=\n\u221a\nN\n/\n2.\nShifted versions of\nthese expressions describe the\n\u03d5\n=\n\u03c0\nand the \u201cEdge\u201d\npreparations.\nThe Wigner function of a Fock state\n\u03c8\n=\n|\nn\n\u232a\nis semiclassically approximated as\n\u222b\n\u03c1$_{W}$\n(\n\u03b8, \u03d5\n)\nd\n\u2126\nh\n=\n\u222b\n[\n\u03c1$_{W}$\n(\n\u03b8, \u03d5\n)]\n2\nd\n\u2126\nh\n= 1\n.\n(33)\n\u03c1\n(\n\u03c8\n)\nW\n(\n\u03b8, \u03d5\n)\n\u2248\n2e\n\u2212\nN\n2\n\u03b8\n2\n.\n(34)\n\u03c1\n(\n\u03c8\n)\nW\n(\nn, \u03d5\n)\n\u2248\n1\nab\ne\n\u2212\n\u03d5\n2\n2\na\n$_{2}$\u2212\nn\n2\n2\nb\n2\n,\n(35)\n\u03c1\n(\n\u03c8\n)\nW\n(\nn, \u03d5\n)\n\u2248\n\u03b4\n(\nn\n\u2212\nn\n)\n,\n(36)\ntrace[\u02c6\n\u03c1\n\u02c6\nA\n]\n=\n\u222b\nd\n\u2126\nh\n\u03c1$_{W}$\n(\u2126)\nA$_{W}$\n(\u2126)\n(32)\nIV.\nTHE INITIAL PREPARATION AND ITS\nPHASE-SPACE REPRESENTATION - THE\nWIGNER FUNCTION\n\u03c9\n(\nE\n)\n\u2248\n[\n1\n\u03c0\nlog\n\u2223\nNK\nE\n\u2212\nE$_{x}$\n\u2223\n]\n\u2212\n1\n\u03c9$_{J}$.\n(29)",
-      "needs_human_review": true,
-      "qa_rationale": "In the bulleted list detailing the experimentally-accessible preparations, the first item explicitly defines the 'TwinFock preparation' as 'The n = 0 Fock preparation. Exactly half of the particles are in each side of the double well. The Wigner function is concentrated along the equator \u03b8 = \u03c0/2.'",
-      "qa_model": "gemini-3.7-flash"
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
     },
     {
-      "id": "doclaynet_1b6a73e9357c",
-      "source_dataset": "doclaynet",
-      "doc_id": "scientific_articles_1611.06217_p37",
-      "pdf_path": "data/raw_pdfs/doclaynet/scientific_articles_1611.06217_p37.pdf",
-      "question": "According to the statement of Lemma A.6, what does the quantity $\\sup_{u \\in \\Pi} |G_n(u, \\hat{\\theta}_n) - G(u, \\theta_0)|$ evaluate to?",
-      "answer": "$o_p(1)$",
+      "id": "docvqa_002",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_002",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_002.pdf",
+      "question": "What is name of university?",
+      "answer": "university of california",
       "target_pages": [
         1
       ],
-      "layout_challenge": "multi-column scientific layout with figures",
-      "qa_source": "gemini-generated",
-      "doc_category": "scientific_articles",
-      "collection": "arxiv_doublespaced",
-      "original_filename": "1611.06217.pdf",
-      "original_page_no": 37,
-      "page_image": "data/pages/scientific_articles_1611.06217_p37.jpg",
-      "page_text": "following similar arguments in proving the negligibility of\nC$_{2}$$_{n}$\n. Hence\nC$_{3}$$_{n}$\n=\nO$_{p}$\n(\nn\n\u2212\n1\n/\n$^{2}$) =\no$_{p}$\n(1).\nThis ends the proof of Lemma A.5.\n\u25a1\nThe next two lemmas establish the (uniform) convergence of\nG$_{n}$\n(\nu,\n\u02c6\n\u03b8$_{n}$\n) and \u0394\n\u2212\n1\nn\n(\n\u02c6\n\u03b8$_{n}$\n) to\nG\n(\nu, \u03b8$_{0}$\n) and \u0394\n\u2212\n$^{1}$(\n\u03b8$_{0}$\n), respectively.\nLemma A.6\nUnder Assumptions 3.1-3.3, we have\nProof of Lemma A.6:\nThe proof follows directly from the ULLN of Newey and McFadden\n(1994).\n\u25a1\nLemma A.7\nUnder Assumptions 3.1-3.2, we have\nProof of Lemma A.7:\nThe proof follows from the ULLN of Newey and McFadden (1994) and\nthe continuous mapping theorem.\n\u25a1\nNow, we are ready to proceed with the proofs of our main theorems.\nProof of Theorem 1:\nBy a straightforward decomposition, we have\nBy Lemmas A.4-A.7, we have that\n38\n=\n\u2212\n\u221a$_{n}$$_{(}$\n\u02c6\n\u03b8$_{n}$\n\u2212\n\u03b8$_{0}$\n)\n$^{\u2032}$E\n[\ng\n(\nX, \u03b8$_{0}$\n)\n\u2202g\n(\nX, \u03b8$_{0}$\n)\n\u2202\u03b8\n\u2032\n]\n\u221a$_{n}$$_{(}$\n\u02c6\n\u03b8$_{n}$\n\u2212\n\u03b8$_{0}$\n) +\no$_{p}$\n(1)\n=\nO$_{p}$\n(1)\n,\nsup\nu\n\u2208\n\u03a0\n\u2223\nG$_{n}$\n(\nu,\n\u02c6\n\u03b8$_{n}$\n)\n\u2212\nG\n(\nu, \u03b8$_{0}$\n)\n\u2223\n=\no$_{p}$\n(1)\n.\n\u0394\n\u2212\n1\nn\n(\n\u02c6\n\u03b8$_{n}$\n) = \u0394\n\u2212\n$^{1}$(\n\u03b8$_{0}$\n) +\no$_{p}$\n(1)\n.\n\u02c6\nR\np\n$_{n}$(\nu\n) =\n1\n\u221a$_{n}$\nn\n\u2211\ni\n=1\n\u03b5$_{i}$\n(\n\u02c6\n\u03b8$_{n}$\n)\n(\n1\n{\nq\n(\nX$_{i}$,\n\u02c6\n\u03b8$_{n}$\n)\n\u2264\nu\n}\n\u2212\ng\n$^{\u2032}$(\nX$_{i}$,\n\u02c6\n\u03b8$_{n}$\n)\u0394\n\u2212\n1\nn\n(\n\u02c6\n\u03b8$_{n}$\n)\nG$_{n}$\n(\nu,\n\u02c6\n\u03b8$_{n}$\n)\n=\n\u02c6\nR$_{n}$\n(\nu\n)\n\u2212\nG\n\u2032\n$_{n}$(\nu,\n\u02c6\n\u03b8$_{n}$\n)\u0394\n\u2212\n1\nn\n(\n\u02c6\n\u03b8$_{n}$\n)\n1\n\u221a$_{n}$\nn\n\u2211\ni\n=1\n\u03b5$_{i}$\n(\n\u02c6\n\u03b8$_{n}$\n)\ng\n(\nX$_{i}$,\n\u02c6\n\u03b8$_{n}$\n)\n:=\n\u02c6\nR$_{n}$\n(\nu\n)\n\u2212\nG\n\u2032\n$_{n}$(\nu,\n\u02c6\n\u03b8$_{n}$\n)\u0394\n\u2212\n1\nn\n(\n\u02c6\n\u03b8$_{n}$\n)\n\u02c6\nS$_{n}$.\n\u02c6\nR\np\n$_{n}$(\nu\n) =\n1\n\u221a$_{n}$\nn\n\u2211\ni\n=1\n\u03b5$_{i}$\n(\n\u03b8$_{0}$\n)1\n{\nq\n(\nX$_{i}$, \u03b8$_{0}$\n)\n\u2264\nu\n} \u2212\nG\n$^{\u2032}$(\nu, \u03b8$_{0}$\n$_{)}$\u221a$_{n}$$_{(}$\n\u02c6\n\u03b8$_{n}$\n\u2212\n\u03b8$_{0}$\n)\n\u2212\nG\n$^{\u2032}$(\nu, \u03b8$_{0}$\n)\u0394\n\u2212\n$^{1}$(\n\u03b8$_{0}$\n)\n[\n1\n\u221a$_{n}$\nn\n\u2211\ni\n=1\n\u03b5$_{i}$\n(\n\u03b8$_{0}$\n)\ng\n(\nX$_{i}$, \u03b8$_{0}$\n)\n\u2212\n\u0394(\n\u03b8$_{0}$\n$_{)}$\u221a$_{n}$$_{(}$\n\u02c6\n\u03b8$_{n}$\n\u2212\n\u03b8$_{0}$\n)\n]\n+\no$_{p}$\n(1)\n=\n1\n\u221a$_{n}$\nn\n\u2211\ni\n=1\n\u03b5$_{i}$\n(\n\u03b8$_{0}$\n)\n(\n1\n{\nq\n(\nX$_{i}$, \u03b8$_{0}$\n)\n\u2264\nu\n} \u2212\nG\n$^{\u2032}$(\nu, \u03b8$_{0}$\n)\u0394\n\u2212\n$^{1}$(\n\u03b8$_{0}$\n)\ng\n(\nX$_{i}$, \u03b8$_{0}$\n)\n+\no$_{p}$\n(1)",
-      "needs_human_review": true,
-      "qa_rationale": "In the two-column layout, the mathematical statement corresponding to Lemma A.6 (which assumes Assumptions 3.1-3.3) is given on the right side as $\\sup_{u \\in \\Pi} |G_n(u, \\hat{\\theta}_n) - G(u, \\theta_0)| = o_p(1)$.",
-      "qa_model": "gemini-3.7-flash"
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
     },
     {
-      "id": "doclaynet_609cf3517d1e",
-      "source_dataset": "doclaynet",
-      "doc_id": "scientific_articles_1001.1732_p8",
-      "pdf_path": "data/raw_pdfs/doclaynet/scientific_articles_1001.1732_p8.pdf",
-      "question": "According to the text referencing Ref. [40], what is the name of the protocol constructed to achieve the rates for CQE communication?",
-      "answer": "classically-enhanced father protocol",
+      "id": "docvqa_003",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_003",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_003.pdf",
+      "question": "What is the name of the company?",
+      "answer": "itc limited",
       "target_pages": [
         1
       ],
-      "layout_challenge": "multi-column scientific layout with figures",
-      "qa_source": "gemini-generated",
-      "doc_category": "scientific_articles",
-      "collection": "arxiv_two_columns",
-      "original_filename": "1001.1732.pdf",
-      "original_page_no": 8,
-      "page_image": "data/pages/scientific_articles_1001.1732_p8.jpg",
-      "page_text": "9\nthe intersection have entropic quantities of the following\nform:\non the CE trade-off curve, contradicting the optimality\nof this trade-off curve.\nThe next surface to consider is that formed by com-\nbining the CQ trade-off curve with the \u201cinverse\u201d of\nthe entanglement distribution protocol. Recall that the\nentanglement distribution protocol exploits a noiseless\nqubit channel to establish a shared noiseless ebit.\nLet\n(\nC$_{CQ}$\n(\ns$_{2}$\n)\n, Q$_{CQ}$\n(\ns$_{2}$\n)\n,\n0)\ndenote a parametrization of all\npoints on the CQ trade-off curve with respect to some\nparameter\ns$_{2}$\n\u2208\n[0\n,\n1\n/\n2], and recall that each point on\nthe trade-off curve has corresponding entropic quantities\nof the form (\nI\n(\nX\n;\nB\n)\n, I\n(\nA\n\u232a\nBX\n)\n,\n0).\nThen the surface\nformed by combining the CQ trade-off curve with the\ninverse of entanglement distribution is\nRef. [40] constructed a protocol, dubbed the \u201cclassically-\nenhanced father protocol,\u201d that can achieve the above\nrates for CQE communication. Thus, by combining this\nprotocol with super-dense coding and entanglement dis-\ntribution, we can achieve all points inside the first and\nsecond surfaces with entanglement consumption below a\ncertain rate.\nFinally, by combining this protocol with\nsuper-dense coding, entanglement distribution, and the\nwasting of entanglement, we can achieve all points that\nlie inside all three surfaces, and thus we can achieve the\nfull CQE capacity region. We summarize these results as\nthe following theorem.\nThis surface also forms an outer bound for the capacity\nregion.\nWere it not so, then one could combine points\noutside it with entanglement distribution to outperform\npoints on the CQ trade-off curve, contradicting the opti-\nmality of this trade-off curve.\n(\nI\n(\nX\n;\nB\n)\n,\n1\n2\nI\n(\nA\n;\nB\n|\nX\n)\n,\n1\n2\nI\n(\nA\n;\nE\n|\nX\n)$^{)}$\n.\n{\n(\nC$_{CQ}$\n(\ns$_{2}$\n)\n, Q$_{CQ}$\n(\ns$_{2}$\n) +\nE, E\n) :\ns$_{2}$\n\u2208\n[0\n,\n1\n/\n2]\n,\nE\n\u2265\n0\n}\n.\nC\n+ 2\nQ\n\u2264\n1\nn\nh\n$^{(}$N\n\u2297\nn\n$^{)}$,\n(20)\nC$_{CQE}$\n(\nN\n) =\nC\n(1)\n$_{CQE}$(\nN\n)\n.\nh\n$^{(}$N\n\u2297\nn\n)\n=\nnh\n(\nN\n)\n,\nh\n(\nN\n)\n\u2261\nmax$_{\u03c1}$\nI\n(\nAX\n;\nB\n)\n,\nTheorem 1\nSuppose the CQ and CE trade-off curves of\na quantum channel\nN\nsingle-letterize. Then the full CQE\ncapacity region of\nN\nsingle-letterizes:\nThe final surface to consider is the following regular-\nization of the plane that (17) specifies:\nfor all\nn\n\u2265\n1, where\nand\n\u03c1\nis a state of the form in (15). Lemma 1 below states\nthat\nh\n(\nN\n\u2297\n$^{n}$) actually single-letterizes for any quantum\nchannel\nN\n:\nWe apply the above theorem in the next section. We\nfirst show that both the CQ and CE trade-off curves\nsingle-letterize for all Hadamard channels, and it then\nfollows that the full CQE capacity region single-letterizes\nfor these channels.\nso that the computation of the boundary\nh\n(\nN\n\u2297\n$^{n}$)\n/n\nis tractable.\nIts proof is a consequence of the single-\nletterization of the entanglement-assisted classical capac-\nity [37], but we provide it in Appendix A for complete-\nness.\nFor the CQ region, we would like to maximize both\nthe classical and quantum communication rates, but we\ncannot have both be simultaneously optimal. Thus, we\nmust trade between these resources. If we are willing to\nreduce the quantum communication rate by a little, then\nwe can communicate more classical information and vice\nversa.\nLemma 1\nThe plane in (20) admits a single-letter char-\nacterization for any noisy quantum channel\nN\n:\nOur main theorem below states and proves that the\nfollowing function generates points on the CQ trade-off\ncurve for Hadamard channels:\nThe above three surfaces all form outer bounds on the\nCQE capacity region, but is it clear that we can achieve\npoints along the boundaries? To answer this question, we\nshould consider the intersection of the first and second\nsurfaces, found by solving the following equation for\nQ\nand\nE\n:\nIV.\nSINGLE-LETTERIZATION OF THE CQ\nAND CE TRADE-OFF CURVES FOR\nHADAMARD CHANNELS\nA.\nCQ Trade-off Curve\nf$_{\u03bb}$\n(\nN\n)\n\u2261\nmax$_{\u03c1}$\nI\n(\nX\n;\nB\n)$_{\u03c1}$ +\n\u03bbI\n(\nA\n\u232a\nBX\n)$_{\u03c1}$\n,\n(21)\nh\n$^{(}$N\n\u2297\nn\n)\n=\nnh\n(\nN\n)\n.\n(\nI\n(\nX\n;\nB\n)$_{\u03c1}$\n, I\n(\nA\n\u232a\nBX\n)$_{\u03c1}$)\n(\nC$_{CE}$\n(\ns$_{1}$\n)\n\u2212\n2\nQ, Q, E$_{CE}$\n(\ns$_{1}$\n)\n\u2212\nQ\n)\n= (\nC$_{CQ}$\n(\ns$_{2}$\n)\n, Q$_{CQ}$\n(\ns$_{2}$\n) +\nE, E\n)\n.\nwhere the state\n\u03c1\nis of the form in (15) and\n\u03bb\n\u2265\n1.\nTheorem 2\nFor any fixed\n\u03bb\n\u2265\n1\n, the function in (21)\nleads to a point\non the CQ trade-off curve, provided\n\u03c1\nmaximizes (21).\nUsing the entropic expressions for the trade-off curves\nand solving the above equation gives that all points along",
-      "needs_human_review": true,
-      "qa_rationale": "The text states: 'Ref. [40] constructed a protocol, dubbed the \u201cclassically-enhanced father protocol,\u201d that can achieve the above rates for CQE communication.'",
-      "qa_model": "gemini-3.7-flash"
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
     },
     {
-      "id": "doclaynet_7a6beec192ea",
-      "source_dataset": "doclaynet",
-      "doc_id": "scientific_articles_1002.1045_p20",
-      "pdf_path": "data/raw_pdfs/doclaynet/scientific_articles_1002.1045_p20.pdf",
-      "question": "In Equation (124), what prefactor multiplies the term $\\frac{1}{\\epsilon}[(k^{2}g^{\\lambda\\nu} - k^{\\lambda}k^{\\nu}) - (q^{2}g^{\\nu\\lambda} - q^{\\nu}q^{\\lambda})]$?",
-      "answer": "\\frac{5 e^2}{24 \\pi^2}",
+      "id": "docvqa_004",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_004",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_004.pdf",
+      "question": "Where is the university located ?",
+      "answer": "san diego",
       "target_pages": [
         1
       ],
-      "layout_challenge": "multi-column scientific layout with figures",
-      "qa_source": "gemini-generated",
-      "doc_category": "scientific_articles",
-      "collection": "arxiv_mediumspaced",
-      "original_filename": "1002.1045.pdf",
-      "original_page_no": 20,
-      "page_image": "data/pages/scientific_articles_1002.1045_p20.jpg",
-      "page_text": "so that\nFinally, let us see the diagrams\nB\n\u03bb\n\u03bd\n\u2032\n(\np, q, k\n) and\nB\n\u03bd\n\u03bb\n\u2032\n(\np, k, q\n), given by\n21\nPP[\u03a0\n\u03bd\u03bb\n$_{b,c,d}$(\nq\n)\n\u2212\n\u03a0\n\u03bb\u03bd\n$_{b,c,d}$(\nk\n)] =\n5\ne\n2\n24\n\u03c0\n2\n1\n\u03f5\n[(\nk\n$^{2}$g\n\u03bb\u03bd\n\u2212\nk\n$^{\u03bb}$k$^{\u03bd}$)\n\u2212\n(\nq\n$^{2}$g\n\u03bd\u03bb\n\u2212\nq\n$^{\u03bd}$q$^{\u03bb}$)]\n.\n(124)\n= 2\ne\nsin(\np\n\u2227\nq\n)\nB\n\u03bb\na \u03bd\n\u2032\n(\np, q, k\n)\n(125)\n=\ni\n$^{2}$(\n\u2212\ni\n)(2\ne\n)\n3\n\u222b\nd\n$^{4}$l\n(2\n\u03c0\n)\n4\n(\n\u2212\nl\n)$_{\u03bd}$\n\u2032\n(\n\u2212\np\n\u2212\nq\n\u2212\nl\n)\n\u03bb\nl\n$^{2}$(\np\n+\nl\n)\n$^{2}$(\np\n+\nq\n+\nl\n)\n2\n\u00d7\nsin(\nl\n\u2227\np\n) sin(\n\u2212\nl\n\u2227\np\n\u2212\nl\n\u2227\nq\n) sin(\n\u2212\nl\n\u2227\nq\n\u2212\np\n\u2227\nq\n)\n,\n= 2\ne\nsin(\np\n\u2227\nq\n)\nB\n\u03bb\nb \u03bd\n\u2032\n(\np, q, k\n)\n(126)\n=\ni\n(\n\u2212\ni\n)\n$^{2}$(2\ne\n)\n3\n\u222b\nd\n$^{4}$l\n(2\n\u03c0\n)\n4\n(\np\n+\nl\n)$_{\u03b1}$\n\u03b3\n\u03b1\u03bb\n\u03bd\n\u2032\n(\n\u2212\nl,\n\u2212\np\n\u2212\nq, p\n+\nq\n+\nl\n)\nl\n$^{2}$(\np\n+\nl\n)\n$^{2}$(\np\n+\nq\n+\nl\n)\n2\n\u00d7\nsin(\nl\n\u2227\np\n) sin(\n\u2212\nl\n\u2227\np\n\u2212\nl\n\u2227\nq\n) sin(\nl\n\u2227\nq\n+\np\n\u2227\nq\n)\n,\n= 2\ne\nsin(\np\n\u2227\nq\n)\nB\n\u03bd\na \u03bb\n\u2032\n(\np, k, q\n)\n(127)\n=\ni\n$^{2}$(\n\u2212\ni\n)(2\ne\n)\n3\n\u222b\nd\n$^{4}$l\n(2\n\u03c0\n)\n4\n(\np\n+\nl\n)$_{\u03bb}$\n\u2032\n(\np\n+\nq\n+\nl\n)\n\u03bd\nl\n$^{2}$(\np\n+\nl\n)\n$^{2}$(\np\n+\nq\n+\nl\n)\n2\n\u00d7\nsin(\nl\n\u2227\np\n) sin(\nl\n\u2227\np\n+\nl\n\u2227\nq\n) sin(\nl\n\u2227\nq\n+\np\n\u2227\nq\n)\n,\nand\n= 2\ne\nsin(\np\n\u2227\nq\n)\nB\n\u03bd\nb \u03bb\n\u2032\n(\np, q, k\n)\n(128)",
-      "needs_human_review": true,
-      "qa_rationale": "Equation (124) calculates the expression $PP[\\Pi^{\\nu\\lambda}_{b,c,d}(q) - \\Pi^{\\lambda\\nu}_{b,c,d}(k)]$, explicitly showing the coefficient $\\frac{5 e^2}{24 \\pi^2}$ multiplying $\\frac{1}{\\epsilon}[(k^{2}g^{\\lambda\\nu} - k^{\\lambda}k^{\\nu}) - (q^{2}g^{\\nu\\lambda} - q^{\\nu}q^{\\lambda})]$.",
-      "qa_model": "gemini-3.7-flash"
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
     },
     {
-      "id": "doclaynet_d38edd039526",
-      "source_dataset": "doclaynet",
-      "doc_id": "scientific_articles_1110.4445_p6",
-      "pdf_path": "data/raw_pdfs/doclaynet/scientific_articles_1110.4445_p6.pdf",
-      "question": "In the bulleted case analysis under equation (2.2), which condition on $c \\pmod p$ leads directly to the congruence $3x_0 \\equiv 0 \\pmod p$?",
-      "answer": "$c \\equiv 2^{-1} \\pmod p$",
+      "id": "docvqa_005",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_005",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_005.pdf",
+      "question": "To whom is the document sent?",
+      "answer": "Paul",
       "target_pages": [
         1
       ],
-      "layout_challenge": "multi-column scientific layout with figures",
-      "qa_source": "gemini-generated",
-      "doc_category": "scientific_articles",
-      "collection": "arxiv_doublespaced",
-      "original_filename": "1110.4445.pdf",
-      "original_page_no": 6,
-      "page_image": "data/pages/scientific_articles_1110.4445_p6.jpg",
-      "page_text": "ON THE APPLICATIONS OF CYCLOTOMIC FIELDS IN INTRODUCTORY NUMBER THEORY\n7\nSubtracting the latter congruence from the former yields\n(2.2)\n\u03b6\n\u2212\n$^{c}$x$_{0}$\n+\n\u03b6\n$^{1}$\u2212\n$^{c}$y$_{0}$\n\u2212\n\u03b6\n$^{c}$x$_{0}$\n\u2212\n\u03b6\n$^{c}$\u2212\n$^{1}$y$_{0}$\n\u2261\n0\n(\np\n)\nNow an element of\nO\nK\n=\nZ\n[\n\u03b6\n] is divisible by\np\nif and only if all of the coefficients as a\npolynomial in\n\u03b6\nare divisible by\np\n.\np\n\u2224\nx$_{0}$, y$_{0}$\nsince\np\n\u2224\nx$_{0}$y$_{0}$z$_{0}$\n, so we must check the cases where\none of\n{\nc,\n\u2212\nc,\n1\n\u2212\nc, c\n\u2212\n1\n}\nis congruent to\n\u2212\n1\nmodulo\np\nor where two of\n{\nc,\n\u2212\nc,\n1\n\u2212\nc, c\n\u2212\n1\n}\nare equal modulo\np\n. These cases can be split as follows:\n\u2022\nc\n\u2261\n1\n(\np\n) (so that 1\n\u2212\nc\n\u2261\nc\n\u2212\n1\n(\np\n)). Then\np\n|\nx$_{0}$\n(\n\u03b6\n\u2212\n1\n\u2212\n\u03b6\n)\n\u21d2\np\n|\nx$_{0}$\nas in the previous\ncase\n\u21d2\ncontradiction.\n\u2022\nc\n\u2261\n0\n(\np\n) (so that\nc\n\u2261 \u2212\nc\n(\np\n)). Then\np\n|\ny$_{0}$\n(\n\u03b6\n\u2212\n\u03b6\n\u2212\n$^{1}$) =\ny$_{0}$\n($^{p}$\n\u2212\n2\n\u2211\ni\n=2\n\u03b6\n$^{i}$+ 1)\n\u21d2\np\n|\ny$_{0}$\n(even if\np\n= 3)\n\u21d2\ncontradiction.\n\u2022\nc\n\u2261\n2\n\u2212\n1\n(\np\n) (so that\nc\n\u2261\n1\n\u2212\nc\n(\np\n)). Then\np\n|\n(\ny$_{0}$\n\u2212\nx$_{0}$\n)\n\u03b6\n$^{c}$+\n\u03b6\n\u2212\n$^{c}$(\nx$_{0}$\n\u2212\ny$_{0}$\n). So\np\n|\n(\nx$_{0}$\n\u2212\ny$_{0}$\n).\nWe then rewrite 2.1 as\nx\np\n0\n+ (\n\u2212\nz$_{0}$\n)\np\n= (\n\u2212\ny$_{0}$\n)\np\n(since\np\nis odd). Then with the same\nargument we will get\np\n|\n(\nx$_{0}$\n+\nz$_{0}$\n).\nBut 2.1 yields\nx\np\n0\n+\ny\np\n0\n\u2212\nz\np\n0\n\u2261\n0\n(\np\n) and so\nx$_{0}$\n+\ny$_{0}$\n\u2212\nz$_{0}$\n\u2261\n0\n(\np\n). This yields 3\nx$_{0}$\n\u2261\n0\n(\np\n). We suppose for now that\np >\n3.\nThen\nthis yields\np\n|\nx$_{0}$\n\u21d2\ncontradiction.\n\u2022\nLetting one of\n{\nc,\n\u2212\nc,\n1\n\u2212\nc, c\n\u2212\n1\n}\nbe congruent to\n\u2212\n1\nmodulo\np\nwill yield one of the\ncoefficients of the terms of (2.2) as\n\u00b1\n(\nx$_{0}$\n\u2212\ny$_{0}$\n), giving the same contradiction as in\nthe previous case.\nWe therefore obtain a contradiction in all cases. We have, however, supposed that\np >\n3\n.\nA general study of the case where\np\n= 3 is done elegantly in [4].\n3.\nAn Approach to Pell\u2019s Equation using cyclotomy\nPell\u2019s Equation is\nx\n2\n\u2212\ndy\n2\n= 1,\nx, y\n\u2208\nZ\nin\nx\nand\ny\n, where\nd\n\u2208\nZ\n$^{+}$.\nd\n\u2264\n0\ntrivially yields the single solution (1\n,\n0), and we can\nconsider\nd\nto be square-free, since any square factor of\nd\ncan be incorporated into\ny\n.",
-      "needs_human_review": true,
-      "qa_rationale": "The third bullet point explicitly analyzes the case $c \\equiv 2^{-1} \\pmod p$ (where $c \\equiv 1 - c \\pmod p$), showing that it yields $p \\mid (x_0 - y_0)$ and eventually $3x_0 \\equiv 0 \\pmod p$.",
-      "qa_model": "gemini-3.7-flash"
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
     },
     {
-      "id": "doclaynet_757fef3aaf53",
-      "source_dataset": "doclaynet",
-      "doc_id": "manuals_sg247938_p819",
-      "pdf_path": "data/raw_pdfs/doclaynet/manuals_sg247938_p819.pdf",
-      "question": "According to the index on this page, which page number is referenced for the sub-entry 'nodes' under the main entry 'Remote Copy'?",
-      "answer": "20",
+      "id": "docvqa_006",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_006",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_006.pdf",
+      "question": "What the location address of NSDA?",
+      "answer": "1128 SIXTEENTH ST., N. W., WASHINGTON, D. C. 20036",
       "target_pages": [
         1
       ],
-      "layout_challenge": "technical manual with callouts and diagrams",
-      "qa_source": "gemini-generated",
-      "doc_category": "manuals",
-      "collection": "redbooks",
-      "original_filename": "sg247938.pdf",
-      "original_page_no": 819,
-      "page_image": "data/pages/manuals_sg247938_p819.jpg",
-      "page_text": "pools\n288\nrequirements\n17\nperformance advantage\n80\nperformance considerations\n740, 742\nperformance improvement\n80\nperformance monitoring tool\n75\nperformance requirements\n44\nphysical location\n46\nphysical site\n48\nplanning rules\n44\npoint in time (PiT)\n38\ncopies\n16\u201317, 38\nconsistent\n17\npolicy decision\n524\npools\nprimary\n262\nport\nmask\n59\nport mask\n54\nPort Mask field\n359\nport speeds\n52\nports\noffline\n364\nstates\n365\npost-processing based\n428\npower supply\n680\npower supply units (PSU)\n680\u2013681\nremoving\n681\nPPRC\nbackground copy\n523, 532\ncommands\n541\ndetailed states\n538\npreferred access node\n68\npreferred node\n251\npre-installation planning\n44\nPrepare\n782\nPREPARE_COMPLETED\n464\npresets\n12\nprimary\n526\nprimary copy\n243\npriority\n309\npriority setting\n309\nprivate keys\n756\u2013757, 759, 764, 766\npublic keys\n756, 758, 760\u2013761, 767\nPuTTY\n756\u2013757, 759, 762\u2013764, 766\nkey generators\n759\nRAID arrays\n19, 28, 31\ngoals\n27\nRAID levels\n27\nredundancy\n27\nRAS\n784\nreal capacity\n253\nreal-time synchronized\n514\nrebalancing\n27\nreceivers\n41\nRedbooks website\nContact us\nxviii\nredundancy\n77\narrays\n27\nMDisks\n29\nPSUs\n680\nredundant\n773\nRedundant SAN\n784\nredundant SAN\n784\nrelationships\nFlashCopy\n38\nimage mode volumes\n32\nreliability, availability, and serviceability (RAS)\n674\nRemote\n784\nremote\ndata mirroring\n23\nmirroring\n11, 17\nservice\n40\nRemote authentication\n108\nRemote Copy\nasynchronous\n17, 37\nnodes\n20\nsynchronous\n37\nremote fabric\n780\ninterconnect\n780\nremove WWPN definitions\n380\nreplication\n72\nrestore points\n38\nReverse FlashCopy\n16, 38\nround robin\n68\nsampling interval\n742\nSAN fabric\n50\nSAN fabrics\n19, 35\nSAN Volume Controller\n12, 784\nclusters\n756\nSATA\n78\nscalable\n82\nscripting\n524\nscripts\n769\nSCSI\n785\ncommands\n35\nSCSI commands\n61\nSCSI Disk\n780\nSCSI IDs\n359, 372\nsecondary\n526\nsecurity\nfeatures\n40\nSerial Attached SCSI (SAS)\n13, 676\u2013678\nconnectivity\n679\nquorum\ncandidates\n29\ndisks\n29\nquorum disks\n46\nRAID\ndefinition\n27\noverview\n27\nperformance\n27\npresets\n12\nQ\nR\nS\n798 \nImplementing the IBM Storwize V7000 with IBM Spectrum Virtualize V8.2.1",
-      "needs_human_review": true,
-      "qa_rationale": "In the hierarchical index layout, the sub-entry 'nodes' is indented under the primary topic 'Remote Copy' and corresponds to page number 20.",
-      "qa_model": "gemini-3.7-flash"
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
     },
     {
-      "id": "doclaynet_a49c9dc4e9f7",
-      "source_dataset": "doclaynet",
-      "doc_id": "manuals_IBM-i-s5445349_p14",
-      "pdf_path": "data/raw_pdfs/doclaynet/manuals_IBM-i-s5445349_p14.pdf",
-      "question": "According to the list of figures, what is the title of Figure 13?",
-      "answer": "Overview of Overlay Utility Operation",
+      "id": "docvqa_007",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_007",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_007.pdf",
+      "question": "What is ITC's brand of Atta featured in the advertisement?",
+      "answer": "aashirvaad",
       "target_pages": [
         1
       ],
-      "layout_challenge": "technical manual with callouts and diagrams",
-      "qa_source": "gemini-generated",
-      "doc_category": "manuals",
-      "collection": "manuals",
-      "original_filename": "IBM-i-s5445349.pdf",
-      "original_page_no": 14,
-      "page_image": "data/pages/manuals_IBM-i-s5445349_p14.jpg",
-      "page_text": "Figures\n1.\nConventional Letter Preparation ...........................5\n2.\nLetter Preparation Using AFP Utilities .........................6\n3.\nUsing Overlays.................................7\n4.\nUsing Page Segments ..............................8\n5.\nSample Overlay (Created by the Overlay Utility) .....................9\n6.\nSample Label (Created by the Print Format Utility) ....................1\n0\n7.\nPrint Sample (Labels) ..............................1\n1\n8.\nMembers and Files in a Library...........................1\n4\n9.\nMenu for the IBM Advanced Function Printing Utilities for iSeries ...............1\n5\n10.\nPrompts and Columns on the Work with Source Overlays Display ...............1\n6\n11.\nDesign Display ................................1\n7\n12.\nSample Overlay ................................2\n4\n13.\nOverview of Overlay Utility Operation ........................2\n6\n14.\nSample Overlay ................................3\n4\n15.\nRecord Layout Sample..............................9\n8\n16.\nPage Layout Sample ..............................9\n9\n17.\nOverview of Print Format Utility Operation ......................1\n0\n2\n18.\nSample Label ................................1\n0\n9\n19.\nPosition-and-trim mapping ............................1\n6\n20.\nPosition and Distance of the Record in the Page Layout ..................2\n8\n21.\nProcess of Converting to Page Segment........................3\n1\n0\n22.\nLetter which contain a Page Segment ........................3\n1\n23.\nExample of Position-and-Trim Mapping........................3\n3\n7\n24.\nExample of Scale-to-Fit Mapping ..........................3\n3\n7\n25.\nExample of Center-and-Trim Mapping ........................3\n3\n8\n26.\nExample of Rotating the Image Block ........................3\n3\n9\n27.\nCommand Syntax for STROVLU Command ......................3\n6\n4\n28.\nThe Command Syntax for STRPFU Command .....................3\n6\n29.\nThe Command Syntax for PRTPFDDTACommand ....................3\n6\n8\n30.\nThe Command Syntax for CVTPCDPAGS Command ...................3\n7\n3\n31.\nThe Command Syntax for CVTPFMPAGS Command ...................3\n7\n9\n32.\nThe Command Syntax for CVTOVLPFM Command....................3\n8\n5\n33.\nThe Command Syntax for CVTPAGSPFM Command ...................3\n8\n34.\nPrint Example - 1 ...............................4\n2\n1\n35.\nPrint Example - 2 ...............................4\n2\n36.\nPrint Example -3 ...............................4\n2\n3\n37.\nPrint Example - 4 ...............................4\n2\n4\n38.\nPrint Example - 5 ...............................4\n2\n5\n39.\nPrint Example - 6 ...............................4\n2\n6\n40.\nPrint Example - 7 ...............................4\n2\n7\n41.\nPrint Example - 8 ...............................4\n2\n8\n42.\nPrint Example - 9 ...............................4\n2\n9\n43.\nPrint Example - 10...............................4\n3\n0\n44.\nPrint Example - 11...............................4\n3\n1\n45.\nPrint Example - 12...............................4\n3\n2\n46.\nPrint Example - 13...............................4\n3\n47.\nPrint Example - 14...............................4\n3\n4\n48.\nPrint Example - 15...............................4\n3\n5\n49.\nShading patterns ...............................4\n3\n6\n50.\nRotation of graphics ..............................4\n3\n7\n51.\nTimes New Roman Medium ...........................4\n6\n5\n52.\nHelvetica Roman Bold .............................4\n6\n53.\nCourier Font Samples..............................4\n6\nxiii",
-      "needs_human_review": true,
-      "qa_rationale": "In the structured list of figures, the entry for item number 13 corresponds to 'Overview of Overlay Utility Operation'.",
-      "qa_model": "gemini-3.7-flash"
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
     },
     {
-      "id": "doclaynet_2cca91a2c3c3",
-      "source_dataset": "doclaynet",
-      "doc_id": "manuals_sg248459_p163",
-      "pdf_path": "data/raw_pdfs/doclaynet/manuals_sg248459_p163.pdf",
-      "question": "In the sample output of the `oc describe pod docker-registry-3-4flql` command, what is the ClaimName associated with the `registry-storage` volume?",
-      "answer": "registry-pvc",
+      "id": "docvqa_008",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_008",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_008.pdf",
+      "question": "What is the name of foundation?",
+      "answer": "The Robert A. Welch Foundation",
       "target_pages": [
         1
       ],
-      "layout_challenge": "technical manual with callouts and diagrams",
-      "qa_source": "gemini-generated",
-      "doc_category": "manuals",
-      "collection": "redbooks",
-      "original_filename": "sg248459.pdf",
-      "original_page_no": 163,
-      "page_image": "data/pages/manuals_sg248459_p163.jpg",
-      "page_text": "8459ch06.fm\nDraft Document for Review December 11, 2019 1:55 pm\nIf the details provided by the \noc get\n command are not sufficient, additional information about \nthe resource can be retrieved by using the \noc describe RESOURCE_TYPE \nRESOURCE_NAME\n command. Unlike the \noc get\n command, there is no way to iterate \nthrough all of the different resources by type. Although most major resources can be \ndescribed, this functionality is not available across all resources. To display detailed \ninformation about a Pod resource use the following command:\nUse the \noc export RESOURCE_TYPE RESOURCE_NAME [-o OUTPUT_FORMAT]\ncommand to export a definition of a resource. Typical use cases include creating a backup, or \nto aid in modifying a definition. By default, the export command prints out the object \nrepresentation in YAML format, but this can be changed by providing the \n-o\n option.\nUse the\n oc delete RESOURCE_TYPE RESOURCE_NAME \ncommand to remove a resource \nfrom the OpenShift cluster. \nUse the \noc create\n command to create resources from a resource definition. Typically, this is \npaired with the \noc export \ncommand for editing definitions.\noc describe pod docker-registry-3-4flql\nName:\ndocker-registry-3-4flql\nNamespace:\ndefault\nPriority:\n0\nPriorityClassName:\n<none>\nNode:\nmstnode02.domain.example.com/192.168.11.203\nStart Time:\nThu, 07 Nov 2019 16:09:12 +0000\nLabels:\ndeployment=docker-registry-3\ndeploymentconfig=docker-registry\ndocker-registry=default\nAnnotations:\nopenshift.io/deployment-config.latest-version=3\nopenshift.io/deployment-config.name=docker-registry\nopenshift.io/deployment.name=docker-registry-3\nopenshift.io/scc=restricted\nStatus:\nRunning\nIP:\n10.130.0.48\n...\nOutput truncated\n...\nVolumes:\nregistry-storage:\nType:\nPersistentVolumeClaim (a reference to a PersistentVolumeClaim in the s\name namespace)\nClaimName:\nregistry-pvc\nReadOnly:\nfalse\nregistry-token-zg2tb:\nType:\nSecret (a volume populated by a Secret)\nSecretName:\nregistry-token-zg2tb\nOptional:\nfalse\nQoS Class:\nBurstable\nNode-Selectors:\nnode-role.kubernetes.io/infra=true\nTolerations:\nnode.kubernetes.io/memory-pressure:NoSchedule\nEvents:\n<none>\nNote:\n A fundamental understanding of the OpenShift architecture is needed because \ndeleting managed resources such as Pods results in newer instances of those resources \nbeing automatically recreated.\nThe \noc new-app\n command can create application Pods to run on OpenShift in many different \nways. It can create Pods from existing docker images, from Dockerfiles, and from raw source \ncode using the Source-to-Image (S2I) process. The command can create a service, a \ndeployment configuration, and a build configuration if source code is used.\nUse the \noc exec POD_NAME COMMAND\n command to execute commands against a Pod:\n144 \nRed Hat OpenShift and IBM Cloud Paks on IBM Power Systems: Volume 1",
-      "needs_human_review": true,
-      "qa_rationale": "The structured command output block lists volume details for the pod, where under 'Volumes:' -> 'registry-storage:', the 'ClaimName:' key maps directly to the value 'registry-pvc'.",
-      "qa_model": "gemini-3.7-flash"
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
     },
     {
-      "id": "doclaynet_61cd352beaae",
-      "source_dataset": "doclaynet",
-      "doc_id": "manuals_sg246915_p44",
-      "pdf_path": "data/raw_pdfs/doclaynet/manuals_sg246915_p44.pdf",
-      "question": "When configuring the ARS.INI file for setting up Secure Sockets Layer (SSL), what value is assigned to the SSL_KEYRING_LABEL parameter?",
-      "answer": "IBM Content Manager OnDemand",
+      "id": "docvqa_009",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_009",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_009.pdf",
+      "question": "What time is the \u2018coffee break\u2019?",
+      "answer": "11:14 to 11:39 a.m.",
       "target_pages": [
         1
       ],
-      "layout_challenge": "technical manual with callouts and diagrams",
-      "qa_source": "gemini-generated",
-      "doc_category": "manuals",
-      "collection": "redbooks",
-      "original_filename": "sg246915.pdf",
-      "original_page_no": 44,
-      "page_image": "data/pages/manuals_sg246915_p44.jpg",
-      "page_text": "Setting up Secure Sockets Layer\nStoring user IDs and passwords in a stash file\nInstalling and configuring Tivoli Storage Manager\nSetting up Secure Sockets Layer (SSL) is optional. If you decide to use SSL, complete the \nfollowing steps:\n/opt/IBM/ondemand/V9.5/config \nTo create the key database, run a command that is similar to the following command:\ngsk8capicmd_64 -keydb -create -db \"ondemand.kdb\" -pw \"myKeyDBpasswd\" -stash \n-populate\nYou can store user IDs and passwords in \nstash\n files (encrypted files). By storing passwords in \na stash file, you can improve security because you do not need to specify the password on \nthe command line, where the password might be visible to others.\nTo store the user IDs and passwords in a stash file, complete the following steps:\nWhen you configure the Content Manager OnDemand instance, you modify the \nARS.INI\n file to \ninclude the \nSRVR_OD_STASH\n parameter and specify the directory that you specified in step 2:\nSRVR_OD_STASH=/opt/IBM/ondemand/V9.5/config/ars.stash\nBefore you begin, familiarize yourself with configuring and managing server storage, as \ndescribed in the\nTivoli Storage Manager for AIX Administrator\u2019s Guide, \nGC32-0768\n. \nIn \naddition, the \nIBM Tivoli Storage Manager for AIX Administrator\u2019s Reference\n, SC32-0123, \nprovides information about all of the commands that are used in this section. This book is\nyour primary reference when you work with IBM Tivoli Storage Manager. If you encounter \nproblems while you configure Tivoli Storage Manager or if the examples in this section do not \nprovide the information that you need to define your server storage devices, policies, and \noperations, see these Tivoli Storage Manager publications.\nChapter 2. Setting up a Content Manager OnDemand instance \n21\n1.\nCreate the key database and store it in the \nconfig\n subdirectory of the Content Manager \nOnDemand server installation directory:\n2.\nCreate a digital certificate.\n3.\nConfigure the Content Manager OnDemand for AIX server. Add the following lines to the \nARS.INI \nfile:\n4.\nRestart the Content Manager OnDemand server.\n1.\nCreate a stash file by running the \narsstash\n command. The command prompts you for the \npassword. For a description of the syntax of the \narsstash\n command and an example of \nthe command, see \u201cSyntax of \nthe ARSSTASH command\u201d in the \nIBM Content Manager \nOnDemand for Multiplatforms - Installation and Configuration Guide\n, SC18-9232.\n2.\nSave the stash file in a directory with limited access to that file. You can set this access by \nusing file permissions.\nSSL_PORT=\nport_number\nSSL_KEYRING_FILE=/opt/IBM/ondemand/V9.5/config/ondemand.kdb\nSSL_KEYRING_STASH=/opt/IBM/ondemand/V9.5/config/ondemand.sth\nSSL_KEYRING_LABEL=IBM Content Manager OnDemand\nSSL_CLNT_USE_SSL=0",
-      "needs_human_review": true,
-      "qa_rationale": "Under the ARS.INI configuration block corresponding to Step 3 of setting up Secure Sockets Layer, the parameter is defined as 'SSL_KEYRING_LABEL=IBM Content Manager OnDemand'.",
-      "qa_model": "gemini-3.7-flash"
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
     },
     {
-      "id": "doclaynet_bf1447b80535",
-      "source_dataset": "doclaynet",
-      "doc_id": "manuals_basic-english-language-skills_p18",
-      "pdf_path": "data/raw_pdfs/doclaynet/manuals_basic-english-language-skills_p18.pdf",
-      "question": "According to the example sentence provided for the possessive pronoun \"Their\", what was cancelled due to unforeseen circumstances?",
-      "answer": "their meeting",
+      "id": "docvqa_010",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_010",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_010.pdf",
+      "question": "According to budget request summary what is total amount of other expenses??",
+      "answer": "$975.00",
       "target_pages": [
         1
       ],
-      "layout_challenge": "technical manual with callouts and diagrams",
-      "qa_source": "gemini-generated",
-      "doc_category": "manuals",
-      "collection": "manuals",
-      "original_filename": "basic-english-language-skills.PDF",
-      "original_page_no": 18,
-      "page_image": "data/pages/manuals_basic-english-language-skills_p18.jpg",
-      "page_text": "Basic English Language Skills\nStationary/Stationery\nThere/Their/They\u2019re\nTo/Too/Two\n\u201cTo\u201d is a preposition, and indicates the relationship between one\nthing and another.\nE.g. I gave the letter to him.\n\u201cToo\u201d means \u201calso\u201d, \u201cadditional\u201d or \u201cmore than what is necessary\nor desirable\u201d.\nE.g. He is going on holiday too. As a result, there are too few people \navailable to work over December.\n\u201cTwo\u201d is a number.\nE.g. There are only two staff members in the office.\n\u201cThey\u2019re\u201d is a contraction of \u201cthey are\u201d.\nE.g. They\u2019re not going to be pleased when they find out that he lost \nthe report.\n\u201cTheir\u201d is a possessive pronoun. It indicates that something\nbelongs to them.\nE.g. Due to unforeseen circumstances, their meeting was cancelled.\n\u201cThere\u201d is a preposition that refers to a place.\nE.g. He will be there in ten minutes.\n\u201cStationery\u201d refers to writing materials.\nE.g. She needed new stationery for school.\n\u201cStationary\u201d means not moving.\nE.g. The stationary truck held up the traffic.",
-      "needs_human_review": true,
-      "qa_rationale": "The document organizes homophones into distinct definition and example blocks. Under the entry for 'Their' (defined as a possessive pronoun), the example given is: 'Due to unforeseen circumstances, their meeting was cancelled.'",
-      "qa_model": "gemini-3.7-flash"
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
     },
     {
-      "id": "doclaynet_cb51e3fd58d7",
-      "source_dataset": "doclaynet",
-      "doc_id": "manuals_sg247938_p695",
-      "pdf_path": "data/raw_pdfs/doclaynet/manuals_sg247938_p695.pdf",
-      "question": "According to the methods listed under section 13.1, what feature is used to achieve host system failover capabilities?",
-      "answer": "N-Port ID Virtualization (NPIV)",
+      "id": "docvqa_011",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_011",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_011.pdf",
+      "question": "Who is \u2018presiding\u2019 TRRF GENERAL SESSION (PART 1)?",
+      "answer": "TRRF Vice President",
       "target_pages": [
         1
       ],
-      "layout_challenge": "technical manual with callouts and diagrams",
-      "qa_source": "gemini-generated",
-      "doc_category": "manuals",
-      "collection": "redbooks",
-      "original_filename": "sg247938.pdf",
-      "original_page_no": 695,
-      "page_image": "data/pages/manuals_sg247938_p695.jpg",
-      "page_text": "13.1\nReliability, availability, and serviceability\nReliability, availability, and serviceability (RAS) are important concepts in the design of the \nIBM Spectrum Virtualize system. Hardware features, software features, design \nconsiderations, and operational guidelines all contribute to make the IBM Storwize V7000 \nsystem reliable. \nFault tolerance and high levels of availability are achieved by using the following methods:\nHigh levels of serviceability are available through the following methods:\nGLYPH<SM590000>\nThe Redundant Array of Independent Disks (RAID) capabilities of the underlying disks\nGLYPH<SM590000>\nIBM Storwize V7000 nodes clustering using a \nCompass\n architecture\nGLYPH<SM590000>\nAuto-restart of hung nodes\nGLYPH<SM590000>\nIntegrated Battery Backup Units (BBU) to provide memory protection if a site power failure \noccurs\nGLYPH<SM590000>\nHost system failover capabilities using N-Port ID Virtualization (NPIV)\nGLYPH<SM590000>\nCluster error logging\nGLYPH<SM590000>\nAsynchronous error notification\nGLYPH<SM590000>\nAutomatic Dump capabilities to capture software detected issues\nGLYPH<SM590000>\nConcurrent diagnostic procedures\nGLYPH<SM590000>\nDirected Maintenance Procedures (DMP) with guided online replacement process\nGLYPH<SM590000>\nConcurrent log analysis and memory dump data recovery tools\nGLYPH<SM590000>\nConcurrent maintenance of IBM Storwize V7000 components\nGLYPH<SM590000>\nConcurrent upgrade of IBM Storwize V7000 Spectrum Virtualize Software and firmware\nGLYPH<SM590000>\nConcurrent addition or deletion of node canisters in the clustered system\nGLYPH<SM590000>\nAutomatic software version leveling when replacing a node\nGLYPH<SM590000>\nDetailed status and error conditions that are displayed by LED indicators\nGLYPH<SM590000>\nError and event notification through Simple Network Management Protocol (SNMP), \nsyslog, and email\nGLYPH<SM590000>\nOptional Remote Support Assistant\nThe heart of IBM Storwize V7000 system is a pair of \nnode canisters\n. These two canisters \nshare the read and write data workload from the attached hosts and to the disk arrays. This \nsection examines the RAS features of IBM Storwize V7000 system, monitoring, and \ntroubleshooting.\nThroughout this chapter, the term \nIBM Storwize V7000\n refers to both models of the product: \nIBM Storwize V7000 Gen2 and Gen2+.\n674 \nImplementing the IBM Storwize V7000 with IBM Spectrum Virtualize V8.2.1",
-      "needs_human_review": true,
-      "qa_rationale": "The bulleted list under section 13.1 explicitly states that host system failover capabilities are achieved using 'N-Port ID Virtualization (NPIV)'.",
-      "qa_model": "gemini-3.7-flash"
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
     },
     {
-      "id": "doclaynet_bfc7c17da747",
-      "source_dataset": "doclaynet",
-      "doc_id": "manuals_IBM-i-s5445349_p115",
-      "pdf_path": "data/raw_pdfs/doclaynet/manuals_IBM-i-s5445349_p115.pdf",
-      "question": "According to the table of contents, on which page does the section \"Start Printing by PRTPFDDTA\" begin?",
-      "answer": "223",
+      "id": "docvqa_012",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_012",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_012.pdf",
+      "question": "What is the name of the choco fills advertised?",
+      "answer": "dark fantasy",
       "target_pages": [
         1
       ],
-      "layout_challenge": "technical manual with callouts and diagrams",
-      "qa_source": "gemini-generated",
-      "doc_category": "manuals",
-      "collection": "manuals",
-      "original_filename": "IBM-i-s5445349.pdf",
-      "original_page_no": 115,
-      "page_image": "data/pages/manuals_IBM-i-s5445349_p115.jpg",
-      "page_text": "Select Record Format..............................1\n6\n0\nSpecify Break Fields ...............................1\n6\n1\nDesign Record Layout ..............................1\n6\n2\nData in Record Layout .............................1\n6\n3\nNumeric Editing ...............................1\n6\n7\nDesign Page Layout ...............................1\n6\n9\nRepetition of the Record in the Page.........................1\n7\n2\nSpecify Record Selection..............................1\n8\n3\nDefine Printout Specifications ............................1\n8\n7\nSpecify Mapping Object Name ...........................1\n9\n1\nSaving PFD Definition .............................1\n9\n4\n2=Change PFD Definition ..............................1\n9\n7\n3=Copy PFD Definition ...............................1\n9\n8\n4=Delete PFD Definition...............................2\n0\n6=Print PFD Definition ...............................2\n0\n1\n7=Rename PFD Definition ..............................2\n0\n1\n9=Print Database File................................2\n0\n1\nChapter 11. Work with PFD Definition Files\n.......................203\nP\nr\no\nm\np\nt\ns....................................2\n0\n6\nOptions ....................................2\n0\n7\nColumns ....................................2\n0\n7\nShowing a PFD Definition File List ...........................2\n0\n8\nSelecting a PFD Definition File from a List ........................2\n0\n8\n1=Create PFD Definition File .............................2\n0\n9\n2=Change PFD Definition File.............................2\n1\n3=Copy PFD Definition File .............................2\n1\n2\n4=Delete PFD Definition File .............................2\n1\n3\n7=Rename PFD Definition File.............................2\n1\n4\n8=Display Description of PFD Definition File........................2\n1\n4\n12=Work with PFD Definitions ............................2\n1\n4\nChapter 12. Print Database File Member\n........................215\nStart Printing from Work with PFD Definitions Display ....................2\n1\n5\nStart Printing from theAFP Utilities Menu ........................2\n2\n1\nStart Printing by PRTPFDDTA.............................2\n2\n3\n96\nAFPUtilitiesforiSeries:User\u2019sGuide",
-      "needs_human_review": true,
-      "qa_rationale": "In the table of contents layout, leader dots connect the entry 'Start Printing by PRTPFDDTA' under Chapter 12 to the page number digits 2, 2, and 3, which form page number 223.",
-      "qa_model": "gemini-3.7-flash"
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
     },
     {
-      "id": "doclaynet_4e8d8575c0b2",
-      "source_dataset": "doclaynet",
-      "doc_id": "manuals_sg248459_p91",
-      "pdf_path": "data/raw_pdfs/doclaynet/manuals_sg248459_p91.pdf",
-      "question": "According to the comparison table at the top of the page, what is the maximum storage capacity of the LC922 model?",
-      "answer": "120 TB",
+      "id": "docvqa_013",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_013",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_013.pdf",
+      "question": "What is the name of the fashion wear/clothing advertise",
+      "answer": "wills lifestyle",
       "target_pages": [
         1
       ],
-      "layout_challenge": "technical manual with callouts and diagrams",
-      "qa_source": "gemini-generated",
-      "doc_category": "manuals",
-      "collection": "redbooks",
-      "original_filename": "sg248459.pdf",
-      "original_page_no": 91,
-      "page_image": "data/pages/manuals_sg248459_p91.jpg",
-      "page_text": "8459ch05.fm\nDraft Document for Review December 11, 2019 1:55 pm\nMicroprocessors\n1x or 2x POWER9 CPUs; 16 or \n20\ncores\n1x or 2x POWER9 CPUs; 16, \n20\nor 22 cores\nMemory slots\n32\n16\nMemory max.\n2\nTB\n2\nTB\nPCIe G4 slots\n4\n6\nSupported operating system\nLinux\nLinux\nMax. storage\n40\nTB\n120 TB\nLC921\nLC922\n5.1.3\nEnterprise AI workloads\nAI holds tremendous promise for facilitating digital transformations, accelerating innovation, \nenhancing the efficiency of internal processes, identifying new marketplace opportunities and \nmore. For organizations to take advantage of AI and cognitive technologies such as machine \nlearning and deep learning, they need powerful, accelerated servers that can handle these \ndata-intensive workloads. Accelerated servers can also play a vital role in supercomputing. \nWith the correct accelerated servers, researchers and scientists can explore more complex, \ndata- intensive problems and deliver results faster than before.\nThe IBM Power Systems Accelerated Compute Server, as shown in Table 5-5, help reduce \nthe time to value for enterprise AI initiatives. The IBM PowerAI Enterprise platform combines \nthis server with popular open source deep learning frameworks and efficient AI development \ntools to accelerate the processes of building, training and inferring deep learning neural \nnetworks. Using PowerAI Enterprise, organizations can deploy a fully optimized and \nsupported AI platform with blazing performance, proven dependability and resilience. \nTable 5-5\nIBM Power Systems - Accelerated Compute servers\nAC922\nKey features\nGLYPH<129> Unprecedented performance for modern AI, \nanalytics, and HPC workloads\nGLYPH<129> Proven deployments from\n small clusters to the \nworld\u2019s largest supercomputers, with near-linear \nscaling\nGLYPH<129> Simple GPU acceleration\nMachine type and model (MTM)\n8335-GTH | 8335-GTX\nForm factors\n2U\nSockets\n2\nMicroprocessors\n2x POWER9 with NVLink CPUs: 16 or 20 cores; \nor 18 or 22 cores with liquid cooling\nGPUs\n4\nor 6 NVIDIA Tesla GPU processors\n(NVLink 2.0 attached)\nMemory slots\n16\nPCIe G4 slot\n1\nTB\nSupported operating system\nLinux\n72 \nRed Hat OpenShift and IBM Cloud Paks on IBM Power Systems: Volume 1",
-      "needs_human_review": true,
-      "qa_rationale": "The table header columns correspond to LC921 and LC922. Tracing the 'Max. storage' row to the LC922 column gives '120 TB'.",
-      "qa_model": "gemini-3.7-flash"
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
     },
     {
-      "id": "doclaynet_51139ae0222a",
-      "source_dataset": "doclaynet",
-      "doc_id": "manuals_sg246915_p252",
-      "pdf_path": "data/raw_pdfs/doclaynet/manuals_sg246915_p252.pdf",
-      "question": "According to the Note callout on the page, what is the stated reason to consider aggregating smaller objects into larger objects?",
-      "answer": "for performance reasons",
+      "id": "docvqa_014",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_014",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_014.pdf",
+      "question": "How many nomination committee meetings has Y. C. Deveshwar attended?",
+      "answer": "2",
       "target_pages": [
         1
       ],
-      "layout_challenge": "technical manual with callouts and diagrams",
-      "qa_source": "gemini-generated",
-      "doc_category": "manuals",
-      "collection": "redbooks",
-      "original_filename": "sg246915.pdf",
-      "original_page_no": 252,
-      "page_image": "data/pages/manuals_sg246915_p252.jpg",
-      "page_text": "10.3.4\nExpiring annotations\n10.4\nReloading data\nReloading to change the expiration type\nReloading ad hoc stored documents\nAnnotations for all application groups are kept in a single application group data table, which \nallows the expiration of annotations to be controlled at a system-wide level. The Life Of \nAnnotations field setup is on the System Parameters General tab. Annotations can be set to \nnever expire or to expire after \nN\n days. After the number of days (\nN\n) passes and \nARSMAINT\n is \nrun, Content Manager OnDemand removes the annotation.\nIf you are migrating data by unloading and then reloading the data, you need to determine \nyour future expiration policy.\nFor example, if your current expiration policy is set to \nStorage Manager\n but you later want to \nperform holds on the data, during the migration process (when you create the application \ngroup and before you load any data), change your expiration policy from Storage Manager to \nLoad\n.\nWhen you use the Enhanced Retention Management feature with Content Manager \nOnDemand or IBM Enterprise Records (formerly IBM FileNet Records Manager), Content \nManager OnDemand must be in complete control of expiration processing. Therefore, if you \nare using Tivoli Storage Manager or OAM, you must disable the ability for either of these \nstorage managers to expire data. \nAlso, you can use Enhanced Retention Management and Content Federation Services for \nContent Manager OnDemand only with application groups with an expiration type of \nLoad\n. For \nthose application groups with expiration types of \nDocument\n, \nSegment\n, or \nStorage Manager\n, \nutilities exist to convert these application groups to an expiration type of \nLoad\n. \nConsider engaging IBM Lab Services to provide these services. \nIf you choose not to take advantage of the ability of Content Manager OnDemand to \naggregate documents but instead you choose to load documents ad hoc by using the \nstoreDocument Java API, StoreDoc Object Linking and Embedding (OLE) API, or \nCommonStore, you must migrate the data later. \nIf you choose not to take advantage of the ability of Content Manager OnDemand to \naggregate documents into 10 MB storage objects, this decision might result in millions of \nsmall objects that are stored in your storage manager, which might cause the storage \nmanager to experience performance problems when it migrates these small objects to tape. \nNote:\n Consider aggregating these smaller objects into larger objects for performance \nreasons.\nFor you to aggregate all of these tiny objects into larger objects after they are stored \nindividually requires that you retrieve and reload them as larger objects. You might want to \nengage IBM Lab Services to assist you with this task.\nAnother option is to not migrate objects to tape, but to use another random access hardware \ndevice instead.\nChapter 10. Migration and expiring data and indexes \n229",
-      "needs_human_review": true,
-      "qa_rationale": "In the callout block labeled 'Note:', the text explicitly states: 'Consider aggregating these smaller objects into larger objects for performance reasons.'",
-      "qa_model": "gemini-3.7-flash"
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
     },
     {
-      "id": "doclaynet_b0834b70d79e",
-      "source_dataset": "doclaynet",
-      "doc_id": "manuals_basic-english-language-skills_p8",
-      "pdf_path": "data/raw_pdfs/doclaynet/manuals_basic-english-language-skills_p8.pdf",
-      "question": "Which four examples are listed under the 'Abstract nouns' category?",
-      "answer": "love, courage, hope, innovation",
+      "id": "docvqa_015",
+      "source_dataset": "docvqa",
+      "doc_id": "docvqa_015",
+      "pdf_path": "data/raw_pdfs/docvqa/docvqa_015.pdf",
+      "question": "What time is \u2018question and answers \u2018session?",
+      "answer": "12:25 to 12:58 p.m.",
       "target_pages": [
         1
       ],
-      "layout_challenge": "technical manual with callouts and diagrams",
-      "qa_source": "gemini-generated",
-      "doc_category": "manuals",
-      "collection": "manuals",
-      "original_filename": "basic-english-language-skills.PDF",
-      "original_page_no": 8,
-      "page_image": "data/pages/manuals_basic-english-language-skills_p8.jpg",
-      "page_text": "NOUNS\nThe job of a noun is to name something. It might be an object, a person, \na place, or even a thought or idea. There are different types of nouns:\nCommon nouns:\nRefer to an object that you can see or touch.\nExample:\ntable, chair, dog\nProper nouns: \nIndicate the name of a person or place. Proper nouns \nalways start with a capital letter.\nExample:\nSouth Africa, Oxbridge Academy, Desmond Tutu, Toyota\nBasic English Language Skills\nAbstract nouns: \nRefer to concepts, rather than to things that you can \ndetect with your senses.\nExample:\nlove, courage, hope, innovation\nCollective nouns: \nAre used to name a group or collection of people\nor things.\nExample:\n\u201cboard\u201d of directors, \u201clitter\u201d of puppies, \u201cherd\u201d of cattle",
-      "needs_human_review": true,
-      "qa_rationale": "In the structured layout of noun types and their respective sub-blocks, the 'Abstract nouns' entry specifically provides 'love, courage, hope, innovation' under its 'Example:' field.",
-      "qa_model": "gemini-3.7-flash"
+      "layout_challenge": "form with spatial field-value relationships",
+      "qa_source": "docvqa-human"
     }
   ]
 }
