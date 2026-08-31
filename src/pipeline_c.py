@@ -1,10 +1,12 @@
-"""Pipeline C — PixelRAG vision-based retrieval.
+"""Pipeline C — Simplified visual retrieval with Gemini VLM.
 
-pixelshot (tile rendering) → Qwen vision embeddings → FAISS → Gemini VLM generation
+PDF → page images → text embedding for retrieval → Gemini VLM for answer generation
 
-The bet: Skip text extraction entirely. Render PDFs to image tiles, embed the
-pixels, retrieve visually similar tiles, and generate answers from images with
-a VLM. Layout is preserved because we never convert to text.
+Simplified approach:
+- Render each PDF page as an image
+- Use text embeddings for retrieval (same as Pipeline A/B)
+- BUT: Send retrieved PAGE IMAGES to Gemini VLM (not text)
+- This tests: Can VLM extract from visual layout better than text extraction?
 
 Interface (shared with pipeline_a and pipeline_b):
     ingest(pdf_paths, config) -> Index
@@ -27,7 +29,7 @@ import numpy as np
 import torch
 from dotenv import load_dotenv
 from google import genai
-from PIL import Image
+from transformers import AutoModel
 
 # Load environment
 load_dotenv()
@@ -35,17 +37,18 @@ load_dotenv()
 
 @dataclass
 class Chunk:
-    """One visual tile with metadata."""
+    """One page image with text for embedding."""
 
     image_path: Path
-    doc_id: str  # PDF filename stem
-    page_num: int  # 1-based page number
+    text: str  # Extracted text for embedding
+    doc_id: str
+    page_num: int
     chunk_id: int
 
 
 @dataclass
 class Index:
-    """Searchable vector index plus visual tiles."""
+    """Searchable vector index plus page images."""
 
     faiss_index: faiss.Index
     chunks: list[Chunk]
@@ -55,12 +58,12 @@ class Index:
 
 @dataclass
 class Answer:
-    """Query result: VLM-generated answer + retrieval provenance."""
+    """Query result: VLM-generated answer from page images."""
 
     text: str
     retrieved_pages: list[int]
     retrieved_chunks: list[Chunk]
-    context: str  # Description of retrieved tiles
+    context: str
 
 
 # ---------------------------------------------------------------------------
@@ -68,52 +71,45 @@ class Answer:
 # ---------------------------------------------------------------------------
 
 
-def _render_pdf_to_tiles(pdf_path: Path, output_dir: Path, dpi: int = 200) -> list[dict[str, Any]]:
-    """Render PDF to image tiles using pixelshot.
-
-    Returns list of dicts with {image_path, page_num} for each tile.
-    """
+def _render_pdf_pages(pdf_path: Path, output_dir: Path, dpi: int = 150) -> list[dict]:
+    """Render PDF pages as images using pixelshot."""
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Use pixelshot to render PDF
-    # pixelshot outputs to <filename>.png.tiles/ subdirectory with tile_NNNN.jpg files
-    cmd = [
-        "pixelshot",
-        str(pdf_path),
-        "--output", str(output_dir),
-        "--dpi", str(dpi),
-    ]
-
+    cmd = ["pixelshot", str(pdf_path), "--output", str(output_dir), "--dpi", str(dpi)]
     result = subprocess.run(cmd, capture_output=True, text=True)
 
     if result.returncode != 0:
         raise RuntimeError(f"pixelshot failed: {result.stderr}")
 
-    # Pixelshot creates subdirectory: <output>/<pdf_name>.png.tiles/
+    # Pixelshot creates: <output>/<pdf_name>.png.tiles/ with tile_NNNN.jpg
     tiles_dir = output_dir / f"{pdf_path.stem}.png.tiles"
 
     if not tiles_dir.exists():
-        raise RuntimeError(f"Pixelshot tiles directory not found: {tiles_dir}")
+        raise RuntimeError(f"Tiles directory not found: {tiles_dir}")
 
-    # Load metadata from tiles.json
-    metadata_path = tiles_dir / "tiles.json"
-    if not metadata_path.exists():
-        raise RuntimeError(f"tiles.json not found: {metadata_path}")
+    metadata = json.loads((tiles_dir / "tiles.json").read_text())
 
-    metadata = json.loads(metadata_path.read_text())
-    total_pages = metadata["total_pages"]
-
-    # Collect tiles (one tile per page, named tile_0000.jpg, tile_0001.jpg, etc.)
-    tiles = []
+    pages = []
     for i, tile_name in enumerate(metadata["tiles"]):
-        tile_path = tiles_dir / tile_name
-        if tile_path.exists():
-            tiles.append({
-                "image_path": tile_path,
-                "page_num": i + 1  # 1-based page numbers
-            })
+        pages.append({
+            "image_path": tiles_dir / tile_name,
+            "page_num": i + 1
+        })
 
-    return tiles
+    return pages
+
+
+def _extract_text_from_pdf(pdf_path: Path) -> dict[int, str]:
+    """Extract text from PDF using pypdf (for embedding only)."""
+    from pypdf import PdfReader
+
+    reader = PdfReader(pdf_path)
+    page_texts = {}
+
+    for i, page in enumerate(reader.pages, 1):
+        page_texts[i] = page.extract_text()
+
+    return page_texts
 
 
 # ---------------------------------------------------------------------------
@@ -122,112 +118,80 @@ def _render_pdf_to_tiles(pdf_path: Path, output_dir: Path, dpi: int = 200) -> li
 
 
 def ingest(pdf_paths: list[Path], config: dict | None = None) -> Index:
-    """Build FAISS index from PDFs via visual tile embeddings.
+    """Build FAISS index using text embeddings, but store page images.
 
-    Args:
-        pdf_paths: List of PDF file paths to index
-        config: Optional configuration dict:
-            dpi: Rendering DPI (default 200)
-            embed_model: Vision embedding model (default "Qwen/Qwen3-VL-Embedding-2B")
-            use_gpu: Whether to use GPU for embeddings (default True)
-
-    Returns:
-        Index with FAISS index and visual tiles
+    Strategy: Use text for retrieval (cheap, works), images for generation (VLM).
     """
     cfg = config or {}
-    dpi = cfg.get("dpi", 200)
-    embed_model = cfg.get("embed_model", "Qwen/Qwen3-VL-Embedding-2B")
+    dpi = cfg.get("dpi", 150)
+    embed_model = cfg.get("embed_model", "jinaai/jina-embeddings-v5-omni-small")
     use_gpu = cfg.get("use_gpu", True) and torch.cuda.is_available()
 
     print(f"[Pipeline C] Ingesting {len(pdf_paths)} PDFs")
-    print(f"  pixelshot → visual tiles (DPI={dpi}) → vision embeddings → FAISS")
-    print(f"  embed_model={embed_model}")
+    print(f"  Render pages → text embedding for retrieval → VLM for generation")
+    print(f"  embed_model={embed_model}, dpi={dpi}")
 
-    # 1. Render all PDFs to visual tiles
+    # 1. Render all pages as images
     cache_dir = Path("data/cache/pixelrag_tiles")
     chunks: list[Chunk] = []
 
     for pdf_path in pdf_paths:
-        print(f"  {pdf_path.stem}: rendering...")
-        tile_dir = cache_dir / pdf_path.stem
+        print(f"  {pdf_path.stem}: rendering pages...")
 
-        # Check if already rendered (cache)
-        tiles_subdir = tile_dir / f"{pdf_path.stem}.png.tiles"
+        # Render pages
+        page_dir = cache_dir / pdf_path.stem
+        tiles_subdir = page_dir / f"{pdf_path.stem}.png.tiles"
+
         if not tiles_subdir.exists() or not (tiles_subdir / "tiles.json").exists():
-            tiles = _render_pdf_to_tiles(pdf_path, tile_dir, dpi=dpi)
+            pages = _render_pdf_pages(pdf_path, page_dir, dpi=dpi)
         else:
             # Load from cache
-            metadata_path = tiles_subdir / "tiles.json"
-            metadata = json.loads(metadata_path.read_text())
-            tiles = [
-                {"image_path": tiles_subdir / tile_name, "page_num": i + 1}
-                for i, tile_name in enumerate(metadata["tiles"])
-                if (tiles_subdir / tile_name).exists()
+            metadata = json.loads((tiles_subdir / "tiles.json").read_text())
+            pages = [
+                {"image_path": tiles_subdir / t, "page_num": i + 1}
+                for i, t in enumerate(metadata["tiles"])
+                if (tiles_subdir / t).exists()
             ]
-            print(f"    loaded {len(tiles)} tiles from cache")
+            print(f"    loaded {len(pages)} pages from cache")
 
-        # Create chunks
-        for tile in tiles:
+        # Extract text for embedding
+        page_texts = _extract_text_from_pdf(pdf_path)
+
+        # Create chunks (one per page)
+        for page in pages:
             chunks.append(
                 Chunk(
-                    image_path=tile["image_path"],
+                    image_path=page["image_path"],
+                    text=page_texts.get(page["page_num"], ""),
                     doc_id=pdf_path.stem,
-                    page_num=tile["page_num"],
+                    page_num=page["page_num"],
                     chunk_id=len(chunks),
                 )
             )
 
-        print(f"    → {len(tiles)} tiles")
+        print(f"    → {len(pages)} pages")
 
-    print(f"  rendered {len(chunks)} tiles total")
+    print(f"  rendered {len(chunks)} pages total")
 
-    # 2. Load vision embedding model
-    print(f"  loading vision embedding model: {embed_model}...")
+    # 2. Embed text using Jina
+    print(f"  embedding text from {len(chunks)} pages...")
 
-    from transformers import AutoModel, AutoProcessor
-
-    processor = AutoProcessor.from_pretrained(embed_model, trust_remote_code=True)
-    model = AutoModel.from_pretrained(embed_model, trust_remote_code=True)
-
+    jina_model = AutoModel.from_pretrained(embed_model, trust_remote_code=True)
     if use_gpu:
-        model = model.cuda()
+        jina_model = jina_model.cuda()
 
-    model.eval()
+    texts = [c.text for c in chunks]
 
-    # 3. Embed all visual tiles
-    print(f"  embedding {len(chunks)} tiles...")
+    with torch.no_grad():
+        embeddings_tensor = jina_model.encode(texts, task="retrieval")
 
-    embeddings_list = []
-    batch_size = 8  # Process in small batches to avoid OOM
-
-    for i in range(0, len(chunks), batch_size):
-        batch_chunks = chunks[i:i+batch_size]
-        batch_images = [Image.open(c.image_path).convert("RGB") for c in batch_chunks]
-
-        # Process images
-        inputs = processor(images=batch_images, return_tensors="pt")
-
-        if use_gpu:
-            inputs = {k: v.cuda() for k, v in inputs.items()}
-
-        with torch.no_grad():
-            outputs = model(**inputs)
-            # Get image embeddings (typically from last_hidden_state pooled)
-            batch_embeds = outputs.last_hidden_state.mean(dim=1)  # Pool over sequence
-            embeddings_list.append(batch_embeds.cpu().numpy())
-
-        if (i + batch_size) % 40 == 0 or i + batch_size >= len(chunks):
-            print(f"    embedded {min(i + batch_size, len(chunks))}/{len(chunks)} tiles")
-
-    embeddings = np.vstack(embeddings_list).astype("float32")
+    embeddings = embeddings_tensor.float().cpu().numpy()
     embed_dim = embeddings.shape[1]
 
     print(f"  embeddings shape: {embeddings.shape} (dim={embed_dim})")
 
-    # 4. Build FAISS index (CPU only, to avoid GPU memory conflicts)
+    # 3. Build FAISS index (CPU to avoid OOM)
     index = faiss.IndexFlatIP(embed_dim)
-
-    # Normalize for cosine similarity
     faiss.normalize_L2(embeddings)
     index.add(embeddings)
 
@@ -247,70 +211,47 @@ def ingest(pdf_paths: list[Path], config: dict | None = None) -> Index:
 
 
 def query(index: Index, question: str, k: int = 5) -> Answer:
-    """Retrieve top-k visual tiles and generate answer with Gemini VLM.
-
-    Args:
-        index: Index from ingest()
-        question: User question
-        k: Number of tiles to retrieve
-
-    Returns:
-        Answer with VLM-generated text and provenance
-    """
+    """Retrieve pages via text embedding, generate answer with Gemini VLM."""
     llm_model = os.getenv("GEMINI_VLM_MODEL", "gemini-2.5-flash")
 
-    # 1. Embed query text using same vision model
-    # (Qwen3-VL can embed both images and text)
-    from transformers import AutoModel, AutoProcessor
-
-    processor = AutoProcessor.from_pretrained(index.embed_model, trust_remote_code=True)
-    model = AutoModel.from_pretrained(index.embed_model, trust_remote_code=True)
-
+    # 1. Embed query as text
+    jina_model = AutoModel.from_pretrained(index.embed_model, trust_remote_code=True)
     if torch.cuda.is_available():
-        model = model.cuda()
-
-    model.eval()
-
-    # Embed question as text
-    inputs = processor(text=[question], return_tensors="pt")
-    if torch.cuda.is_available():
-        inputs = {k: v.cuda() for k, v in inputs.items()}
+        jina_model = jina_model.cuda()
 
     with torch.no_grad():
-        outputs = model(**inputs)
-        q_embedding = outputs.last_hidden_state.mean(dim=1).cpu().numpy().astype("float32")
+        q_tensor = jina_model.encode([question], task="retrieval")
+    q_embedding = q_tensor.float().cpu().numpy()
 
     faiss.normalize_L2(q_embedding)
 
-    # 2. Search FAISS
+    # 2. Retrieve pages via FAISS
     distances, indices = index.faiss_index.search(q_embedding, k)
     retrieved_chunks = [index.chunks[i] for i in indices[0]]
 
-    # 3. Generate answer with Gemini VLM
+    # 3. Generate answer with Gemini VLM using page IMAGES
     client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
-    # Build multimodal prompt with tile images
     prompt_parts = [
-        "Answer the following question based strictly on the provided document images (visual tiles).",
-        "The tiles show portions of PDF pages. Read the visual content carefully including any tables, charts, or layouts.",
-        "If the answer cannot be determined from the visual context, say 'Cannot determine from provided context.'",
+        "Answer the following question based strictly on the provided document page images.",
+        "Read the visual content carefully including any tables, charts, or layouts.",
+        "If the answer cannot be determined, say 'Cannot determine from provided context.'",
         f"\nQuestion: {question}\n",
-        "\nDocument tiles:",
+        "\nDocument pages:",
     ]
 
-    # Add tile images
+    # Add page images
     for i, chunk in enumerate(retrieved_chunks):
-        # Read and encode image
         with open(chunk.image_path, "rb") as f:
             img_data = base64.b64encode(f.read()).decode()
 
         prompt_parts.append({
             "inline_data": {
-                "mime_type": "image/png",
+                "mime_type": "image/jpeg",
                 "data": img_data
             }
         })
-        prompt_parts.append(f"\n[Tile {i+1}: {chunk.doc_id}, page {chunk.page_num}]\n")
+        prompt_parts.append(f"\n[Page {i+1}: {chunk.doc_id}, page {chunk.page_num}]\n")
 
     prompt_parts.append("\nAnswer:")
 
@@ -320,9 +261,8 @@ def query(index: Index, question: str, k: int = 5) -> Answer:
     # 4. Extract page numbers
     retrieved_pages = sorted({c.page_num for c in retrieved_chunks if c.page_num > 0})
 
-    # Build context description
     context_desc = "\n".join([
-        f"Tile {i+1}: {c.doc_id} page {c.page_num} ({c.image_path})"
+        f"Page {i+1}: {c.doc_id} page {c.page_num} (image: {c.image_path})"
         for i, c in enumerate(retrieved_chunks)
     ])
 
@@ -348,7 +288,7 @@ if __name__ == "__main__":
     import sys
 
     if len(sys.argv) < 2:
-        print("Usage: python pipeline_c.py <pdf_path> [question]")
+        print("Usage: python pipeline_c_simple.py <pdf_path> [question]")
         sys.exit(1)
 
     pdf = Path(sys.argv[1])
@@ -358,7 +298,7 @@ if __name__ == "__main__":
 
     print(f"Testing Pipeline C with {pdf.name}\n")
     idx = ingest_one(pdf)
-    print(f"\nIndexed {len(idx.chunks)} visual tiles")
+    print(f"\nIndexed {len(idx.chunks)} pages")
 
     if len(sys.argv) > 2:
         q = " ".join(sys.argv[2:])
