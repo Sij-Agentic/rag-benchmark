@@ -1,0 +1,19 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+================================================================================
+BUILDING V3 CORPUS
+================================================================================
+
+================================================================================
+Collecting FinanceBench: Target 20 questions
+================================================================================
+Keeping 8 existing hard FinanceBench questions
+Traceback (most recent call last):
+  File "/home/ubuntu/rag-benchmark/src/build_v3_corpus.py", line 360, in <module>
+    build_v3_corpus()
+  File "/home/ubuntu/rag-benchmark/src/build_v3_corpus.py", line 316, in build_v3_corpus
+    financebench_items = collect_financebench(target=20)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/rag-benchmark/src/build_v3_corpus.py", line 57, in collect_financebench
+    existing_ids = {item["item_id"] for item in existing}
+                    ~~~~^^^^^^^^^^^
+KeyError: 'item_id'
