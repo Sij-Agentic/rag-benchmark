@@ -1,0 +1,83 @@
+{
+  "A": {
+    "total": 70,
+    "correct": 1,
+    "accuracy": 1.4285714285714286,
+    "by_dataset": {
+      "docvqa": {
+        "total": 30,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "financebench": {
+        "total": 19,
+        "correct": 1,
+        "accuracy": 5.263157894736842
+      },
+      "chartqa": {
+        "total": 20,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "doclaynet": {
+        "total": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      }
+    }
+  },
+  "B": {
+    "total": 70,
+    "correct": 39,
+    "accuracy": 55.714285714285715,
+    "by_dataset": {
+      "docvqa": {
+        "total": 30,
+        "correct": 24,
+        "accuracy": 80.0
+      },
+      "financebench": {
+        "total": 19,
+        "correct": 6,
+        "accuracy": 31.57894736842105
+      },
+      "chartqa": {
+        "total": 20,
+        "correct": 8,
+        "accuracy": 40.0
+      },
+      "doclaynet": {
+        "total": 1,
+        "correct": 1,
+        "accuracy": 100.0
+      }
+    }
+  },
+  "C": {
+    "total": 70,
+    "correct": 42,
+    "accuracy": 60.0,
+    "by_dataset": {
+      "docvqa": {
+        "total": 30,
+        "correct": 22,
+        "accuracy": 73.33333333333333
+      },
+      "financebench": {
+        "total": 19,
+        "correct": 6,
+        "accuracy": 31.57894736842105
+      },
+      "chartqa": {
+        "total": 20,
+        "correct": 14,
+        "accuracy": 70.0
+      },
+      "doclaynet": {
+        "total": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      }
+    }
+  }
+}
