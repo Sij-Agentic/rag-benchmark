@@ -18,9 +18,3 @@ __pycache__/
 *.py[cod]
 .venv/
 .ipynb_checkpoints/
-
-ARTICLE_NOTES.md
-PROJECT_LOG.md
-ANSWER_ANALYSIS.md
-ARTICLE_OUTLINE.md
-docs/
