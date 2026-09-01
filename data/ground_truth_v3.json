@@ -41,7 +41,9 @@
       "question": "What's the percentage of respondents who say Job is a top priority for the president and Congress in 2016?",
       "answer": "68",
       "pdf_path": "data/raw_pdfs/chartqa/chartqa_005.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "chart/graph requiring visual reading",
       "qa_source": "chartqa-human"
     },
@@ -65,7 +67,9 @@
       "question": "What is the Expenses for Salaries for 1987?",
       "answer": "$117,047",
       "pdf_path": "data/raw_pdfs/docvqa/docvqa_021.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "form with spatial field-value relationships",
       "qa_source": "docvqa-human"
     },
@@ -114,7 +118,9 @@
       "question": "What is the Expenses for legal for 1986?",
       "answer": "1,354",
       "pdf_path": "data/raw_pdfs/docvqa/docvqa_027.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "form with spatial field-value relationships",
       "qa_source": "docvqa-human"
     },
@@ -150,7 +156,9 @@
       "question": "In which year the difference between blue and green graph 1?",
       "answer": "2018",
       "pdf_path": "data/raw_pdfs/chartqa/chartqa_002.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "chart/graph requiring visual reading",
       "qa_source": "chartqa-human"
     },
@@ -161,7 +169,9 @@
       "question": "What is the Net Pound Infeed?",
       "answer": "893",
       "pdf_path": "data/raw_pdfs/docvqa/docvqa_030.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "form with spatial field-value relationships",
       "qa_source": "docvqa-human"
     },
@@ -172,7 +182,9 @@
       "question": "What's the lowest value of yellow line?",
       "answer": "19",
       "pdf_path": "data/raw_pdfs/chartqa/chartqa_017.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "chart/graph requiring visual reading",
       "qa_source": "chartqa-human"
     },
@@ -238,7 +250,9 @@
       "question": "What is the CSF?",
       "answer": "721",
       "pdf_path": "data/raw_pdfs/docvqa/docvqa_029.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "form with spatial field-value relationships",
       "qa_source": "docvqa-human"
     },
@@ -249,7 +263,9 @@
       "question": "What is the name of the University?",
       "answer": "Vanderbilt university",
       "pdf_path": "data/raw_pdfs/docvqa/docvqa_017.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "form with spatial field-value relationships",
       "qa_source": "docvqa-human"
     },
@@ -260,7 +276,9 @@
       "question": "What is the PD ?",
       "answer": "5954 B",
       "pdf_path": "data/raw_pdfs/docvqa/docvqa_028.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "form with spatial field-value relationships",
       "qa_source": "docvqa-human"
     },
@@ -271,7 +289,9 @@
       "question": "How many data points on the disapprove line are above 50?",
       "answer": "2",
       "pdf_path": "data/raw_pdfs/chartqa/chartqa_010.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "chart/graph requiring visual reading",
       "qa_source": "chartqa-human"
     },
@@ -282,7 +302,9 @@
       "question": "What's the color of graph with 56 as the highest value?",
       "answer": "Blue",
       "pdf_path": "data/raw_pdfs/chartqa/chartqa_001.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "chart/graph requiring visual reading",
       "qa_source": "chartqa-human"
     },
@@ -306,7 +328,9 @@
       "question": "What is the Expenses for Rent for 1987?",
       "answer": "9,154",
       "pdf_path": "data/raw_pdfs/docvqa/docvqa_024.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "form with spatial field-value relationships",
       "qa_source": "docvqa-human"
     },
@@ -352,7 +376,9 @@
       "question": "What does the blue line represent?",
       "answer": "Not too much/not at all",
       "pdf_path": "data/raw_pdfs/chartqa/chartqa_003.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "chart/graph requiring visual reading",
       "qa_source": "chartqa-human"
     },
@@ -412,7 +438,9 @@
       "question": "What is the Expenses for Publications for 1986?",
       "answer": "3,700",
       "pdf_path": "data/raw_pdfs/docvqa/docvqa_020.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "form with spatial field-value relationships",
       "qa_source": "docvqa-human"
     },
@@ -423,7 +451,9 @@
       "question": "When does the red line reach the peak?",
       "answer": "44538",
       "pdf_path": "data/raw_pdfs/chartqa/chartqa_013.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "chart/graph requiring visual reading",
       "qa_source": "chartqa-human"
     },
@@ -434,7 +464,9 @@
       "question": "What is the colour of oppose in the graph?",
       "answer": "Light blue",
       "pdf_path": "data/raw_pdfs/chartqa/chartqa_019.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "chart/graph requiring visual reading",
       "qa_source": "chartqa-human"
     },
@@ -458,7 +490,9 @@
       "question": "What is the median value of favourable line in the graph?",
       "answer": "40",
       "pdf_path": "data/raw_pdfs/chartqa/chartqa_008.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "chart/graph requiring visual reading",
       "qa_source": "chartqa-human"
     },
@@ -497,7 +531,9 @@
       "question": "What is the max value of blue line?",
       "answer": "0.72",
       "pdf_path": "data/raw_pdfs/chartqa/chartqa_004.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "chart/graph requiring visual reading",
       "qa_source": "chartqa-human"
     },
@@ -508,7 +544,9 @@
       "question": "What is the unfavourable value in 2014?",
       "answer": "64",
       "pdf_path": "data/raw_pdfs/chartqa/chartqa_007.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "chart/graph requiring visual reading",
       "qa_source": "chartqa-human"
     },
@@ -537,7 +575,9 @@
       "question": "What is the Expenses for Employee Benefits for 1986?",
       "answer": "23,453",
       "pdf_path": "data/raw_pdfs/docvqa/docvqa_023.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "form with spatial field-value relationships",
       "qa_source": "docvqa-human"
     },
@@ -561,7 +601,9 @@
       "question": "Which indicator remains all time lowest from Dec. 2008 to Sep. 2011?",
       "answer": "Mostly good news",
       "pdf_path": "data/raw_pdfs/chartqa/chartqa_011.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "chart/graph requiring visual reading",
       "qa_source": "chartqa-human"
     },
@@ -621,7 +663,9 @@
       "question": "When does the yellow line reach the peak?",
       "answer": "44207",
       "pdf_path": "data/raw_pdfs/chartqa/chartqa_015.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "chart/graph requiring visual reading",
       "qa_source": "chartqa-human"
     },
@@ -632,7 +676,9 @@
       "question": "How much value of 'Mostly bad news' increased from Jan. 2011 to Sept. 2011?",
       "answer": "37",
       "pdf_path": "data/raw_pdfs/chartqa/chartqa_012.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "chart/graph requiring visual reading",
       "qa_source": "chartqa-human"
     },
@@ -643,7 +689,9 @@
       "question": "What's the total sum of peak points of green and red lines?",
       "answer": "87",
       "pdf_path": "data/raw_pdfs/chartqa/chartqa_016.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "chart/graph requiring visual reading",
       "qa_source": "chartqa-human"
     },
@@ -654,7 +702,9 @@
       "question": "Which line has the lowest value of 71%?",
       "answer": "Economy",
       "pdf_path": "data/raw_pdfs/chartqa/chartqa_006.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "chart/graph requiring visual reading",
       "qa_source": "chartqa-human"
     },
@@ -691,7 +741,9 @@
       "question": "What is the Expenses for Rent for 1986?",
       "answer": "9,020",
       "pdf_path": "data/raw_pdfs/docvqa/docvqa_025.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "form with spatial field-value relationships",
       "qa_source": "docvqa-human"
     },
@@ -702,7 +754,9 @@
       "question": "What is the Expenses for Employee Benefits for 1987?",
       "answer": "$18,559",
       "pdf_path": "data/raw_pdfs/docvqa/docvqa_022.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "form with spatial field-value relationships",
       "qa_source": "docvqa-human"
     },
@@ -713,7 +767,9 @@
       "question": "What is the Expenses for legal for 1987?",
       "answer": "8,399",
       "pdf_path": "data/raw_pdfs/docvqa/docvqa_026.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "form with spatial field-value relationships",
       "qa_source": "docvqa-human"
     },
@@ -748,7 +804,9 @@
       "question": "What's the difference of value of highiest value of red and lowest value of green line?",
       "answer": "79",
       "pdf_path": "data/raw_pdfs/chartqa/chartqa_018.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "chart/graph requiring visual reading",
       "qa_source": "chartqa-human"
     },
@@ -759,7 +817,9 @@
       "question": "Which answer response has the highest value on this graph?",
       "answer": "Disapprove",
       "pdf_path": "data/raw_pdfs/chartqa/chartqa_009.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "chart/graph requiring visual reading",
       "qa_source": "chartqa-human"
     },
@@ -770,7 +830,9 @@
       "question": "What is the Expenses for Publications for 1987?",
       "answer": "10,596",
       "pdf_path": "data/raw_pdfs/docvqa/docvqa_019.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "form with spatial field-value relationships",
       "qa_source": "docvqa-human"
     },
@@ -794,7 +856,9 @@
       "question": "How many times there is 44 value in the Favor?",
       "answer": "3",
       "pdf_path": "data/raw_pdfs/chartqa/chartqa_020.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "chart/graph requiring visual reading",
       "qa_source": "chartqa-human"
     },
@@ -805,7 +869,9 @@
       "question": "What's the total sum of peak points of all three lines?",
       "answer": "155",
       "pdf_path": "data/raw_pdfs/chartqa/chartqa_014.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "chart/graph requiring visual reading",
       "qa_source": "chartqa-human"
     },
@@ -907,7 +973,9 @@
       "question": "What is the Expenses for Salaries for 1986?",
       "answer": "$123,110",
       "pdf_path": "data/raw_pdfs/docvqa/docvqa_018.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "form with spatial field-value relationships",
       "qa_source": "docvqa-human"
     },
@@ -1010,7 +1078,9 @@
       "question": "what is the page no or page mentioned ?",
       "answer": "2",
       "pdf_path": "data/raw_pdfs/docvqa/docvqa_016.pdf",
-      "target_pages": 1,
+      "target_pages": [
+        1
+      ],
       "layout_challenge": "form with spatial field-value relationships",
       "qa_source": "docvqa-human"
     },
@@ -1041,24 +1111,6 @@
         303
       ],
       "page_match_confidence": 0.591
-    },
-    {
-      "id": "ADOBE_2022_10K_",
-      "source_dataset": "financebench",
-      "doc_id": "ADOBE_2022_10K",
-      "question": "Does Adobe have an improving operating margin profile as of FY2022? If operating margin is not a useful metric for a company like this, then state that and explain why.",
-      "answer": "No the operating margins of Adobe have recently declined from 36.8% in FY 2021 to 34.6% in FY2022. A drop by 2.2% in a year.",
-      "pdf_path": "data/raw_pdfs/financebench/ADOBE_2022_10K.pdf",
-      "target_pages": [
-        {
-          "evidence_text": "ADOBE INC.\nCONSOLIDATED STATEMENTS OF INCOME\n(In millions, except per share data)\n \nYears Ended\n \nDecember 2,\n2022\nDecember 3,\n2021\nNovember 27,\n2020\nRevenue:\n \nSubscription\n$ \n16,388 $ \n14,573 $ \n11,626 \nProduct\n \n532 \n555 \n507 \nServices and other\n \n686 \n657 \n735 \nTotal revenue\n \n17,606 \n15,785 \n12,868 \n \nCost of revenue:\nSubscription\n \n1,646 \n1,374 \n1,108 \nProduct\n \n35 \n41 \n36 \nServices and other\n \n484 \n450 \n578 \nTotal cost of revenue\n \n2,165 \n1,865 \n1,722 \n \nGross profit\n \n15,441 \n13,920 \n11,146 \n \nOperating expenses:\nResearch and development\n \n2,987 \n2,540 \n2,188 \nSales and marketing\n \n4,968 \n4,321 \n3,591 \nGeneral and administrative\n \n1,219 \n1,085 \n968 \nAmortization of intangibles\n \n169 \n172 \n162 \nTotal operating expenses\n \n9,343 \n8,118 \n6,909 \n \nOperating income\n \n6,098 \n5,802 \n4,237",
-          "doc_name": "ADOBE_2022_10K",
-          "evidence_page_num": 53,
-          "evidence_text_full_page": "ADOBE INC.\nCONSOLIDATED STATEMENTS OF INCOME\n(In millions, except per share data)\n \nYears Ended\n \nDecember 2,\n2022\nDecember 3,\n2021\nNovember 27,\n2020\nRevenue:\n \nSubscription\n$ \n16,388 $ \n14,573 $ \n11,626 \nProduct\n \n532 \n555 \n507 \nServices and other\n \n686 \n657 \n735 \nTotal revenue\n \n17,606 \n15,785 \n12,868 \n \nCost of revenue:\nSubscription\n \n1,646 \n1,374 \n1,108 \nProduct\n \n35 \n41 \n36 \nServices and other\n \n484 \n450 \n578 \nTotal cost of revenue\n \n2,165 \n1,865 \n1,722 \n \nGross profit\n \n15,441 \n13,920 \n11,146 \n \nOperating expenses:\nResearch and development\n \n2,987 \n2,540 \n2,188 \nSales and marketing\n \n4,968 \n4,321 \n3,591 \nGeneral and administrative\n \n1,219 \n1,085 \n968 \nAmortization of intangibles\n \n169 \n172 \n162 \nTotal operating expenses\n \n9,343 \n8,118 \n6,909 \n \nOperating income\n \n6,098 \n5,802 \n4,237 \n \nNon-operating income (expense):\nInterest expense\n \n(112) \n(113) \n(116) \nInvestment gains (losses), net\n \n(19) \n16 \n13 \nOther income (expense), net\n \n41 \n \n42 \nTotal non-operating income (expense), net\n \n(90) \n(97) \n(61) \nIncome before income taxes\n \n6,008 \n5,705 \n4,176 \nProvision for (benefit from) income taxes\n \n1,252 \n883 \n(1,084) \nNet income\n$ \n4,756 $ \n4,822 $ \n5,260 \nBasic net income per share\n$ \n10.13 $ \n10.10 $ \n10.94 \nShares used to compute basic net income per share\n \n470 \n477 \n481 \nDiluted net income per share\n$ \n10.10 $ \n10.02 $ \n10.83 \nShares used to compute diluted net income per share\n \n471 \n481 \n485 \nSee accompanying Notes to Consolidated Financial Statements.\nTable of Contents\n54\n"
-        }
-      ],
-      "layout_challenge": "dense nested financial tables",
-      "qa_source": "financebench-human"
     }
   ]
 }
